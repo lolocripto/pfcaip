@@ -210,10 +210,10 @@ final class FreqProxTermsWriter extends TermsHashConsumer {
           if (termStates[i].docID < minState.docID)
             minState = termStates[i];
 
+        //TODO AIP comment: mirar bien porqué el anterior "termFreq" se pilla del atributo!!
         final int termDocFreq = minState.termFreq;
         
         //AIP change code: getting CF vble.
-        //TODO AIP comment: mirar bien porqué el anterior "termFreq" se pilla del atributo!!
         final int colDocFreq = minState.getColFreq();
 
         // AIP change code: adding colDocFreq as well
