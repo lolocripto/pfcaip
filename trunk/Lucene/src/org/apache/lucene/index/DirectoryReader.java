@@ -1088,6 +1088,11 @@ class DirectoryReader extends IndexReader implements Cloneable {
     public int freq() {
       return current.freq();
     }
+    
+    //AIP change code
+    public int colFreq(){
+    	return current.colFreq();
+    }
   
     public void seek(Term term) {
       this.term = term;
