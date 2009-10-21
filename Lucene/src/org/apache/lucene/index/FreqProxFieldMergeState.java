@@ -43,6 +43,7 @@ final class FreqProxFieldMergeState {
 
   int docID;
   int termFreq;
+  int colFreq;//AIP change code
 
   public FreqProxFieldMergeState(FreqProxTermsWriterPerField field) {
     this.field = field;
@@ -81,6 +82,7 @@ final class FreqProxFieldMergeState {
         if (!field.omitTermFreqAndPositions)
           termFreq = p.docFreq;
         p.lastDocCode = -1;
+        colFreq = p.colFreq;//AIP change code
         return true;
       } else
         // EOF
@@ -97,6 +99,8 @@ final class FreqProxFieldMergeState {
       else
         termFreq = freq.readVInt();
     }
+    
+    colFreq = p.colFreq;
 
     assert docID != p.lastDocID;
 
@@ -104,7 +108,7 @@ final class FreqProxFieldMergeState {
   }
   
   // AIP change code: we need this method since "p" is private
-  public int getColFreq(){
-	  return p.colFreq;
-  }  
+//  public int getColFreq(){
+//	  return p.colFreq;
+//  }  
 }
