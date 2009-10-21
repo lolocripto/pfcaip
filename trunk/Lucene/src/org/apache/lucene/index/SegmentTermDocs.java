@@ -26,6 +26,8 @@ class SegmentTermDocs implements TermDocs {
   protected IndexInput freqStream;
   protected int count;
   protected int df;
+  protected int cf; //AIP change code
+  
   protected BitVector deletedDocs;
   int doc = 0;
   int freq;
@@ -84,6 +86,7 @@ class SegmentTermDocs implements TermDocs {
       df = 0;
     } else {
       df = ti.docFreq;
+      cf = ti.colFreq; //AIP change code
       doc = 0;
       freqBasePointer = ti.freqPointer;
       proxBasePointer = ti.proxPointer;
@@ -101,6 +104,8 @@ class SegmentTermDocs implements TermDocs {
 
   public final int doc() { return doc; }
   public final int freq() { return freq; }
+  
+  public final int colFreq() { return cf; } // AIP change code
 
   protected void skippingDoc() throws IOException {
   }
