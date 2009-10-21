@@ -568,6 +568,9 @@ public class ParallelReader extends IndexReader {
 
     public int doc() { return termDocs.doc(); }
     public int freq() { return termDocs.freq(); }
+    
+    //AIP change code
+    public int colFreq() { return termDocs.colFreq(); }
 
     public void seek(Term term) throws IOException {
       IndexReader reader = ((IndexReader)fieldToReader.get(term.field()));
