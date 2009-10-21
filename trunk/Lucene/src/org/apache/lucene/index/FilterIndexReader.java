@@ -47,6 +47,9 @@ public class FilterIndexReader extends IndexReader {
     public void seek(TermEnum termEnum) throws IOException { in.seek(termEnum); }
     public int doc() { return in.doc(); }
     public int freq() { return in.freq(); }
+    //AIP change code
+    public int colFreq() { return in.colFreq(); }
+    
     public boolean next() throws IOException { return in.next(); }
     public int read(int[] docs, int[] freqs) throws IOException {
       return in.read(docs, freqs);
