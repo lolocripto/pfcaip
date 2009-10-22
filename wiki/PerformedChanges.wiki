@@ -1,0 +1,6 @@
+== Introduction ==
+ All the changes have been flagged with comments on an certain format to track the changes made from the "public" version, also, important comments made after detailed investigation/execution of the source code have been flagged too, the format of the comments is:
+  * "AIP change code: comment of the change made and why"
+  * "AIP comment: comment about what the code does in that part"
+
+ For the nature of the modifications, the affected package is mainly "_org.apache.lucene.index_". There are a few changes on "_org.apache.lucene.search_" as well, to lists the changes you can make a search with the previous comments (AIP flag).
