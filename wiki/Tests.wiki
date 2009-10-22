@@ -1,0 +1,16 @@
+#labels tests
+Tests pasados
+
+= Introduction =
+Los tests pasados se encuentran todos en el paquete /src/test, han sido extraidos de la web de Lucene y he modificado los ficheros para incluir las comprobaciones a los cambios que he hecho.
+Tambien se ha hecho un test simple en un programilla de prueba, dentro del paquete _lia.meetlucene_, se llama IdxReader.java y prueba la lectura de un indice en el que se recorren todos los terminos y se calcula su CF y su DF, probando las llamadas: _idx.colDocFreq(indexedTerm)_ donde "idx" es un IndexReader y _termEnum.colFreq()_ donde "termEnum" es un termino.
+
+
+= Details =
+
+- *TestIndexReaderCF* : es un fichero paralelo al _TestIndexReader_ en el que se han incluido llamadas a los metodos _reader.colDocFreq(searchTerm)_ 
+
+Add your content here.  Format your content with:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
