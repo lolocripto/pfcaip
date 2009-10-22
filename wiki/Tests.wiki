@@ -1,11 +1,16 @@
 #labels tests
-Tests pasados
+=Performed Tests=
 
-= Introduction =
-Los tests pasados se encuentran todos en el paquete /src/test, han sido extraidos de la web de Lucene y he modificado los ficheros para incluir las comprobaciones a los cambios que he hecho.
-Tambien se ha hecho un test simple en un programilla de prueba, dentro del paquete _lia.meetlucene_, se llama IdxReader.java y prueba la lectura de un indice en el que se recorren todos los terminos y se calcula su CF y su DF, probando las llamadas: _idx.colDocFreq(indexedTerm)_ donde "idx" es un IndexReader y _termEnum.colFreq()_ donde "termEnum" es un termino.
+== Introduction ==
+  Performed test are mainly in /src/test package from the standar test package used for Lucene community modified to include the checks focus to the changes apply to include Collection Frequecy parameter.
 
+  Apart from the previous (detailed later in this document) I've made a basic check with a simple program which read an index, fech the terms included and makes a count of the both DF (document frequency) and CF (collection frequency), in this test the methods checked are: _idx.colDocFreq(indexedTerm)_ where "idx" is an IndexReader object and _termEnum.colFreq()_ where "termEnum" is a TermEnum object.
 
-= Details =
+  From the previous test we can see the access to CF came from two different ways, from the IndexReader object by giving the Term and from TermEnum object.
 
-*TestIndexReaderCF* : es un fichero paralelo al _TestIndexReader_ en el que se han incluido llamadas al metodo _reader.colDocFreq(searchTerm)_. Los test pasados son:
+== Details ==
+
+*TestIndexReaderCF* : is based on the test file _TestIndexReader_ in which the method _reader.colDocFreq(searchTerm)_ have been included to get CF variable where DF is accessed, exactly, the calls have been included in the following tests:
+  - _testBasicDelete()_
+  - _testDeleteReaderWriterConflictUnoptimized()_: this doesn't include the _writer.optimize()_ called
+  - _testDeleteReaderWriterConflictOptimized()_: this included the _writer.optimize()_ called that include a "merge()" procedure
