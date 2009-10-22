@@ -8,4 +8,4 @@ Tambien se ha hecho un test simple en un programilla de prueba, dentro del paque
 
 = Details =
 
-* *TestIndexReaderCF* : es un fichero paralelo al _TestIndexReader_ en el que se han incluido llamadas al metodo _reader.colDocFreq(searchTerm)_. Los test pasados son:
+*TestIndexReaderCF* : es un fichero paralelo al _TestIndexReader_ en el que se han incluido llamadas al metodo _reader.colDocFreq(searchTerm)_. Los test pasados son:
