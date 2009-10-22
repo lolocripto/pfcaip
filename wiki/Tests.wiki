@@ -12,8 +12,8 @@
 
 *TestIndexReaderCF* : is based on the test file _TestIndexReader_ in which the method _reader.colDocFreq(searchTerm)_ have been included to get CF variable where DF is accessed. To check the access to CF, a method "addDocCF" has been made, which adds the same term twice to the doc, with this we can check the difference between DF and CF where DF only count the number of different documents which includes the term and the CF counts the total number of terms include in the document.
 Exactly, the calls have been included in the following tests:
-  - _testBasicDelete()_
-  - _testDeleteReaderWriterConflictUnoptimized()_: based on "deleteReaderWriterConflict(false)" method, this doesn't include the _writer.optimize()_ called
-  - _testDeleteReaderWriterConflictOptimized()_: based on "deleteReaderWriterConflict(true)" method, this included the _writer.optimize()_ called that include a "merge()" procedure
-  - _testDeleteReaderReaderConflictUnoptimized()_: based on "deleteReaderReaderConflict(false)"
-  - _testDeleteReaderReaderConflictOptimized()_: based on "deleteReaderReaderConflict(true)"
+  * _testBasicDelete()_
+  * _testDeleteReaderWriterConflictUnoptimized()_: based on "deleteReaderWriterConflict(false)" method, this doesn't include the _writer.optimize()_ called
+  * _testDeleteReaderWriterConflictOptimized()_: based on "deleteReaderWriterConflict(true)" method, this included the _writer.optimize()_ called that include a "merge()" procedure
+  * _testDeleteReaderReaderConflictUnoptimized()_: based on "deleteReaderReaderConflict(false)"
+  * _testDeleteReaderReaderConflictOptimized()_: based on "deleteReaderReaderConflict(true)"
