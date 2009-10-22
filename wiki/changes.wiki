@@ -1,0 +1,28 @@
+
+Modificacion del Indice invertido para la introducción del parámetro CF (Collection Frequency)
+
+    CF es un contador del numero de veces que aparece un término, recordar que DF (Document Frequency) es el núm. de documentos que contienen un término, sin embargo CF es el núm. de veces que aparece el término en la colección de documentos.
+    Todo lo que se refiere a la creación del índice esta en el paquete "org.apache.lucene.index"
+
+    1. Creación y actualización del valor de la variable CF (collection frequency).
+
+	Clase
+	Método / Atributo
+	Observaciones
+1
+	DocInverterPerField (Final, extiende de DocFieldConsumerPerField, cuya clase la extienden tambien: DocFieldConsumersPerField y StoredFieldsWriterPerField	processFields	En un momento dado se hace un:
+consumer.add(token); (clase TermsHashPerField)
+que lo que hace es meter el token en el array de PostingList, luego, dependiendo si el token es nuevo o no en dicho array, llama a los metodos "newTerm" o "addTerm" (clase TermsHashConsumerPerField), ver puntos 2 y 3.
+2
+	FreqProxTermsWriter (Final, extiende de TermsHashConsumer)	atributo/clase static "PostingList"
+	MODIFICACION: Se añade el atributo "colFreq" entero colFreq que guardará la variable CollectionFrequency.
+3
+	FreqProxTermsWriterPerField (clase final que hereda de la clase abstracta TermsHashConsumerPerField)	newTerm(RawPostingList p0): aqui se modifica el objeto "p" del tipo PostingList (ver punto 1)
+	MODIFICACION: Aqui se inician los contadores, tanto docFreq como colFreq a 1.
+4
+	"
+	addTerm(RawPostingList p0): aqui se modifica el objeto "p" del tipo PostingList (ver punto 1)	MODIFICACION: Incrementamos el contador de colFreq
+5
+	TermInfo	colFreq	MODIFICACION: metemos el atributo colFreq en la clase y modificamos / añadimos los metodos para insertarlo y recuperarlo de la misma manera que se hace con docFreq.
+
+            
