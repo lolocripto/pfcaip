@@ -2,11 +2,11 @@
 =Performed Tests=
 
 == Introduction ==
-  Performed test are mainly in /src/test package from the standar test package used for Lucene community modified to include the checks focus to the changes apply to include Collection Frequecy parameter.
+ Performed test are mainly in /src/test package from the standar test package used for Lucene community modified to include the checks focus to the changes apply to include Collection Frequecy parameter.
 
-  Apart from the previous (detailed later in this document) I've made a basic check with a simple program which read an index, fech the terms included and makes a count of the both DF (document frequency) and CF (collection frequency), in this test the methods checked are: _idx.colDocFreq(indexedTerm)_ where "idx" is an IndexReader object and _termEnum.colFreq()_ where "termEnum" is a TermEnum object.
+ Apart from the previous (detailed later in this document) I've made a basic check with a simple program which read an index, fech the terms included and makes a count of the both DF (document frequency) and CF (collection frequency), in this test the methods checked are: _idx.colDocFreq(indexedTerm)_ where "idx" is an IndexReader object and _termEnum.colFreq()_ where "termEnum" is a TermEnum object.
 
-  From the previous test we can see the access to CF came from two different ways, from the IndexReader object by giving the Term and from TermEnum object.
+ From the previous test we can see the access to CF came from two different ways, from the IndexReader object by giving the Term and from TermEnum object.
 
 == Details ==
 
