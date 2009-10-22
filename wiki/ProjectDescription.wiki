@@ -1,0 +1,6 @@
+= Lucene modification =
+
+ The mail goal of the project is the improvement of Lucene project, which is an Retrival Information application, Open Source under Apache Licence.
+ The modification are based on the _java_ version since there are other versions in other Language programs.
+ The based version for the modifications is 2.9.0 release on September 25th which by the way included several changes from the previous version 2.4.1 (9 March 2009).
+ The modifications include the modification of the inverted index format to include more parameters to be used in the computation of ranking formulas.
