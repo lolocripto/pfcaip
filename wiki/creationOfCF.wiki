@@ -1,0 +1,3 @@
+= Creation and Update of Collection Frequency parameter =
+ 
+ These are the changed made in source code to create and update the value of the CF parameter:
