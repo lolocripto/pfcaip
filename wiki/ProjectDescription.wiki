@@ -6,4 +6,4 @@
  The modifications include the modification of the inverted index format to include more parameters to be used in the computation of ranking formulas.
 
  * [modifications_ppal Modifications]
- * Tests
+ * [tests Tests]
