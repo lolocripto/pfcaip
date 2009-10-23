@@ -4,4 +4,4 @@
 
 = Details =
 
-  * [[creationOfCF]]Creation and update of the Collection Frequency (CF) parameter
+  * http://docs.google.com/View?id=dgjkgr6b_125cwqvb8cs
