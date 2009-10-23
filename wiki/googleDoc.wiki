@@ -1,0 +1,930 @@
+
+<&#33;DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><base target="_top"><style type="text/css">
+/* default css */
+table {
+font-size: 1em;
+line-height: inherit;
+border-collapse: collapse;
+}
+tr {
+text-align: left;
+}
+div, address, ol, ul, li, option, select {
+margin-top: 0px;
+margin-bottom: 0px;
+}
+p {
+margin: 0px;
+}
+pre {
+font-family: Courier New;
+white-space: pre-wrap;
+margin:0;
+}
+body {
+margin: 6px;
+padding: 0px;
+font-family: Verdana, sans-serif;
+font-size: 10pt;
+background-color: #ffffff;
+}
+img {
+-moz-force-broken-image-icon: 1;
+}
+@media screen {
+html.pageview {
+background-color: #f3f3f3 &#33;important;
+}
+body {
+min-height: 1100px;
+counter-reset: __goog_page__;
+}
+* html body {
+height: 1100px;
+}
+.pageview body {
+border-top: 1px solid #ccc;
+border-left: 1px solid #ccc;
+border-right: 2px solid #bbb;
+border-bottom: 2px solid #bbb;
+width: 648px &#33;important;
+margin: 15px auto 25px;
+padding: 40px 50px;
+}
+/* IE6 */
+* html {
+overflow-y: scroll;
+}
+* html.pageview body {
+overflow-x: auto;
+}
+/* Prevent repaint errors when scrolling in Safari. This "Star-7" css hack
+targets Safari 3.1, but not WebKit nightlies and presumably Safari 4.
+That's OK because this bug is fixed in WebKit nightlies/Safari 4 :-). */
+html*#wys_frame::before {
+content: '\A0';
+position: fixed;
+overflow: hidden;
+width: 0;
+height: 0;
+top: 0;
+left: 0;
+}
+.writely-callout-data {
+display: none;
+*display: inline-block;
+*width: 0;
+*height: 0;
+*overflow: hidden;
+}
+.writely-footnote-marker {
+background-image: url('MISSING');
+background-color: transparent;
+background-repeat: no-repeat;
+width: 7px;
+overflow: hidden;
+height: 16px;
+vertical-align: top;
+-moz-user-select: none;
+}
+.editor .writely-footnote-marker {
+cursor: move;
+}
+.writely-footnote-marker-highlight {
+background-position: -15px 0;
+-moz-user-select: text;
+}
+.writely-footnote-hide-selection ::-moz-selection, .writely-footnote-hide-selection::-moz-selection {
+background: transparent;
+}
+.writely-footnote-hide-selection ::selection, .writely-footnote-hide-selection::selection {
+background: transparent;
+}
+.writely-footnote-hide-selection {
+cursor: move;
+}
+.editor .writely-comment-yellow {
+background-color: #FF9;
+background-position: -240px 0;
+}
+.editor .writely-comment-yellow-hover {
+background-color: #FF0;
+background-position: -224px 0;
+}
+.editor .writely-comment-blue {
+background-color: #C0D3FF;
+background-position: -16px 0;
+}
+.editor .writely-comment-blue-hover {
+background-color: #6292FE;
+background-position: 0 0;
+}
+.editor .writely-comment-orange {
+background-color: #FFDEAD;
+background-position: -80px 0;
+}
+.editor .writely-comment-orange-hover {
+background-color: #F90;
+background-position: -64px 0;
+}
+.editor .writely-comment-green {
+background-color: #99FBB3;
+background-position: -48px 0;
+}
+.editor .writely-comment-green-hover {
+background-color: #00F442;
+background-position: -32px 0;
+}
+.editor .writely-comment-cyan {
+background-color: #CFF;
+background-position: -208px 0;
+}
+.editor .writely-comment-cyan-hover {
+background-color: #0FF;
+background-position: -192px 0;
+}
+.editor .writely-comment-purple {
+background-color: #EBCCFF;
+background-position: -144px 0;
+}
+.editor .writely-comment-purple-hover {
+background-color: #90F;
+background-position: -128px 0;
+}
+.editor .writely-comment-magenta {
+background-color: #FCF;
+background-position: -112px 0;
+}
+.editor .writely-comment-magenta-hover {
+background-color: #F0F;
+background-position: -96px 0;
+}
+.editor .writely-comment-red {
+background-color: #FFCACA;
+background-position: -176px 0;
+}
+.editor .writely-comment-red-hover {
+background-color: #FF7A7A;
+background-position: -160px 0;
+}
+.editor .writely-comment-marker {
+background-image: url('MISSING');
+background-color: transparent;
+padding-right: 11px;
+background-repeat: no-repeat;
+width: 16px;
+height: 16px;
+-moz-user-select: none;
+}
+.editor .writely-comment-hidden {
+padding: 0;
+background: none;
+}
+.editor .writely-comment-marker-hidden {
+background: none;
+padding: 0;
+width: 0;
+}
+.editor .writely-comment-none {
+opacity: .2;
+filter:progid:DXImageTransform.Microsoft.Alpha(opacity=20);
+-moz-opacity: .2;
+}
+.editor .writely-comment-none-hover {
+opacity: .2;
+filter:progid:DXImageTransform.Microsoft.Alpha(opacity=20);
+-moz-opacity: .2;
+}
+.br_fix span+br:not(:-moz-last-node) {
+position:relative;
+left: -1ex
+}
+#cb-p-tgt {
+font-size: 8pt;
+padding: .4em;
+background-color: #ddd;
+color: #333;
+}
+#cb-p-tgt-can {
+text-decoration: underline;
+color: #36c;
+font-weight: bold;
+margin-left: 2em;
+}
+#cb-p-tgt .spin {
+width: 16px;
+height: 16px;
+background: url(//ssl.gstatic.com/docs/clipboard/spin_16o.gif) no-repeat;
+}
+}
+h6 { font-size: 8pt }
+h5 { font-size: 8pt }
+h4 { font-size: 10pt }
+h3 { font-size: 12pt }
+h2 { font-size: 14pt }
+h1 { font-size: 18pt }
+blockquote {padding: 10px; border: 1px #DDD dashed }
+.webkit-indent-blockquote { border: none; }
+a img {border: 0}
+.pb {
+border-width: 0;
+page-break-after: always;
+/* We don't want this to be resizeable, so enforce a width and height
+using &#33;important */
+height: 1px &#33;important;
+width: 100% &#33;important;
+}
+.editor .pb {
+border-top: 1px dashed #C0C0C0;
+border-bottom: 1px dashed #C0C0C0;
+}
+div.google_header, div.google_footer {
+position: relative;
+margin-top: 1em;
+margin-bottom: 1em;
+}
+/* Table of contents */
+.editor div.writely-toc {
+background-color: #f3f3f3;
+border: 1px solid #ccc;
+}
+.writely-toc > ol {
+padding-left: 3em;
+font-weight: bold;
+}
+ol.writely-toc-subheading {
+padding-left: 1em;
+font-weight: normal;
+}
+/* IE6 only */
+* html writely-toc ol {
+list-style-position: inside;
+}
+.writely-toc-none {
+list-style-type: none;
+}
+.writely-toc-decimal {
+list-style-type: decimal;
+}
+.writely-toc-upper-alpha {
+list-style-type: upper-alpha;
+}
+.writely-toc-lower-alpha {
+list-style-type: lower-alpha;
+}
+.writely-toc-upper-roman {
+list-style-type: upper-roman;
+}
+.writely-toc-lower-roman {
+list-style-type: lower-roman;
+}
+.writely-toc-disc {
+list-style-type: disc;
+}
+/* Ordered lists converted to numbered lists can preserve ordered types, and
+vice versa. This is confusing, so disallow it */
+ul[type="i"], ul[type="I"], ul[type="1"], ul[type="a"], ul[type="A"] {
+list-style-type: disc;
+}
+ol[type="disc"], ol[type="circle"], ol[type="square"] {
+list-style-type: decimal;
+}
+/* end default css */
+/* default print css */
+@media print {
+body {
+padding: 0;
+margin: 0;
+}
+div.google_header, div.google_footer {
+display: block;
+min-height: 0;
+border: none;
+}
+div.google_header {
+flow: static(header);
+}
+/* used to insert page numbers */
+div.google_header::before, div.google_footer::before {
+position: absolute;
+top: 0;
+}
+div.google_footer {
+flow: static(footer);
+}
+/* always consider this element at the start of the doc */
+div#google_footer {
+flow: static(footer, start);
+}
+span.google_pagenumber {
+content: counter(page);
+}
+span.google_pagecount {
+content: counter(pages);
+}
+.endnotes {
+page: endnote;
+}
+/* MLA specifies that endnotes title should be 1" margin from the top of the page. */
+@page endnote {
+margin-top: 1in;
+}
+callout.google_footnote {
+display: prince-footnote;
+footnote-style-position: inside;
+/* These styles keep the footnote from taking on the style of the text
+surrounding the footnote marker. They can be overridden in the
+document CSS. */
+color: #000;
+font-family: Verdana;
+font-size: 10.0pt;
+font-weight: normal;
+}
+/* Table of contents */
+#WritelyTableOfContents a::after {
+content: leader('.') target-counter(attr(href), page);
+}
+#WritelyTableOfContents a {
+text-decoration: none;
+color: black;
+}
+}
+@page {
+@top {
+content: flow(header);
+}
+@bottom {
+content: flow(footer);
+}
+@footnotes {
+border-top: solid black thin;
+padding-top: 8pt;
+}
+}
+/* end default print css */
+/* custom css */
+/* end custom css */
+/* ui edited css */
+body {
+font-family: Verdana;
+font-size: 10.0pt;
+line-height: normal;
+background-color: #ffffff;
+}
+/* end ui edited css */
+/* editor CSS */
+.editor a:visited {color: #551A8B}
+.editor table.zeroBorder {border: 1px dotted gray}
+.editor table.zeroBorder td {border: 1px dotted gray}
+.editor table.zeroBorder th {border: 1px dotted gray}
+.editor div.google_header, .editor div.google_footer {
+border: 2px #DDDDDD dashed;
+position: static;
+width: 100%;
+min-height: 2em;
+}
+.editor .misspell {background-color: yellow}
+.editor .writely-comment {
+font-size: 9pt;
+line-height: 1.4;
+padding: 1px;
+border: 1px dashed #C0C0C0
+}
+/* end editor CSS */
+</style><title>LUCENE</title></head><body 
+><div style=TEXT-ALIGN:center><font size=3><u><b>LUCENE<br></b></u></font></div><font size=2><br></font><p><font size=2>An index contains a sequence of documents. </font></p><ul><li><p><font size=2>A document is a sequence of fields. </font></p></li><li><p><font size=2>A field is a named sequence of terms. </font></p></li><li><font size=2>A term is a string. </font></li></ul><p><font size=2>The same string in two different fields is considered a different term. Thus terms are represented as a pair of strings, the first naming the field, and the second naming text within the field.</font></p><p><font size=2><br></font></p><a name=N10055></a><a name="Inverted Indexing"></a><font size=2><b>Inverted Indexing</b><br>
+&nbsp;&nbsp;&nbsp; The index stores statistics about terms in order to make term-based search more efficient. Lucene's index falls into the family of indexes known as an inverted index. This is because it can list, for a term, the documents that contain it. This is the inverse of the natural relationship, in which documents list terms.<br><br><b>Types of Fields</b><br>
+&nbsp;&nbsp;&nbsp; In Lucene, fields may be stored, in which case their text is stored in the index literally, in a non-inverted manner.<br>
+&nbsp;&nbsp; &nbsp;Fields that are inverted are called indexed. A field may be both stored and indexed.<br>
+&nbsp;&nbsp; &nbsp;The text of a field may be tokenized into terms to be indexed, or the text of a field may be used literally as a term to be indexed. Most fields are tokenized, but sometimes it is useful for certain identifier fields to be indexed literally.<br></font><b><br></b><p><b><font size=2>Segments</font></b></p><p><font size=2>&nbsp;&nbsp; &nbsp;Lucene indexes may be composed of multiple sub-indexes, or <i>segments</i>. Each segment is a fully independent index, which could be searched separately. Indexes evolve by: </font></p><ol><ol><li><p><font size=2>Creating new segments for newly added documents.</font></p></li><li><p><font size=2>Merging existing segments.</font></p></li></ol></ol><p><font size=2>&nbsp;&nbsp; &nbsp;Searches may involve multiple segments and/or multiple indexes, each index potentially composed of a set of segments</font></p><font size=2><br><b>Numeracion de los Documentos</b>:<br></font><p><font size=2>&nbsp;&nbsp;&nbsp; Los documentos tienen una numeracion que es unica dentro del segmento, además, cuando se van borrando documentos se puede usar esta numeración sobrante para otros documentos.<br></font></p><br><p><font size=2>Each segment index maintains the following:</font></p><ul><li><p><font size=2>Field names. This contains the set of field names used in the index. </font></p></li><li><p><font size=2>Stored Field values. This contains, for each document, a list of attribute-value pairs, where the attributes are field names. These are used to store auxiliary information about the document, such as its title, url, or an identifier to access a database. The set of stored fields are what is returned for each hit when searching. This is keyed by document number. </font></p></li><li><p><font size=2>Term dictionary. A dictionary containing all of the terms used in all of the indexed fields of all of the documents. The dictionary also contains the number of documents which contain the term, and pointers to the term's frequency and proximity data. </font></p></li><li><p><font size=2>Term Frequency data. For each term in the dictionary, the numbers of all the documents that contain that term, and the frequency of the term in that document if omitTf is false. </font></p></li><li><p><font size=2>Term Proximity data. For each term in the dictionary, the positions that the term occurs in each document. Note that this will not exist if all fields in all documents set omitTf to true. </font></p></li><li><p><font size=2>Normalization factors. For each field in each document, a value is stored that is multiplied into the score for hits on that field. </font></p></li><li><p><font size=2>Term Vectors. For each field in each document, the term vector (sometimes called document vector) may be stored. A term vector consists of term text and term frequency. To add Term Vectors to your index see the <a href=http://lucene.apache.org/java/docs/api/org/apache/lucene/document/Field.html>Field</a> constructors </font></p></li><li><p><font size=2>Deleted documents. An optional file indicating which documents are deleted. </font></p></li></ul><p><font size=2><br></font></p><br><br><p style=TEXT-ALIGN:center><b><font size=2>Flujo ejecución en la creación del índice invertido y clases que intervienen</font></b></p><p><br></p><p><b><font size=2>IndexWriter<br></font></b></p><p><font size=2>&nbsp;&nbsp;&nbsp; An IndexWriter creates and maintains an index.<br>
+The create argument to the constructor determines whether a new index is created, or whether an existing index is opened. Note that you can open an index with create=true even while readers are using the index. The old readers will continue to search the "point in time" snapshot they had opened, and won't see the newly created index until they re-open. There are also constructors with no create argument which will create a new index if there is not already an index at the provided path and otherwise open the existing index.<br>
+In either case, documents are added with addDocument and removed with deleteDocuments(Term) or deleteDocuments(Query). A document can be updated with updateDocument (which just deletes and then adds the entire document). When finished adding, deleting and updating documents, close should be called.<br>
+These changes are buffered in memory and periodically flushed to the Directory (during the above method calls). A flush is triggered when there are enough buffered deletes (see setMaxBufferedDeleteTerms(int)) or enough added documents since the last flush, whichever is sooner. For the added documents, flushing is triggered either by RAM usage of the documents (see setRAMBufferSizeMB(double)) or the number of added documents. The default is to flush when RAM usage hits 16 MB. For best indexing speed you should flush by RAM usage with a large RAM buffer. Note that flushing just moves the internal buffered state in IndexWriter into the index, but these changes are not visible to IndexReader until either commit() or close() is called. A flush may also trigger one or more segment merges which by default run with a background thread so as not to block the addDocument calls (see below for changing the MergeScheduler).<br>
+The optional autoCommit argument to the constructors controls visibility of the changes to IndexReader instances reading the same index. When this is false, changes are not visible until close() or commit() is called. Note that changes will still be flushed to the Directory as new files, but are not committed (no new segments_N file is written referencing the new files, nor are the files sync'd to stable storage) until close() or commit() is called. If something goes terribly wrong (for example the JVM crashes), then the index will reflect none of the changes made since the last commit, or the starting state if commit was not called. You can also call rollback(), which closes the writer without committing any changes, and removes any index files that had been flushed but are now unreferenced. This mode is useful for preventing readers from refreshing at a bad time (for example after you've done all your deletes but before you've done your adds). It can also be used to implement simple single-writer transactional semantics ("all or none"). You can do a two-phase commit by calling prepareCommit() followed by commit(). This is necessary when Lucene is working with an external resource (for example, a database) and both must either commit or rollback the transaction.<br>
+Regardless of autoCommit, an IndexReader or IndexSearcher will only see the index as of the "point in time" that it was opened. Any changes committed to the index after the reader was opened are not visible until the reader is re-opened.<br>
+Opening an IndexWriter creates a lock file for the directory in use. Trying to open another IndexWriter on the same directory will lead to a LockObtainFailedException. The LockObtainFailedException is also thrown if an IndexReader on the same directory is used to delete documents from the index.</font></p><p><font size=2><br></font></p><p><font size=2>DocumentsWriter</font></p><p><font size=2>&nbsp;&nbsp;&nbsp; Es una clase privada a la anterior (IndexWriter) y no aparece en el javadoc del API.<br></font></p><p><br></p><p><font size=2>Token</font></p><p><font size=2>&nbsp;&nbsp;&nbsp; La clase Token, del paquete "analysis" contiene el siguiente token segun lo haya dado la clase que hace el analisis, p.e. la siguiente palabra entre espacios.<br></font></p><p><br></p><p><font size=2>1. Creación del objeto IndexWriter: en este momento se crean los ficheros segments_X, segments.gen y _X.cfs</font></p><p><font size=2>2. Uso del método "addDocument" del objeto "IndexWriter", aqui se modifica el índice y se calculan los parámetros estadisticos.</font></p><p></p><div>
+{|  border=1 bordercolor=#000000 cellpadding=3 cellspacing=0 class="" height=326 id=e9jr width=1163<tbody> 
+|  style=TEXT-ALIGN:center valign=top width=4% | 
+Paso<br>
+|  style=TEXT-ALIGN:center width=10% | 
+Objeto<br>
+|  style=TEXT-ALIGN:center width=15% | 
+Metodo<br>
+|  style=TEXT-ALIGN:center width=35% | 
+Obs<br>
+|- 
+|  style=TEXT-ALIGN:center valign=top width=4% | <font size=2>1<br></font>
+|  width=10% | <font size=2>IndexWriter<br></font>
+|  width=15% | <font size=2>new IndexWriter(new File(indexDir),&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;new StandardAnalyzer(), true, IndexWriter.MaxFieldLength.UNLIMITED);</font>
+|  width=35% | <font size=2>En este momento se crean los ficheros </font><font size=2>segments_X, segments.gen y _X.cfs</font>
+|- 
+|  style=TEXT-ALIGN:center width=4% | <font size=2>2<br></font>
+|  width=10% | <font size=2>Document<br></font>
+|  width=15% | <font size=2>new Document<br></font>
+|  width=35% | <font size=2>Creamos un documento</font><font size=2><br></font>
+|- 
+|  style=TEXT-ALIGN:center width=4% | <font size=2>3<br></font>
+|  width=10% | <font size=2>Field<br></font>
+|  width=15% | <font size=2>Field("contents", new FileReader(f))</font>
+|  width=35% | 
+&nbsp;&nbsp; <font size=2>Creamos un nuevo campo de nombre "contents" indexed pero NO stored. El "reader" que se le pasa como argumento es de solo lectura y no se puede cerrar hasta que no termine el método indexwriter.addDocument.<br>
+&nbsp; Por otro lado, el objecto Document sólo contiene una lista de campos, pero de momento no hace nada mas.<br></font>
+|- 
+|  style=TEXT-ALIGN:center valign=top | 
+4<br>
+|  valign=top | 
+IndexWriter<br>
+|  valign=top | 
+addDocument(doc anterior, analizer)<br>
+|  valign=top | 
+el analizer usado es el de la creacion del indexwriter<br>
+|- 
+|  style=TEXT-ALIGN:center valign=top | 
+5<br>
+|  valign=top | 
+DocumentsWriter<br>
+|  valign=top | 
+updateDocument(doc,analyzer)<br>
+|  valign=top | <br>
+|- 
+|  style=TEXT-ALIGN:center valign=top | 
+6<br>
+|  valign=top | 
+DocumentsWriter<br>
+|  valign=top | 
+getThreadState(doc)<br>
+|  valign=top | 
+Llamada sincronizada que devuelve un objeto "DocumentsWriterThreadState", o sea devuelve un ThreadState ilde que puede ser usado para indexar el documento.<br>
+|- 
+|  style=TEXT-ALIGN:center valign=top | 
+7<br>
+|  valign=top | 
+ThreadState.consumer
+|  valign=top | 
+processDocument
+|  valign=top | 
+Aqui hace:<br>
+- consumer.startDocument()<br>
+- va procesando los "Field" del documento, el field por ejemplo del "contents" contiene el "Reader" con el contenido del documento, todavia no analizado.<br>
+- Por cada "Field" se crea un obj. "DocFieldProcessorPerField", que lo añade a su atributo "consumer" con la informacion del Field<br>
+- se ordenan los Field con el quicksort<br>
+- se comienza un bucle para procesar los Field<br>
+|- 
+|  style=TEXT-ALIGN:center valign=top | 
+7.1<br>
+|  valign=top | 
+DocFieldConsumer<b>s</b>PerField
+|  valign=top | 
+processFields(fields[i].fields, fields[i].fieldCount)
+|  valign=top | 
+DocFieldConsumer<b>s</b>PerField es una clase final que tiene 3 atributos:<br>
+&nbsp; final DocFieldConsumerPerField one;<br>
+&nbsp; final DocFieldConsumerPerField two;<br>
+&nbsp; final DocFieldConsumersPerThread perThread;<br><br>
+donde "DocFieldConsumerPerField" es una clase abstracta<br>
+|- 
+|  valign=top | 
+7.1.1<br>
+|  valign=top | 
+DocFieldConsumerPerField<br>
+(en este caso la clase es "DocInverterPerField")<br>
+|  valign=top | 
+processField<br>
+|  valign=top | 
+Al ser una clase abstracta el metodo dependerá de la clase final que implemente el processField. Aqui se distingue si el campo es un Stream o no:<br>
+&nbsp; - Si no lo es: se calcula el offset, length y position<br>
+&nbsp; - Si es un Stream:<br>
+&nbsp; - Si es un Reader: utiliza el analyzer para crear un Stream con el, y entonces procesa los Tokens, aqui ya tiene la posicion dentro del fichero original (sin analizar) eso sera porque se guarda tambien el obj "Reader"<br>
+&nbsp; - Creo que se tiene una lista global de "Tokens" de manera que las actualizaciones estadisticas se hacen de manera global para todos los documentos<br>
+&nbsp; - Aqui se van añadiendo datos como posiciones globales, tamaños de los tokens, etc<br>
+&nbsp; - Hay dos instrucciones:<br>
+&nbsp;public void processFields(Fieldable[] fields, int count) throws IOException {<br>
+&nbsp;&nbsp;&nbsp; one.processFields(fields, count);<br>
+&nbsp;&nbsp;&nbsp; two.processFields(fields, count);<br>
+&nbsp; }<br><br>
+&nbsp;<br>
+|- 
+| 
+7.1.1.1<br>
+| 
+TermsHashPerField (consumer)<br>
+| 
+add(Token)<br>
+| 
+Lo que hace basicamente es añadir todos los Tokens al atributo consumer<br></tbody>
+|}</div>
+&nbsp;&nbsp; &nbsp;<br><p><font size=2>La clase DocumentsWriter ejecuta la instrucción: state.consumer.processDocument()</font><font size=2>que se encarga de todo.</font><br></p><p><font size=2>La clase DocInverterPerField lee del elemento "stream" (cogido de docState.analyzer.reusableTokenStream(fieldInfo.name, reader)) y lo mete en el atributo "consumer"<br></font></p><p><font size=2><br></font></p><p><font size=2>Despues de añadir cada documento al indexWriter se hace uno por uno un "flush" para que actualice los cambios.</font><br></p><br><div style=TEXT-ALIGN:center><b>Scoring</b><br></div>
+&nbsp;&nbsp;&nbsp; Lucene scoring uses a combination of the <a href=http://en.wikipedia.org/wiki/Vector_Space_Model>Vector Space Model (VSM) of Information Retrieval</a> and the <a href=http://en.wikipedia.org/wiki/Standard_Boolean_model>Boolean model</a> to determine how relevant a given Document is to a User's query. In general, the idea behind the VSM is the more times a query term appears in a document relative to the number of times the term appears in all the documents in the collection, the more relevant that document is to the query. In VSM, documents and queries are represented as weighted vectors in a multi-dimensional space, where each distinct index term is a dimension, and weights are <a href=http://en.wikipedia.org/wiki/Tfidf>Tf-idf</a> (term frequency–inverse document frequency) values.<br><br><br>
+Preguntas:<br>
+-<br><br><br><div style=TEXT-ALIGN:center><b>Modificacion del Indice invertido para la introducción del parámetro CF (Collection Frequency)</b><br><br></div>
+&nbsp;&nbsp;&nbsp; CF es un contador del numero de veces que aparece un término, recordar que DF (Document Frequency) es el núm. de documentos que contienen un término, sin embargo CF es el núm. de veces que aparece el término en la colección de documentos.<br>
+&nbsp;&nbsp;&nbsp; Todo lo que se refiere a la creación del índice esta en el paquete "<b>org.apache.lucene.index</b>"<br><br>
+&nbsp;&nbsp;&nbsp; 1. Creación y actualización del valor de la variable CF (collection frequency).<br><div>
+{|  border=1 bordercolor=#000000 cellpadding=3 cellspacing=0 class="" id=gla4 width=100%<tbody> 
+|  valign=top | <br>
+|  style=TEXT-ALIGN:center width=33.333333333333336% | 
+Clase<br>
+|  style=TEXT-ALIGN:center width=33.333333333333336% | 
+Método / Atributo<br>
+|  style=TEXT-ALIGN:center width=33.333333333333336% | 
+Observaciones<br>
+|- 
+|  valign=top | 
+1<br>
+|  valign=top | <i>DocInverterPerField </i>(Final, extiende de DocFieldConsumerPerField, cuya clase la extienden tambien: DocFieldConsumer<b>s</b>PerField y StoredFieldsWriterPerField
+|  valign=top | 
+processFields
+|  valign=top | 
+En un momento dado se hace un:<br><i>consumer.add(token);</i> (clase <i>TermsHashPerField</i>)<br>
+que lo que hace es meter el token en el array de <i>PostingList</i>, luego, dependiendo si el token es nuevo o no en dicho array, llama a los metodos "newTerm" o "addTerm" (clase <i>TermsHashConsumerPerField</i>), ver puntos 2 y 3.<br>
+|- 
+|  valign=top | 
+2<br>
+|  valign=top | <i>FreqProxTermsWriter </i>(Final, extiende de TermsHashConsumer)
+|  valign=top | 
+atributo/clase static "PostingList"<br>
+|  valign=top | 
+MODIFICACION: Se añade el atributo "colFreq" entero colFreq que guardará la variable CollectionFrequency.<br>
+|- 
+|  valign=top | 
+3<br>
+|  width=33.333333333333336% | <i>FreqProxTermsWriterPerField </i>(clase final que hereda de la clase abstracta TermsHashConsumerPerField)
+|  width=33.333333333333336% | 
+newTerm(RawPostingList p0): aqui se modifica el objeto "p" del tipo PostingList (ver punto 1)<br>
+|  width=33.333333333333336% | 
+MODIFICACION: Aqui se inician los contadores, tanto docFreq como colFreq a 1.<br>
+|- 
+|  valign=top | 
+4<br>
+|  style=TEXT-ALIGN:center valign=top | 
+"<br>
+|  valign=top | 
+addTerm(RawPostingList p0): aqui se modifica el objeto "p" del tipo PostingList (ver punto 1)
+|  valign=top | 
+MODIFICACION: Incrementamos el contador de colFreq<br>
+|- 
+|  valign=top | 
+5<br>
+|  valign=top | <i>TermInfo</i>
+|  valign=top | <i>colFreq</i>
+|  valign=top | 
+MODIFICACION: metemos el atributo colFreq en la clase y modificamos / añadimos los metodos para insertarlo y recuperarlo de la misma manera que se hace con docFreq.
+</tbody>
+|}</div><br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp; 2. Escritura de CF en el fichero "tis" modificando el formato existente para incluirlo<br><div>
+{|  border=1 bordercolor=#000000 cellpadding=3 cellspacing=0 class="" id=may5 width=100%<tbody> 
+|  valign=top | <br>
+|  style=TEXT-ALIGN:center width=33.333333333333336% | 
+Clase<br>
+|  style=TEXT-ALIGN:center width=33.333333333333336% | 
+Metodo / Atributo<br>
+|  style=TEXT-ALIGN:center width=33.333333333333336% | 
+Observaciones<br>
+|- 
+|  valign=top | 
+1<br>
+|  width=33.333333333333336% | <i>TermInfosWriter</i><br>
+|  width=33.333333333333336% | 
+void add(int fieldNumber, byte[] termBytes, int termBytesLength, TermInfo ti)
+|  width=33.333333333333336% | 
+MODIFICACION: añadimos la linea:<br>
+output.writeVInt(ti.colFreq);<br>
+donde metemos la vble "CF" en el FICHERO tis&#33;&#33;&#33; esto hay que chequearlo bien para que no cause problemas colaterales.<br>
+|- 
+|  valign=top | 
+2<br>
+|  valign=top | <i>FreqProxTermsWriter </i>(extiende TermsHashConsumer)
+|  valign=top | 
+&nbsp;void appendPostings(FreqProxTermsWriterPerField[] fields,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FormatPostingsFieldsConsumer consumer)
+|  valign=top | 
+MODIFICACION: cuidado&#33; este no es el "appendPostings" que hemos modificado para incluir la salida del fichero "aip" sino el original, los cambios son:<br>
+(1) <i>final int colDocFreq = minState.getColFreq(); </i>// dentro del bucle anterior<br>
+(2)&nbsp;<i>final FormatPostingsPositionsConsumer posConsumer = docConsumer.addDoc(minState.docID, termDocFreq, colDocFreq);</i> //cambiamos la llamada incluyendo el parametro "colDocFreq"<br>
+|- 
+|  valign=top | 
+3<br>
+|  valign=top | 
+FormatPostingsDocsConsumer (abstracta)<br>
+|  valign=top | 
+abstract FormatPostingsPositionsConsumer addDoc(int docID, int termDocFreq, int colFreq) throws IOException;
+|  valign=top | 
+MODIF: basicamente añadir un método con la nueva vble<br>
+|- 
+|  valign=top | 
+4<br>
+|  valign=top | 
+FormatPostingsDocsWriter (extiende la del pto 3)<br>
+|  valign=top | <br>
+|  valign=top | 
+MODIF: cambios en toda la clase para incluir colFreq<br>
+(1) <i>int colFreq;</i> //declaramos la vble<br>
+(2) <i>FormatPostingsPositionsConsumer addDoc(int docID, int termDocFreq, int colFreq)</i> // sobrecargamos este metodo para incluir CF<br>
+(3)&nbsp; <i>termInfo.set(df,colFreq, parent.freqStart, parent.proxStart, (int) (skipPointer - parent.freqStart));</i> //en el metodo "finish()" cambiamos esta linea para incluir CF<br></tbody>
+|}</div><br><br>
+&nbsp;&nbsp;&nbsp; 3. Escritura de CF en un fichero propio "aip" para insertar la vble CF<br><div>
+{|  border=1 bordercolor=#000000 cellpadding=3 cellspacing=0 class="" id=xub5 width=100%<tbody> 
+|  valign=top | <br>
+|  style=TEXT-ALIGN:center width=33.333333333333336% | 
+Clase<br>
+|  style=TEXT-ALIGN:center width=33.333333333333336% | 
+Metodo / Atributo<br>
+|  style=TEXT-ALIGN:center width=33.333333333333336% | 
+Observaciones<br>
+|- 
+|  valign=top | 
+1<br>
+|  valign=top | 
+IndexFileNames (clase final)<br>
+|  valign=top | 
+static final String AIP_EXTENSION = "aip";
+|  valign=top | 
+MODIFICACION: añadimos la extensión del fichero que contendrá los datos, el nombre es cómun al segmento (indice).<br>
+Aparte de añadir la extensión, se ha metido "AIP_EXTENSION" alli donde está ya TERMS_EXTENSION (tis)<br>
+|- 
+|  valign=top | 
+2<br>
+|  width=33.333333333333336% | <i>FreqProxTermsWriter </i>(extiende TermsHashConsumer)
+|  width=33.333333333333336% | 
+flush(Map threadsAndFields, final DocumentsWriter.FlushState state)
+|  width=33.333333333333336% | 
+MODIFICACION: metemos la instruccion:<br><br><i>final IndexOutput colFreqOut = state.directory.createOutput(state.segmentFileName(IndexFileNames.AIP_EXTENSION));</i><br><br>
+de manera similar a la creada con el fichero "frq", cuidado&#33; el fichero "frq" contiene los documentos y sus frecuencias<br><br>
+Cambiamos la llamada a appendPosting para incluir la salida que acabamos de crear:<br><i><br>
+appendPostings(state, fields, termsOut, freqOut, colFreqOut, proxOut, skipListWriter);</i><br>
+|- 
+|  valign=top | 
+3<br>
+|  style=TEXT-ALIGN:center valign=top | 
+"<br>
+|  valign=top | <i>appendPostings(state, fields, termsOut, freqOut, colFreqOut, proxOut, skipListWriter);</i>
+|  valign=top | 
+Es el método al que llamamos desde el punto 2. Es básicamente el mismo que el que no tiene "colFreqOut" añadiendo:<br>
+(1) <i>int colDocFreq = 0;</i> //inicializacion de la vble antes del bucle "while (numToMerge &gt; 0) {" pero dentro del bucle "while (numFields &gt; 0)" que procesa todos los terminos.<br>
+Dentro del bucle "while (numToMerge &gt; 0)" leer el CF del objeto minState:<br>
+(2) <i>colDocFreq = minState.getColFreq();<br></i>Esto ya lo que se quiera escribir en el fichero, no esta muy claro como deberia ser el formato de momento escribimos doc y CF<i>:<br></i>(3) <i>colFreqOut.writeVInt(doc - lastDoc);</i><br>
+(4) <i>colFreqOut.writeVInt(colDocFreq);</i><br>
+Cambiamos la instrucción "termInfo.set(..." para meter el colDocFreq:<br>
+(5) <i>termInfo.set(colDocFreq, df, freqPointer, proxPointer, ...</i><br><br></tbody>
+|}</div><br><br>
+&nbsp;&nbsp;&nbsp; 4. Lectura de la variable CF:<br><div>
+{|  border=1 bordercolor=#000000 cellpadding=3 cellspacing=0 class="" id=mfpf width=100%<tbody> 
+|  valign=top | <br>
+|  style=TEXT-ALIGN:center width=33.333333333333336% | 
+Clase<br>
+|  style=TEXT-ALIGN:center width=33.333333333333336% | 
+Metodo / Atributo<br>
+|  style=TEXT-ALIGN:center width=33.333333333333336% | 
+Observaciones<br>
+|- 
+|  valign=top | 
+1<br>
+|  width=33.333333333333336% | <i>IndexReader</i> (abstracta)<br>
+|  width=33.333333333333336% | 
+public abstract int colDocFreq(Term t) throws IOException;
+|  width=33.333333333333336% | 
+MODIFICACION: se inserta el método abstracto que lee la vble para luego implementarlo en las clases que heredan<br>
+|- 
+|  valign=top | 
+2<br>
+|  valign=top | <i>SegmentReader</i> (extiende de IndexReader)<br>
+|  valign=top | 
+colDocFreq(Term t)
+|  valign=top | 
+MODIFICACION: implementación del método creado en el IndexReader del punto 2<br>
+|- 
+|  valign=top | 
+3<br>
+|  valign=top | <i>FilterIndexReader </i>(extiende de IndexReader)<br>
+|  valign=top | 
+colDocFreq(Term t)
+|  valign=top | 
+MODIFICACION: implementación del método creado en el IndexReader del punto 2
+|- 
+|  valign=top | 
+4<br>
+|  valign=top | 
+TermEnum (abstracta)<br>
+|  valign=top | 
+public abstract int colFreq();
+|  valign=top | 
+MODIFICACION: añadimos el met. abstracto para usarlo en las clases que la heredan<br>
+|- 
+|  valign=top | 
+5<br>
+|  valign=top | 
+SegmentTermEnum (extiende TermEnum)<br>
+|  valign=top | 
+&nbsp;public final int colFreq()
+|  valign=top | 
+MODIFICACION: independientemente de si lo leemos desde el fichero propio "aip" o si lo hacemos desde "tis" hay que añadir este metodo para leer el dato de "termInfo", cuidado&#33; no pueden escribir en termInfo tanto desde la lectura del "aip" como del "tis", hay que elegir uno primero&#33;<br>
+|- 
+|  valign=top | 
+6<br>
+|  valign=top | 
+FreqProxFieldMergeState
+|  valign=top | 
+public int getColFreq()
+|  valign=top | 
+MODIFICACION: añadimos el metodo getColFreq() que pilla CF de la vble 'p' que es privada<br>
+|- 
+|  valign=top | 
+7<br>
+|  valign=top | 
+DirectoryReader (extiende IndexReader)<br>
+|  valign=top | 
+public int colDocFreq(Term t) throws IOException<br>
+|  valign=top | 
+MODIF: añadimos este metodo, la implementacion es un poco rara porque va sumando los valores de los objetos "subReaders", es una copia del "docFreq()"<br>
+Cuidado&#33; no se si sirve de algo o no<br>
+|- 
+|  valign=top | 
+8<br>
+|  valign=top | 
+MultiTermEnum (extiende TermEnum, esta dentro de la clase DirectoryReader)<br>
+|  valign=top | <br>
+|  valign=top | 
+MODIF: hay varias modificaciones:<br>
+(1) private int colFreq; //inicializamos<br>
+(2) colFreq = 0; // antes del metodo "next()"<br>
+(3) colFreq += top.termEnum.colFreq(); //en el metodo "next()" vamos calculandolo<br>
+(4) public int colFreq(); //creamos un metodo getter que devuelva el colFreq<br>
+|- 
+|  valign=top | 
+9<br>
+|  valign=top | 
+FilterTermEnum (extiende TermEnum, esta dentro de FilterIndexReader)<br>
+|  valign=top | 
+public int colFreq()
+|  valign=top | 
+MODIF: añadimos el metodo que devuelve colFreq el parametro TermEnum "in"<br>
+|- 
+|  valign=top | 
+10<br>
+|  valign=top | <i>FilteredTermEnum </i>(extiende TermEnum, pero esta dentro de otro paquete, el org.apache.lucene.search)<br>
+|  valign=top | 
+public int colFreq()
+|  valign=top | 
+MODIF: he añadido este metodo para evitar error de compilacion ya que hereda de una clase abstracta que lo tiene definido.No esta probado.<br>
+|- 
+|  valign=top | 
+11<br>
+|  valign=top | <i>MultiReader </i>(extiende IndexReader)<br>
+|  valign=top | 
+public int colDocFreq(Term t)
+|  valign=top | 
+MODIF: he añadido este metodo para evitar error de compilacion ya que hereda de una clase abstracta que lo tiene definido. No esta probado.<br>
+|- 
+|  valign=top | 
+12<br>
+|  valign=top | <i>ParallelTermEnum </i>(extiende TermEnum, pero esta dentro de ParallelReader)<br>
+|  valign=top | 
+public int colFreq()
+|  valign=top | 
+MODIF: he añadido este metodo para evitar error de compilacion ya que hereda de una clase abstracta que lo tiene definido. No esta probado.
+|- 
+|  valign=top | 
+13<br>
+|  valign=top | 
+ParallelReader (extiende IndexReader)<br>
+|  valign=top | 
+public int colDocFreq(Term term)
+|  valign=top | 
+MODIF: he añadido este metodo para evitar error de compilacion ya que hereda de una clase abstracta que lo tiene definido. No esta probado.
+|- 
+|  valign=top | 
+14<br>
+|  valign=top | 
+TermDocs (Interfaz)<br>
+|  valign=top | 
+int colFreq();
+|  valign=top | 
+MODIF: añadir el metodo para implementarlo en todas las clases que implenten la interfaz<br>
+|- 
+|  valign=top | 
+15<br>
+|  valign=top | 
+MultiTermDocs (Implementa TermDocs)<br>
+|  valign=top | 
+public int colFreq();<br>
+|  valign=top | 
+MODIF: implementamos el metodo de la interfaz. Es un poco extraño porque el atributo del que leo CF tambien implementa la interfaz TermDocs.<br>
+|- 
+|  valign=top | 
+16<br>
+|  valign=top | 
+AllTermDocs (Implementa TermDocs)<br>
+|  valign=top | 
+public int colFreq()<br>
+|  valign=top | 
+MODIF: implemeta el metodo tambien pero NO ESTOY SEGURO de que esté bien porque devuelve 1 como el metodo que devuelve el DF&#33;&#33;<br>
+|- 
+|  valign=top | 
+17<br>
+|  valign=top | 
+FilterIndexReader (Implementa TermDocs)<br>
+|  valign=top | 
+public int colFreq()<br>
+|  valign=top | 
+MODIF: implementa el metodo de la interfaz, como en el caso de 15 es extraño<br>
+|- 
+|  valign=top | 
+18<br>
+|  valign=top | 
+ParallelTermDocs (Implementa TermDocs y extiende TermEnum, pero esta dentro de ParallelReader)<br>
+|  valign=top | 
+public int colFreq()<br>
+|  valign=top | 
+MODIF: idem<br>
+|- 
+|  valign=top | 
+19<br>
+|  valign=top | 
+SegmentTermDocs (Implementa TermDocs)<br>
+|  valign=top | <br>
+|  valign=top | 
+MODIF: se incluyen las lineas de codigo siguientes para incluir la variable CF en la clase:<br>
+1. protected int cf; //declaracion<br>
+2. cf = ti.colFreq; //asignacion (en el metodo seek())<br>
+3. public final int colFreq() { return cf; } //metodo de acceso<br>
+CUIDADO: aqui no se ha hecho ninguna modificacion al metodo "next()" para asignar valor a CF como lo hace para la vble "freq" que es la que devuelve en el metodo "freq()", me da la sensacion de que la lee del fichero ".frq"<br>
+|- 
+|  valign=top | 
+20<br>
+|  valign=top | 
+MultipleTermPositions (implementa TermPositions, que extiende el interfaz TermDocs)<br>
+|  valign=top | 
+public final int colFreq()
+|  valign=top | 
+MODIF: se incluye un metodo para cumplir con la interfaz.<br>
+CUIDADO: se esta devolviendo el mismo valor que DF, fijo que esta mal<br>
+|- 
+|  valign=top | 
+21<br>
+|  valign=top | 
+SegmentMerger<br>
+|  valign=top | 
+&nbsp;private final int appendPostings(final FormatPostingsTermsConsumer termsConsumer, SegmentMergeInfo[] smis, int n)
+|  valign=top | 
+MODIF: en el metodo appendPostings se modifica la llamada al docConsumer.addDoc y se llama al metodo sobrecargado que se creo para añadir la vable CF:<br>
+final FormatPostingsPositionsConsumer posConsumer = docConsumer.addDoc(doc, freq, postings.colFreq())<br>
+esto es posible gracias a todas las modificaciones previas (puntos 14-20)<br></tbody>
+|}</div><br>
+&nbsp;&nbsp;&nbsp; 5. Lectura de CF desde el fichero "tis":<br><div>
+{|  border=1 bordercolor=#000000 cellpadding=3 cellspacing=0 class="" id=gxac width=100%<tbody> 
+|  valign=top | <br>
+|  style=TEXT-ALIGN:center width=33.333333333333336% | 
+Clase<br>
+|  style=TEXT-ALIGN:center width=33.333333333333336% | 
+Metodo / Atributo<br>
+|  style=TEXT-ALIGN:center width=33.333333333333336% | 
+Observaciones<br>
+|- 
+|  valign=top | <br>
+|  width=33.333333333333336% | 
+SegmentTermEnum (extiende TermEnum)<br>
+|  width=33.333333333333336% | 
+public final boolean next()
+|  width=33.333333333333336% | 
+MODIFICACION: justo despues de leer el "docFreq" se lee el colFreq ya que se guardo justo despues:<br><i>termInfo.colFreq = input.readVInt();</i><br>
+Aqui habria que comprobar que estaba incluido en el tamaño que se guarda al ppio del fichero&#33;&#33;<br></tbody>
+|}</div>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp;&nbsp; 6. Lectura de CF desde el fichero "aip":<br><div>
+{|  border=1 bordercolor=#000000 cellpadding=3 cellspacing=0 class="" id=q95o width=100%<tbody> 
+|  valign=top | <br>
+|  style=TEXT-ALIGN:center width=33.333333333333336% | 
+Clase<br>
+|  style=TEXT-ALIGN:center width=33.333333333333336% | 
+Metodo / Atributo<br>
+|  style=TEXT-ALIGN:center width=33.333333333333336% | 
+Observaciones<br>
+|- 
+|  valign=top | <br>
+|  width=33.333333333333336% | 
+TermInfosReader<br>
+|  width=33.333333333333336% | 
+TermInfosReader(Directory dir, String seg, FieldInfos fis, int readBufferSize)
+|  width=33.333333333333336% | 
+MODIFICACION: modificamos el constructor de SegmentTermEnum que se asigna a origEnum:<br>
+origEnum = new SegmentTermEnum(directory.openInput(segment + "." + IndexFileNames.TERMS_EXTENSION,readBufferSize),<br>
+directory.openInput(segment + "." + IndexFileNames.AIP_EXTENSION,<br>
+readBufferSize), fieldInfos, false);<br>
+metemos el fichero "aip" para leer de ahi tambien.<br>
+|- 
+|  valign=top | <br>
+|  valign=top | 
+SegmentTermEnum (extiende TermEnum)<br>
+|  valign=top | 
+private IndexInput inputCF;
+|  valign=top | 
+MODIFICACION:<br>
+(1) <i>private IndexInput inputCF;</i> // añadimos el IndexInput para leer del nuevo fichero<br>
+(2)&nbsp; <i>SegmentTermEnum(IndexInput i, IndexInput iCF, FieldInfos fis, boolean isi)</i> // se añade un constructor mas con nuevo "IndexInput" para poder leerlo<br>
+(3) <i>int firstIntCF = inputCF.readInt();</i> // en el nuevo contructor anterior se lee el primer entero, quiza este deberia ser el tamaño y yo no lo guardo&#33;&#33;&#33;<br>
+(4) <i>clone.inputCF = (IndexInput) inputCF.clone();</i> //en el metodo "clone()" clonamos tambien el nuevo IndexInput<br>
+(5) <i>inputCF.seek(pointer);</i> //en el metodo seek tambien lo usamos para nuestro fichero aunque no se para qué sirve<br>
+(6) <i>termInfo.colFreq = inputCF.readVInt();</i> // se mete esta instruccion en el metodo "next()" para leer de nuestro fichero tambien<br></tbody>
+|}</div><br><br><br><br><br><br><br></body></html>
