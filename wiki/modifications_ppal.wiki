@@ -4,4 +4,4 @@
 
 = Details =
 
-  * http://docs.google.com/View?id=dgjkgr6b_125cwqvb8cs
+  * [http://docs.google.com/View?id=dgjkgr6b_125cwqvb8cs Changes to include CF parameter]
