@@ -1,4 +1,4 @@
-= Lucene modification =
+= Lucene IR Improvement =
 
  The mail goal of the project is the improvement of Lucene project, which is an Retrival Information application, Open Source under Apache Licence.
  The modification are based on the _java_ version since there are other versions in other Language programs.
