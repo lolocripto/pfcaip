@@ -1,6 +1,6 @@
 = Specification of the Modifications in Lucene Project =
 
-  All the changes have been flagged with comments on an certain format to track the changes made from the "public" version, also, important comments made after detailed investigation/execution of the source code have been flagged too, the "flag" has been introduced in source code as "comments" (either with '//' or '/`*`'), the format of those comments are:
+  All the changes have been flagged with comments on an certain format to track the changes made from the "public" version, also, important comments made after detailed investigation/execution of the source code have been flagged too, the "flag" has been introduced in source code as "comments" (either with "//" or "/`*`"), the format of those comments are:
 
         * "AIP change code: comment of the change made and why"
         * "AIP comment: comment about what the code does in that part" 
