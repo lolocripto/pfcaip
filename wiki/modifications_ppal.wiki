@@ -4,4 +4,4 @@
 
 = Details =
 
-  * [[pfcaip:creationOfCF|Creation and update of the Collection Frequency (CF) parameter]]
+  * {{[[creationOfCF|Creation and update of the Collection Frequency (CF) parameter]]}}
