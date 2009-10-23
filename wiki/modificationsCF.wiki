@@ -1,0 +1,7 @@
+= Specification of the Modifications in Lucene Project =
+
+ Here is detailed all the modifications made in the source code to reach the objectives.
+
+= Details =
+
+  * Creation and update of the Collection Frequency (CF) parameter
