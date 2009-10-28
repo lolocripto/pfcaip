@@ -22,7 +22,7 @@ _
     * When documents are deleted, gaps are created in the numbering. These are eventually removed as the index evolves through merging. Deleted documents are dropped when segments are merged. A freshly-merged segment thus has no gaps in its numbering.
 _
 
-
+ * It seems the documents are processed by adding all the terms in a structure and processing that structure without reference of the doc number, basically in each loop the terms of the documents are added to a globe "stream" of Terms and for each document that big "stream" is processed without recording the document number.
 
 
 
