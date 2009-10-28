@@ -102,7 +102,7 @@ final class FreqProxTermsWriterPerField extends TermsHashConsumerPerField implem
   }
 
   /**
-   * AIP: aqui es donde escribe en el indice la frecuencia del termino en el documento
+   * AIP comment: aqui es donde escribe en el indice la frecuencia del termino en el documento
    * 		vamos lo que hace es: como es un termino nuevo apunta en el indice que dicho
    * 		termino aparece en el documento poniendo 1 y en el indice guardara el num de 
    * 		documento en el que aparece dicho termino
@@ -128,7 +128,7 @@ final class FreqProxTermsWriterPerField extends TermsHashConsumerPerField implem
   }
 
   /**
-   * AIP: actualiza la frecuencia de los tokens en los nuevos documentID
+   * AIP comment: actualiza la frecuencia de los tokens en los nuevos documentID
    * 		este metodo lo usa para actualizar terminos que ya estan insertados en el indice
    * 		y tiene que incrementar la frecuencia del termino
    * 		primero comprueba que los docID son distintos, para actualizarlo con el CF
