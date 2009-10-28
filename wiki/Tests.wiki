@@ -10,7 +10,7 @@
  * From the IndexReader object by giving the Term
  * From TermEnum object
 
-== JUNIT tests ==
+== Tests ==
 
  * [http://docs.google.com/View?id=dgjkgr6b_126ggq5s6gz Click here] to check the specifications of the JUNIT classes where the tests have been performed to check the calculation of CF (collection frequency) parameter.
 
