@@ -14,7 +14,7 @@
 
 = Changes for parameters in a document level =
 
- ¿Is it possible to calculate any statistic parameter in a document level? Basically, according to what I've seen in the source code I think it is not possible, this is the list of the reasons:
+ ¿Is it possible to calculate any statistic parameter in a document level? Basically, according to what I''ve seen in the source code I think it is not possible, this is the list of the reasons:
  * If we want to associate the document number with a certain Term, we can face problems since that doc number might change after modification in the Index. According to the documentation:
 {{{
   Note that a document's number may change, so caution should be taken when storing these numbers outside of Lucene. In particular, numbers may change in the following situations:
