@@ -22,7 +22,7 @@ _
     * When documents are deleted, gaps are created in the numbering. These are eventually removed as the index evolves through merging. Deleted documents are dropped when segments are merged. A freshly-merged segment thus has no gaps in its numbering.
 _
 
- * It seems the documents are processed by adding all the terms in a structure and processing that structure without reference of the doc number, basically in each loop the terms of the documents are added to a globe "stream" of Terms and for each document that big "stream" is processed without recording the document number.
+ * It seems the documents are processed by adding all the terms (don't forget a Term is compound by the Field name and the Term value) in a Collection and processing that Collection WITHOUT ANY reference of the doc number, basically in each loop that Coolection Terms of the documents are added to a globe "stream" of Terms and for each document that big "stream" is processed without recording the document number.
 
  * Everything in Lucene is thought with the "Field" concept and not "Document":
   * The same Term (e.g. 'aaa') in different fields are DIFFERENT Terms no matter the Document where the Term is included: this forbid us to include information at Document level in TermInfo object since they are sticked to a Field and not to a Document
