@@ -24,7 +24,9 @@ _
 
  * It seems the documents are processed by adding all the terms in a structure and processing that structure without reference of the doc number, basically in each loop the terms of the documents are added to a globe "stream" of Terms and for each document that big "stream" is processed without recording the document number.
 
-
+ * Everything in Lucene is thought with the "Field" concept and not "Document":
+  - The same Term (e.g. 'aaa') in different fields are DIFFERENT Terms no matter the Document where the Term is included
+  - The same Term (e.g. 'aaa') in different documents but the same field are THE SAME Term
 
 
 [ProjectDescription Return to Project Description Page]
