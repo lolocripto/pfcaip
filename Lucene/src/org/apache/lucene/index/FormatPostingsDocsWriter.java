@@ -65,8 +65,8 @@ final class FormatPostingsDocsWriter extends FormatPostingsDocsConsumer {
   int lastDocID;
   int df;
   
-  //AIP change code
-  int colFreq = -1;
+  //AIP change code.
+  int colFreq;
 
   /** Adds a new doc in this term.  If this returns null
    *  then we just skip consuming positions/payloads. */
@@ -134,6 +134,7 @@ final class FormatPostingsDocsWriter extends FormatPostingsDocsConsumer {
 
     lastDocID = 0;
     df = 0;
+    colFreq = 0; //AIP change code
   }
 
   void close() throws IOException {
