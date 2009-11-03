@@ -14,7 +14,8 @@
 
 = Changes for parameters in a document level =
 
-¿Is it possible to calculate any statistic parameter in a document level? Basically, according to what I've seen in the source code I think it is not possible, this is the list of the reasons:
+*¿Is it possible to calculate any statistic parameter in a document level?* 
+Basically, according to what I've seen in the source code I think it is not possible, this is the list of the reasons:
  * If we want to associate the document number with a certain Term, we can face problems since that doc number might change after modification in the Index. According to the documentation:
 _
   Note that a documents number may change, so caution should be taken when storing these numbers outside of Lucene. In particular, numbers may change in the following situations:
@@ -29,6 +30,8 @@ _
  * Everything in Lucene is thought with the "Field" concept and not "Document":
   * The same Term (e.g. 'aaa') in different fields are DIFFERENT Terms no matter the Document where the Term is included: this forbid us to include information at Document level in TermInfo object since they are sticked to a Field and not to a Document
   * The same Term (e.g. 'aaa') in different documents but the same field are THE SAME Term
+
+*So, what possibilities are to add Document Level Stats?*
 
 
 [ProjectDescription Return to Project Description Page]
