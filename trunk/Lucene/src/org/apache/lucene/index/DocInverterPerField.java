@@ -56,6 +56,9 @@ final class DocInverterPerField extends DocFieldConsumerPerField {
     endConsumer.abort();
   }
 
+  /*
+   * AIP Comment: this method is called for each different "field" with all of his Terms
+   */
   public void processFields(final Fieldable[] fields,
                             final int count) throws IOException {
 
