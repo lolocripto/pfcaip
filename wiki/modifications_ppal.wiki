@@ -32,6 +32,6 @@ _
   * The same Term (e.g. 'aaa') in different documents but the same field are THE SAME Term
 
 *So, what possibilities are to add Document Level Stats?*
-
+ No matter the stats is a Document level or a Collection level I need to separate the meaning of "Field" as field_name / term_value, and store the terms_value in a separated structure, so whenever any stat is updated, first is compared in this structure whether that term has already appear or not.
 
 [ProjectDescription Return to Project Description Page]
