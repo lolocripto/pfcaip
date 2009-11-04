@@ -36,4 +36,4 @@ Problemas:
 
 Ventajas:
   - Tendriamos el numero de veces que aparece un termino (sin importar el campo en el que esté) en toda la colección.
-  - Estaría disponible con el resto de la informacion del Término y se guardaria como parte del diccionario existente ahora (*.tis) asi que evitariamos el problema de almacenar en un fichero nuevo la informacion
+  - Estaría disponible con el resto de la informacion del Término y se guardaria como parte del diccionario existente ahora (`*`.tis) asi que evitariamos el problema de almacenar en un fichero nuevo la informacion
