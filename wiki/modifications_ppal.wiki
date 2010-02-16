@@ -14,12 +14,12 @@ Basically, the target of the modifications is to improve the ranking feature of 
 = Information is given by Lucene currently and which would be needed =
 
 Information needed by the formulas:
-* df(t): number of documents where appears the term "t"
-* ld: document length
-* lc: field length
-* avl(c): average length of a field c
-* N: number of documents
-* 
+ * df(t): number of documents where appears the term "t"
+ * ld: document length
+ * lc: field length
+ * avl(c): average length of a field c
+ * N: number of documents
+  
 = Details =
 
   * [http://docs.google.com/View?id=dgjkgr6b_125cwqvb8cs Changes in Lucene source code to include CF parameter]
