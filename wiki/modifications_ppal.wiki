@@ -7,7 +7,7 @@
 
     For the nature of the modifications, the affected package is mainly "org.apache.lucene.index". There are a few changes on "org.apache.lucene.search" as well, to lists the changes you can make a search with the previous comments (AIP flag). 
 
- This project starts from a request of another project, which is BM25 and BM25F, you can see more detail about this in "http://nlp.uned.es/~jperezi/Lucene-BM25/".
+ This project starts from a request of another project, which is BM25 (for documents without fields) and BM25F (for documents with structure (fields)), you can see more detail about this in http://nlp.uned.es/~jperezi/Lucene-BM25.
 = Details =
 
   * [http://docs.google.com/View?id=dgjkgr6b_125cwqvb8cs Changes in Lucene source code to include CF parameter]
