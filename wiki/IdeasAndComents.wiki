@@ -1,6 +1,6 @@
 = Ideas to be explore =
 
-* Try to create a global field, named "contentsXXX" that contains all the terms: this would be useful to have global counters of terms, no matter the field name
+*Try to create a global field, named "contentsXXX" that contains all the terms: this would be useful to have global counters of terms, no matter the field name
 
 = Changes for parameters in a document level =
 
