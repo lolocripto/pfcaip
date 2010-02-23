@@ -2,9 +2,9 @@
 
 == Tener informacion estadistica por Documento ==
 La informacion en sí se puede sacar ya que el procesamiento se efectua por documento y luego por "Termino" (siendo cada Termino el par "Campo/Termino"), los problemas que plantea son:
- *Mantener en memoria la informacion de cada Termino por Documento distinto, debería ser alguna estructura lo mas rapida posible para no penalizar demasiado en los accesos cuando haya gran cantidad de datos a indexar
- *Escribir dicha informacion, para aprovechar la ventaja de la rapidez de Lucene se debería hacer mediante el mismo procedimiento y esto, al menos hoy por hoy, me resulta muy dificil
- *Leer los datos: esta el problema de leer esa gran cantidad de datos sin penalizar de nuevo en tiempo, además habría que dejarlo disponible en suficientes objetos para que resulte útil a la hora de acceder a ellos
+ * Mantener en memoria la informacion de cada Termino por Documento distinto, debería ser alguna estructura lo mas rapida posible para no penalizar demasiado en los accesos cuando haya gran cantidad de datos a indexar
+ * Escribir dicha informacion, para aprovechar la ventaja de la rapidez de Lucene se debería hacer mediante el mismo procedimiento y esto, al menos hoy por hoy, me resulta muy dificil
+ * Leer los datos: esta el problema de leer esa gran cantidad de datos sin penalizar de nuevo en tiempo, además habría que dejarlo disponible en suficientes objetos para que resulte útil a la hora de acceder a ellos
  
 == Crear un campo nuevo global ==
  Solo se podria aglutinar informacion global de la collection no? no podriamos obtener informacion estadistica por documento.
