@@ -1,6 +1,6 @@
 == Introduction ==
 
-This document contains a link to the Google document describing the [http://docs.google.com/View?id=dgjkgr6b_127gz27crhr TODO tasks lists], also contains the already finished tasks.
+This document contains a link to the Google document describing the [http://docs.google.com/View?id=dgjkgr6b_127gz27crhr TODO tasks lists and Roadmap], also contains some of the already finished tasks and the Roadmap of the project.
 
 
 
