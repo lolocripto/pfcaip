@@ -6,7 +6,7 @@
 
 *¿Is it possible to calculate any statistic parameter in a document level?* 
  Basically, according to what I've seen in the source code I think it is not possible, this is the list of the reasons:
- * If we want to associate the document number with a certain Term, we can face problems since that doc number might change after modification in the Index. According to the documentation:
+ * If we want to associate the document number with a certain Term, we can face problems since that doc number might change after modification in the Index. According to the documentation (I've checked myself):
 _
   Note that a documents number may change, so caution should be taken when storing these numbers outside of Lucene. In particular, numbers may change in the following situations:
     * The numbers stored in each segment are unique only within the segment, and must be converted before they can be used in a larger context. The standard technique is to allocate each segment a range of values, based on the range of numbers used in that segment. To convert a document number from a segment to an external value, the segment's base document number is added. To convert an external value back to a segment-specific value, the segment is identified by the range that the external value is in, and the segment's base value is subtracted. For example two five document segments might be combined, so that the first segment has a base value of zero, and the second of five. Document three from the second segment would have an external value of eight.
