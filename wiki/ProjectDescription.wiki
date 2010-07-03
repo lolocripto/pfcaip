@@ -11,4 +11,4 @@ The modifications include the modification of the inverted index format to inclu
  * [TODO_list TODO Tasks Lists]
 
 
-Check main page of [http://lucene.apache.org/ Apache Lucene page].
+Check main page of [http://lucene.apache.org/java/2_9_0/ Apache Lucene page].
