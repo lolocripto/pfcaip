@@ -15,7 +15,7 @@ _
   The previous information almost forbid us to use stats per document (using the docId) unless hard work changing Lucene is done whenever any change in the index is done (deleting, merging, etc ...) because basically it wouldn't be an "Inverted index" any more.
 
 
- * It seems the documents are processed by adding all the terms (don't forget a Term is compound by the Field name and the Term value) in a Collection and processing that Collection WITHOUT ANY reference of the doc number, basically in each loop that Coolection Terms of the documents are added to a globe "stream" of Terms and for each document that big "stream" is processed without recording the document number.
+ * It seems the documents are processed by adding all the terms (don't forget a Term is compound by the Field name and the Term value) in a Collection and processing that Collection WITHOUT ANY reference of the doc number, basically in each loop that Coolection Terms of the documents are added to a global "stream" of Terms and for each document, and that big "stream" is processed without recording the document number.
 
  * Everything in Lucene is thought with the "Field" concept and not "Document":
   * The same Term (e.g. 'aaa') in different fields are DIFFERENT Terms no matter the Document where the Term is included: this forbid us to include information at Document level in TermInfo object since they are sticked to a Field and not to a Document
