@@ -41,3 +41,5 @@ Problemas:
 Ventajas:
   - Tendriamos el numero de veces que aparece un termino (sin importar el campo en el que esté) en toda la colección.
   - Estaría disponible con el resto de la informacion del Término y se guardaria como parte del diccionario existente ahora (`*`.tis) asi que evitariamos el problema de almacenar en un fichero nuevo la informacion
+
+ Se esta manteniendo una conversación interesante acerca de todo esto con los usuarios de Lucene: https://issues.apache.org/jira/browse/LUCENE-2091
