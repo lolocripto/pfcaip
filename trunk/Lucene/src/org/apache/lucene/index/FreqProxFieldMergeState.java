@@ -100,6 +100,7 @@ final class FreqProxFieldMergeState {
         termFreq = freq.readVInt();
     }
     
+    // AIP Comment: no habria que leer aqui el colFreq de la misma manera que se ha leido el docFreq con readVInt()??
     colFreq = p.colFreq;
 
     assert docID != p.lastDocID;
