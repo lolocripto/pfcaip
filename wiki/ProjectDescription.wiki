@@ -13,8 +13,8 @@ Basically, the target of the modifications is to improve the ranking feature of 
 = Information given by Lucene currently and which would be needed =
 
 Information needed by the formulas:
- * df(t): number of documents where appears the term "t"
- * ld: document length
+ * df(t): number of documents where appears the term "t": Lucene currently gives this information
+ * ld: document length: Lucene doesn't gives the document average length directly from the API but it could be obtained in the indexing time by implementing an specific Similarity function
  * lc: field length
  * avl(c): average length of a field c
  * N: number of documents
