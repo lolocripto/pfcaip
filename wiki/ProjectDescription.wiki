@@ -12,14 +12,12 @@ Basically, the target of the modifications is to improve the ranking feature of 
 
 = Information given by Lucene currently and which would be needed =
 
-Information needed by the formulas:
- * df(t): number of documents where appears the term "t": Lucene currently gives this information based on Field, for BM25 it would be needed to be independient of the Field
- * ld: document length: Lucene doesn't gives the document average length directly from the API but it could be obtained in the indexing time by implementing an specific Similarity function
- * lc: field length
- * avl(c): average length of a field c
- * N: number of documents
- * How many times does term T occur in all fields for doc D?
-  
+Information missing in Lucene and needed in BM25: according to the discussion in "https://issues.apache.org/jira/browse/LUCENE-2091" is:
+ * docFreq at document level, something like "int docFreq(term, doc_id)" and return the number of documents where term occurs, but if it is not possible a catch-all field will be enough.
+ * The Collection Average Document Length and Collection Average Field Length (per each field).
+
+According the same conversation:
+ I don't think that we need "How many times does term T occur in all fields for doc D", frequency is necessary per field and not per document.
 
 For more information, this is an index of the work done so far:
 
