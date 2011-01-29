@@ -19,6 +19,8 @@ Information missing in Lucene and needed in BM25: according to the discussion in
 According the same conversation:
  I don't think that we need "How many times does term T occur in all fields for doc D", frequency is necessary per field and not per document.
 
+ The main problem to use BM25 formulas is that it is against the deep concept of Lucene: "The same string in two different fields is considered a different term"
+
 For more information, this is an index of the work done so far:
 
  * [modifications_ppal Modifications]
