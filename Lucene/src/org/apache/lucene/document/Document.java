@@ -85,8 +85,19 @@ public final class Document implements java.io.Serializable {
    * a document has to be deleted from an index and a new changed version of that
    * document has to be added.</p>
    */
-  public final void add(Fieldable field) {
+//  AIP change code: añadir un campo global igual que el que se añade
+  public final void add(Fieldable field) throws Exception {
     fields.add(field);
+    if (field.isIndexed()){
+	//copiar field a otro field
+	//cambiar el nombre del field
+	if (field instanceof Field){
+	    Field f = (Field) field;
+//	    f.name = "CatchAllFields";
+	    
+	    fields.add(f.copyToGlobalField());
+	}
+    }
   }
   
   /**
