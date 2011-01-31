@@ -537,4 +537,14 @@ public final class Field extends AbstractField implements Fieldable, Serializabl
     
     setStoreTermVector(TermVector.NO);
   }
+  
+  
+//  AIP change code: generar un Field igual pero con el nombre global
+  public Field copyToGlobalField() throws CloneNotSupportedException{
+      Field fout;
+      fout = (Field) this.clone();
+      fout.name = "CatchAllFields";
+      
+      return fout;
+  }
 }
