@@ -93,9 +93,9 @@ public final class Document implements java.io.Serializable {
 	//cambiar el nombre del field
 	if (field instanceof Field){
 	    Field f = (Field) field;
-//	    f.name = "CatchAllFields";
+	    Field globalF = (Field) f.copyToGlobalField();
 	    
-	    fields.add(f.copyToGlobalField());
+	    fields.add(globalF);
 	}
     }
   }
