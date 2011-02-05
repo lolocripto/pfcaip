@@ -17,7 +17,6 @@ package org.apache.lucene.document;
  * limitations under the License.
  */
 
-import org.apache.commons.io.CopyUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.index.IndexWriter;   // for javadoc
@@ -542,28 +541,50 @@ public final class Field extends AbstractField implements Fieldable, Serializabl
     setStoreTermVector(TermVector.NO);
   }
   
+//AIP change code: new constructor only setting the name
+  public Field(String name){
+      this.name = StringHelper.intern(name);
+  }
   
 //  AIP change code: generar un Field igual pero con el nombre global
   public Field copyToGlobalField(){
       Field fout=null;
+      fout = new Field("CatchAllFields");
+      fout.storeTermVector = this.storeTermVector;
+      fout.storeOffsetWithTermVector = this.storeOffsetWithTermVector;
+      fout.storePositionWithTermVector = this.storePositionWithTermVector;
+      fout.omitNorms = this.omitNorms;
+      fout.isStored = this.isStored;
+      fout.isIndexed = this.isIndexed;
+      fout.isTokenized = this.isTokenized;
+      fout.isBinary = this.isBinary;
+      fout.isCompressed = this.isCompressed;
+      fout.lazy = this.lazy;
+      fout.omitTermFreqAndPositions = this.omitTermFreqAndPositions;
+      fout.boost = this.boost;
+      fout.binaryLength = this.binaryLength;
+      fout.binaryOffset = this.binaryOffset;
+	  
       try {
-		fout = (Field) this.clone();
-		  fout.name = "CatchAllFields";
-		  if (this.fieldsData instanceof String){
-			  fout.fieldsData = new String((String)this.fieldsData);
-		  }else if (this.fieldsData instanceof Reader){
-			  String reader = IOUtils.toString((Reader)fieldsData);
-			  StringReader sr = new StringReader(reader);
-			  fout.fieldsData = sr;
-		  }
-	} catch (CloneNotSupportedException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	} catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
+	if (this.fieldsData instanceof String){
+	  fout.fieldsData = new String((String)this.fieldsData);
+	  }else if (this.fieldsData instanceof Reader){
+	      Reader data = (Reader) fieldsData;
+	      String readerData = IOUtils.toString(data);
+//	      TODO as optimization, to avoid make garbage coll work too much, the original Reader coud be reset
+	      StringReader copiedReader = new StringReader(readerData);
+	      StringReader origReader = new StringReader(readerData);
+	      this.fieldsData = origReader;
+	      fout.fieldsData = copiedReader;
+	  }
+    } catch (IOException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+    }
+      
+//    AIP  TODO: faltaria el TokenStream!!
       
       return fout;
   }
+
 }
