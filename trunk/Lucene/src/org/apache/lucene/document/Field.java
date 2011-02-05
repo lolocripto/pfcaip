@@ -17,13 +17,17 @@ package org.apache.lucene.document;
  * limitations under the License.
  */
 
+import org.apache.commons.io.CopyUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.index.IndexWriter;   // for javadoc
 import org.apache.lucene.util.Parameter;
 import org.apache.lucene.util.StringHelper;
 
+import java.io.IOException;
 import java.io.Reader;
 import java.io.Serializable;
+import java.io.StringReader;
 
 /**
   A field is a section of a Document.  Each field has two parts, a name and a
@@ -540,10 +544,25 @@ public final class Field extends AbstractField implements Fieldable, Serializabl
   
   
 //  AIP change code: generar un Field igual pero con el nombre global
-  public Field copyToGlobalField() throws CloneNotSupportedException{
-      Field fout;
-      fout = (Field) this.clone();
-      fout.name = "CatchAllFields";
+  public Field copyToGlobalField(){
+      Field fout=null;
+      try {
+		fout = (Field) this.clone();
+		  fout.name = "CatchAllFields";
+		  if (this.fieldsData instanceof String){
+			  fout.fieldsData = new String((String)this.fieldsData);
+		  }else if (this.fieldsData instanceof Reader){
+			  String reader = IOUtils.toString((Reader)fieldsData);
+			  StringReader sr = new StringReader(reader);
+			  fout.fieldsData = sr;
+		  }
+	} catch (CloneNotSupportedException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
       
       return fout;
   }
