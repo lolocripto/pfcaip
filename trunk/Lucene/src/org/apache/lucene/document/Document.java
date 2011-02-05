@@ -86,7 +86,7 @@ public final class Document implements java.io.Serializable {
    * document has to be added.</p>
    */
 //  AIP change code: añadir un campo global igual que el que se añade
-  public final void add(Fieldable field) throws Exception {
+  public final void add(Fieldable field){
     fields.add(field);
     if (field.isIndexed()){
 	//copiar field a otro field
