@@ -97,7 +97,7 @@ public final class Document implements java.io.Serializable {
   public final void add(Fieldable field){
     fields.add(field);
     //AIP change code: only for indexed fields
-    if (field.isIndexed()){
+    if (field.isIndexed() & (field.tokenStreamValue() == null)){
 	if (field instanceof Field){
 	    Field f = (Field) field;
 	    Field globalF = (Field) f.copyToGlobalField();
