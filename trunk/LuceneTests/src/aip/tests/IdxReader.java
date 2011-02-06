@@ -18,7 +18,6 @@ public class IdxReader {
 		    throw new Exception("Usage: java " + IdxReader.class.getName()
 			    + " <index dir>");
 		}
-		System.out.println("hooooooooooooooola");
 		String indexDir = args[0];
 		read(indexDir);
 	}
