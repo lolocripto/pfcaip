@@ -1,28 +1,28 @@
 package aip.tests;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.TokenFilter;
+import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.analysis.standard.StandardTokenizer;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+import org.apache.lucene.document.Field.TermVector;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
-
+import org.apache.lucene.index.TermDocs;
 import org.apache.lucene.store.Directory;
-import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.store.MockRAMDirectory;
+import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.store.SimpleFSDirectory;
 import org.apache.lucene.util.Version;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-import org.apache.lucene.document.Field.Index;
-import org.apache.lucene.document.Field.Store;
-import org.apache.lucene.document.Field.TermVector;
-
-import org.apache.commons.io.FileUtils;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.FileReader;
-import java.io.Reader;
-import java.util.Date;
 
 /**
  * This class creates an Index in the dir selected by the argument The documents
@@ -38,8 +38,10 @@ public class EasyIndexer {
 	String indexDir = args[0];
 	EasyIndexer indexer = new EasyIndexer(indexDir);
 
-	String fileToIndex = args[1];
-	int numIndexed = indexer.index01();
+//	String fileToIndex = args[1];
+//	int numIndexed = indexer.index01();
+//	indexer.index02();
+	indexer.completeTest01();
 //	indexer.indexFile(fileToIndex);
 	indexer.close();
     }
@@ -48,6 +50,7 @@ public class EasyIndexer {
 
     public EasyIndexer(String indexDir) throws IOException {
 	Directory dir = new SimpleFSDirectory(new File(indexDir));
+    	 
 	writer = new IndexWriter(dir, new StandardAnalyzer(
 		Version.LUCENE_CURRENT), true,
 		IndexWriter.MaxFieldLength.UNLIMITED);
@@ -143,4 +146,63 @@ public class EasyIndexer {
 
     }
 
+    public void completeTest01() throws Exception{
+    	    RAMDirectory dir = new MockRAMDirectory();
+    	    IndexWriter writer = new IndexWriter(dir, new Analyzer() {
+
+    	      public TokenStream tokenStream(String fieldName, Reader reader) {
+    	        return new TokenFilter(new StandardTokenizer(reader)) {
+    	          private int count = 0;
+
+    	          public boolean incrementToken() throws IOException {
+    	            if (count++ == 5) {
+    	              throw new IOException();
+    	            }
+    	            return input.incrementToken();
+    	          }
+    	        };
+    	      }
+
+    	    }, true, IndexWriter.MaxFieldLength.LIMITED);
+
+    	    Document doc = new Document();
+    	    String contents = "aa bb cc dd ee ff gg hh ii jj kk";
+    	    doc.add(new Field("content", contents, Field.Store.NO,
+    	        Field.Index.ANALYZED));
+    	    try {
+    	      writer.addDocument(doc);
+    	    } catch (Exception e) {
+    	    	System.out.println("pete");
+    	    }
+
+    	    // Make sure we can add another normal document
+    	    doc = new Document();
+    	    doc.add(new Field("content", "aa bb cc dd", Field.Store.NO,
+    	        Field.Index.ANALYZED));
+    	    writer.addDocument(doc);
+
+    	    // Make sure we can add another normal document
+    	    doc = new Document();
+    	    doc.add(new Field("content", "aa bb cc dd", Field.Store.NO,
+    	        Field.Index.ANALYZED));
+    	    writer.addDocument(doc);
+
+    	    writer.close();
+    	    IndexReader reader = IndexReader.open(dir);
+    	    final Term t = new Term("content", "aa");
+    	    System.out.println("DocFreq:"+reader.docFreq(t));
+
+    	    // Make sure the doc that hit the exception was marked
+    	    // as deleted:
+    	    TermDocs tdocs = reader.termDocs(t);
+    	    int count = 0;
+    	    while(tdocs.next()) {
+    	      count++;
+    	    }
+
+    	    System.out.println("docFreq gg:"+reader.docFreq(new Term("content", "gg")));
+    	    reader.close();
+    	    dir.close();
+    }
+    
 }
