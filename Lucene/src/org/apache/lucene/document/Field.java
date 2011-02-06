@@ -541,30 +541,51 @@ public final class Field extends AbstractField implements Fieldable, Serializabl
     setStoreTermVector(TermVector.NO);
   }
   
-//AIP change code: new constructor only setting the name
-  public Field(String name){
+//AIP change code: new constructor only setting the name needed for the "copyToGlobalField()" method
+  protected Field(String name){
       this.name = StringHelper.intern(name);
   }
   
-//  AIP change code: generar un Field igual pero con el nombre global
+/**
+ *  AIP change code: generate a new field that will be a copy of the current one but with the
+ *  	same global name, the practical action that this will do is just adding the terms to the global field
+ *  Important obs.- this field is meant to be only to calculate global stats, i.e. the Collection Frequency,
+ *  	this means that it has special values:
+ *  	- don't have TermVector
+ *  	- is not stored never
+ *  	- omitNorms = true --> to save the memory usage at search time
+ *  
+ * @return the copied global Field
+ */
   public Field copyToGlobalField(){
       Field fout=null;
       fout = new Field("CatchAllFields");
-      fout.storeTermVector = this.storeTermVector;
-      fout.storeOffsetWithTermVector = this.storeOffsetWithTermVector;
-      fout.storePositionWithTermVector = this.storePositionWithTermVector;
-      fout.omitNorms = this.omitNorms;
-      fout.isStored = this.isStored;
-      fout.isIndexed = this.isIndexed;
+      
+      //TODO comprobar bien que cuando se mezclan dos tipos de Field distintos, tokenized y no tokenized
+//      	se hace en cada caso lo apropiado
       fout.isTokenized = this.isTokenized;
-      fout.isBinary = this.isBinary;
+      
       fout.isCompressed = this.isCompressed;
-      fout.lazy = this.lazy;
-      fout.omitTermFreqAndPositions = this.omitTermFreqAndPositions;
-      fout.boost = this.boost;
-      fout.binaryLength = this.binaryLength;
-      fout.binaryOffset = this.binaryOffset;
+      fout.lazy = this.lazy;//TODO no se exactamente qué poner aqui
+      
+//    not needed values
+//      fout.binaryLength = this.binaryLength;
+//      fout.binaryOffset = this.binaryOffset;
 	  
+// Special values for being a global copied field for stats purposes
+//    Storing the values as when Field.TermVector.NO
+      fout.storeTermVector = false;
+      fout.storePositionWithTermVector = false;
+      fout.storeOffsetWithTermVector = false;
+
+      fout.isStored = false;
+      fout.isIndexed = true;
+      fout.omitNorms = true;
+
+      fout.omitTermFreqAndPositions = false;//if set to "true", Freq are not calculated so not working
+      fout.isBinary = false;//the binary field are never indexed
+      fout.boost = 0; //not important field
+      
       try {
 	if (this.fieldsData instanceof String){
 	  fout.fieldsData = new String((String)this.fieldsData);
@@ -581,7 +602,6 @@ public final class Field extends AbstractField implements Fieldable, Serializabl
 	// TODO Auto-generated catch block
 	e.printStackTrace();
     }
-      
 //    AIP  TODO: faltaria el TokenStream!!
       
       return fout;
