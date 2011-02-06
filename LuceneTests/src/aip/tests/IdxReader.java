@@ -1,21 +1,12 @@
 package aip.tests;
 
-import org.apache.lucene.document.Document;
-import org.apache.lucene.index.FilterIndexReader;
+import java.io.File;
+
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.index.TermEnum;
-import org.apache.lucene.search.Explanation;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.Query;
-import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.TopDocs;
-import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.Directory;
-import org.apache.lucene.queryParser.QueryParser;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import java.io.File;
-import java.util.Date;
+import org.apache.lucene.store.SimpleFSDirectory;
 
 
 /**
@@ -27,31 +18,42 @@ public class IdxReader {
 		    throw new Exception("Usage: java " + IdxReader.class.getName()
 			    + " <index dir>");
 		}
+		System.out.println("hooooooooooooooola");
 		String indexDir = args[0];
 		read(indexDir);
 	}
 	public static void read(String indexDir) throws Exception {
 
-		IndexReader idx = IndexReader.open(indexDir);
+	    Directory dir = new SimpleFSDirectory(new File(indexDir),null);
+	    IndexReader idx = IndexReader.open(dir,true);
 
-		int docFreq;
-		int colFreq;
-		String text;
+	    int docFreq;
+	    int colFreq;
+	    String text;
+	    String field;
+	    
+	    System.out.println("Fields[" + idx.getFieldNames(IndexReader.FieldOption.ALL) + "]");
 		/**
 		 * AIP: el fichero del indice lo va leyendo directamente desde el fichero en el metodo "next"
 		 * 		el metodo idx.terms() lo lee del SegmentReader
 		 */
 		for (TermEnum termEnum = idx.terms(); termEnum.next();) {
 			Term indexedTerm = termEnum.term();
+			field = indexedTerm.field();
+			
 			text = indexedTerm.text();
 			docFreq = idx.docFreq(indexedTerm);
-			
 			//AIP comment: cualquiera de las dos lineas de abajo valen
 //			colFreq = idx.colDocFreq(indexedTerm);
-//			colFreq = termEnum.colFreq();
-//			System.out.println(text + " " + docFreq + " " + colFreq);
-			System.out.println(text + " " + docFreq);
+			colFreq = termEnum.colFreq();
+			
+			System.out.println(field + " " + text + " " + docFreq + " " + colFreq);
+//			System.out.println(text + " " + docFreq);
 		}
+		//lectura del CatchAll fields
+		Term t = new Term("CatchAllFields","aaa");
+		System.out.println("Col Freq de aaa["+idx.colDocFreq(t)+"]");
+		
 
 		idx.close();
 	}
