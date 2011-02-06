@@ -1,6 +1,8 @@
 package aip.tests;
 
+import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.Term;
 
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
@@ -67,10 +69,10 @@ public class EasyIndexer {
     void addDoc(int i) throws Exception {
 	Document doc = new Document();
 	doc.add(new Field("id", "document_" + i, Field.Store.YES,Field.Index.ANALYZED));
-	doc.add(new Field("content1", "aaa", Field.Store.YES,Field.Index.ANALYZED));
+	doc.add(new Field("content", "aaa bb", Field.Store.YES,Field.Index.ANALYZED));
 	doc.add(new Field("content4", "path1 path2 path3",Field.Store.YES,Field.Index.NOT_ANALYZED));
 	doc.add(new Field("content5", "path1 path2 path3",Field.Store.YES,Field.Index.NOT_ANALYZED));
-	doc.add(new Field("content2", "aaa", Field.Store.YES,Field.Index.ANALYZED));
+	doc.add(new Field("content", "aaa cc", Field.Store.YES,Field.Index.ANALYZED));
 	doc.add(new Field("content3", "aaa", Field.Store.YES,Field.Index.ANALYZED));
 	
 	writer.addDocument(doc);
@@ -110,6 +112,35 @@ public class EasyIndexer {
 	if (doc != null) {
 	    writer.addDocument(doc); // 9
 	}
+    }
+    
+    public void index02() throws Exception{
+	  Document doc = new Document();
+	    String contents = "aa bb cc dd ee ff gg hh ii jj kk";
+	    doc.add(new Field("content", contents, Field.Store.NO,
+	        Field.Index.ANALYZED));
+	    try {
+	      writer.addDocument(doc);
+	    } catch (Exception e) {
+	    }
+
+	    // Make sure we can add another normal document
+	    doc = new Document();
+	    doc.add(new Field("content", "aa bb cc dd", Field.Store.NO,
+	        Field.Index.ANALYZED));
+	    writer.addDocument(doc);
+
+	    // Make sure we can add another normal document
+	    doc = new Document();
+	    doc.add(new Field("content", "aa bb cc dd", Field.Store.NO,
+	        Field.Index.ANALYZED));
+	    writer.addDocument(doc);
+
+	    writer.close();
+//	    IndexReader reader = IndexReader.open(dir);
+//	    final Term t = new Term("content", "aa");
+//	    assertEquals(reader.docFreq(t), 3);
+
     }
 
 }
