@@ -1,6 +1,7 @@
 package aip.tests;
 
 import org.apache.lucene.index.IndexWriter;
+
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.SimpleFSDirectory;
@@ -10,6 +11,7 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.Field.Index;
 import org.apache.lucene.document.Field.Store;
+import org.apache.lucene.document.Field.TermVector;
 
 import org.apache.commons.io.FileUtils;
 
@@ -27,19 +29,17 @@ import java.util.Date;
 public class EasyIndexer {
 
     public static void main(String[] args) throws Exception {
-	if (args.length != 1) {
+	if (args.length < 1) {
 	    throw new Exception("Usage: java " + EasyIndexer.class.getName()
 		    + " <index dir>");
 	}
 	String indexDir = args[0];
-	long start = System.currentTimeMillis();
 	EasyIndexer indexer = new EasyIndexer(indexDir);
 
-	int numIndexed = indexer.index();
+	String fileToIndex = args[1];
+	int numIndexed = indexer.index01();
+//	indexer.indexFile(fileToIndex);
 	indexer.close();
-	long end = System.currentTimeMillis();
-	System.out.println("Indexing " + numIndexed + " files took "
-		+ (end - start) + " milliseconds");
     }
 
     private IndexWriter writer;
@@ -57,19 +57,21 @@ public class EasyIndexer {
 	writer.close(); // 4
     }
 
-    public int index() throws Exception {
+    public int index01() throws Exception {
 	for (int i = 0; i < 5; i++) {
 	    addDoc(i);
 	}
-	return 4;
+	return 0;
     }
 
     void addDoc(int i) throws Exception {
 	Document doc = new Document();
 	doc.add(new Field("id", "document_" + i, Field.Store.YES,Field.Index.ANALYZED));
-	doc.add(new Field("content", "aaa", Field.Store.YES,Field.Index.ANALYZED));
-	doc.add(new Field("content", "aaa", Field.Store.YES,Field.Index.ANALYZED));
-	doc.add(new Field("content", "bbb", Field.Store.YES,Field.Index.ANALYZED));
+	doc.add(new Field("content1", "aaa", Field.Store.YES,Field.Index.ANALYZED));
+	doc.add(new Field("content4", "path1 path2 path3",Field.Store.YES,Field.Index.NOT_ANALYZED));
+	doc.add(new Field("content5", "path1 path2 path3",Field.Store.YES,Field.Index.NOT_ANALYZED));
+	doc.add(new Field("content2", "aaa", Field.Store.YES,Field.Index.ANALYZED));
+	doc.add(new Field("content3", "aaa", Field.Store.YES,Field.Index.ANALYZED));
 	
 	writer.addDocument(doc);
     }
@@ -83,20 +85,28 @@ public class EasyIndexer {
      * @return
      * @throws Exception
      */
-    protected Document getDocument(File f) throws Exception {
+    protected Document getDocument(File f,TermVector tv) throws Exception {
 
 	String content = FileUtils.readFileToString(f);
+	System.out.println("content of the file["+content+"]");
 
 	Document doc = new Document();
-	doc.add(new Field("contents", new FileReader(f))); // 7
-	doc.add(new Field("filename", f.getCanonicalPath(), // 8
-		Field.Store.YES, Field.Index.NOT_ANALYZED));
+	Field f1 = new Field("contents", new FileReader(f), tv);
+	System.out.println("f1["+f1+"]");
+	Field f2 = new Field("filename", f.getCanonicalPath(), Field.Store.YES, Field.Index.NOT_ANALYZED);
+//	Field f2 = new Field("contents", f.getCanonicalPath(), Field.Store.YES, Field.Index.NOT_ANALYZED);
+	System.out.println("f2["+f2+"]");
+	doc.add(f1); // 7 por defecto aqui los valores:	Field.Store.NO / Field.Index.ANALYZED
+	doc.add(f2);
+	
 	return doc;
     }
 
-    private void indexFile(File f) throws Exception {
+    private void indexFile(String file) throws Exception {
+	System.out.println("indexing "+file);
+	File f = new File(file);
 	System.out.println("Indexing " + f.getCanonicalPath());
-	Document doc = getDocument(f);
+	Document doc = getDocument(f, TermVector.YES);
 	if (doc != null) {
 	    writer.addDocument(doc); // 9
 	}
