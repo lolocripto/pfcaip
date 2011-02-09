@@ -1831,6 +1831,10 @@ public class TestIndexWriter extends BaseTokenStreamTestCase {
         Field.Index.ANALYZED));
     writer.addDocument(doc);
 
+    /*
+     * AIP comment: this test should fail because the first document should fail at "writer.addDocument()"
+     * 	because the analizer only permits less to 5 tokens, this means that the docFreq should be 2, not 3!!
+     */
     writer.close();
     IndexReader reader = IndexReader.open(dir);
     final Term t = new Term("content", "aa");
