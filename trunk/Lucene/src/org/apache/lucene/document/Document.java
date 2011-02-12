@@ -106,6 +106,22 @@ public final class Document implements java.io.Serializable {
 	}
     }//end AIP change code
   }
+
+  //AIP Change code (for document size)
+  public int getSize(){
+      int result = 0;
+      Iterator it = fields.iterator();
+      while (it.hasNext()){
+	  Fieldable field = (Fieldable)it.next();
+	  if (field instanceof Field){
+	      field = (Field) field;
+	      if (!field.name().equals("CatchAllFields"))
+		  result += ((Field) field).size();
+	  }
+      }
+      return result;
+  }
+
   
   /**
    * <p>Removes field with the specified name from the document.
@@ -188,7 +204,7 @@ public final class Document implements java.io.Serializable {
     }
     return null;
   }
-
+  
   /** Returns an Enumeration of all the fields in a document.
    * @deprecated use {@link #getFields()} instead
    */
