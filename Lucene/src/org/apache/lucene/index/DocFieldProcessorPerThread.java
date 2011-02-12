@@ -242,6 +242,7 @@ final class DocFieldProcessorPerThread extends DocConsumerPerThread {
     // here.
     quickSort(fields, 0, fieldCount-1);
 
+    //AIP Comment: this is the moment where the fields will be processed
     for(int i=0;i<fieldCount;i++)
       fields[i].consumer.processFields(fields[i].fields, fields[i].fieldCount);
 
