@@ -606,5 +606,24 @@ public final class Field extends AbstractField implements Fieldable, Serializabl
       
       return fout;
   }
+  
+  //AIP change code (experiment for document size)
+  public int size(){
+      int result = 0;
+      try {
+		if (this.fieldsData instanceof String){
+		    result = ((String)this.fieldsData).length();
+		  }else if (this.fieldsData instanceof Reader){
+		      Reader data = (Reader) fieldsData;
+		      String readerData = IOUtils.toString(data);
+		      result = readerData.length();
+		      StringReader origReader = new StringReader(readerData);
+		  }
+	    } catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    }
+	    return result;
+  }
 
 }
