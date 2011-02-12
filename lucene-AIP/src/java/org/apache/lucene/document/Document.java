@@ -85,8 +85,25 @@ public final class Document implements java.io.Serializable {
    * a document has to be deleted from an index and a new changed version of that
    * document has to be added.</p>
    */
+  /**
+   *   AIP change code: every time a new Field is added, when the Field is indexed we will 
+   *   	include it twice, once of them to the global CatchAll fields so the terms are
+   *   	all included in this new Field, thus the stats (docFreq, colFreq, etc ...)
+   *   	will be indeed independient of the Field so they will be the real colFreq needed by BM25F
+   *   	Since the new field will have always the same field name, the new terms will be just
+   *   	added to this new Field 
+   */
   public final void add(Fieldable field) {
     fields.add(field);
+    //AIP change code: only for indexed fields
+    if (field.isIndexed() & (field.tokenStreamValue() == null)){
+    	if (field instanceof Field){
+    		Field f = (Field) field;
+    		Field globalF = (Field) f.copyToGlobalField();
+	    
+    		fields.add(globalF);
+    	}
+    }//end AIP change code
   }
   
   /**
