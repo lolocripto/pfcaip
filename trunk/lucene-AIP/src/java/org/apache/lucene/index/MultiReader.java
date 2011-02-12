@@ -30,6 +30,7 @@ import org.apache.lucene.index.DirectoryReader.MultiTermEnum;
 import org.apache.lucene.index.DirectoryReader.MultiTermPositions;
 import org.apache.lucene.search.DefaultSimilarity;
 import org.apache.lucene.search.FieldCache; // not great (circular); used only to purge FieldCache entry on close
+import org.apache.lucene.util.Constants;
 
 /** An IndexReader which reads multiple indexes, appending
  * their content. */
@@ -359,6 +360,16 @@ public class MultiReader extends IndexReader implements Cloneable {
       total += subReaders[i].docFreq(t);
     return total;
   }
+  //AIP change code: getting the docFreq from CatchAll Field
+  @Override
+  public int docFreq(String t) throws IOException {
+      Term term = new Term(Constants.CATCHALL_FIELD,t);
+    ensureOpen();
+    int total = 0;          // sum freqs in segments
+    for (int i = 0; i < subReaders.length; i++)
+      total += subReaders[i].docFreq(term);
+    return total;
+  }
 
   //AIP change code: adding a similar method than the previous but getting colFreq instead
   @Override
@@ -367,6 +378,17 @@ public class MultiReader extends IndexReader implements Cloneable {
       int total = 0;          // sum freqs in segments
       for (int i = 0; i < subReaders.length; i++)
 	  total += subReaders[i].colDocFreq(t);
+      return total;
+  }
+
+  //AIP change code: getting colFreq from CatchAll Field
+  @Override
+  public int colDocFreq(String t) throws IOException {
+      Term term = new Term(Constants.CATCHALL_FIELD,t);
+      ensureOpen();
+      int total = 0;          // sum freqs in segments
+      for (int i = 0; i < subReaders.length; i++)
+	  total += subReaders[i].colDocFreq(term);
       return total;
   }
 

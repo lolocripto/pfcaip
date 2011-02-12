@@ -36,6 +36,7 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.Lock;
 import org.apache.lucene.store.LockObtainFailedException;
 import org.apache.lucene.search.FieldCache; // not great (circular); used only to purge FieldCache entry on close
+import org.apache.lucene.util.Constants;
 
 /** 
  * An IndexReader which reads indexes with multiple segments.
@@ -659,17 +660,39 @@ class DirectoryReader extends IndexReader implements Cloneable {
       total += subReaders[i].docFreq(t);
     return total;
   }
+  
+  // AIP change code: getting the docFreq from CatchAll Field
+  @Override
+  public int docFreq(String t) throws IOException {
+      Term term = new Term(Constants.CATCHALL_FIELD,t);
+    ensureOpen();
+    int total = 0;          // sum freqs in segments
+    for (int i = 0; i < subReaders.length; i++)
+      total += subReaders[i].docFreq(term);
+    return total;
+  }
 
   //AIP change code: a similar method but adding CFs instead
   @Override
   public int colDocFreq(Term t) throws IOException {
-	    ensureOpen();
-	    int total = 0;          // sum freqs in segments
-	    for (int i = 0; i < subReaders.length; i++)
-	      total += subReaders[i].colDocFreq(t);
-	    return total;
+      ensureOpen();
+      int total = 0;          // sum freqs in segments
+      for (int i = 0; i < subReaders.length; i++)
+	  total += subReaders[i].colDocFreq(t);
+      return total;
   }
 
+  //AIP change code: getting the CF from CatchAll Field
+  @Override
+  public int colDocFreq(String t) throws IOException {
+      Term term = new Term(Constants.CATCHALL_FIELD,t);
+      ensureOpen();
+      int total = 0;          // sum freqs in segments
+      for (int i = 0; i < subReaders.length; i++)
+	  total += subReaders[i].colDocFreq(term);
+      return total;
+  }
+  
   @Override
   public TermDocs termDocs() throws IOException {
     ensureOpen();

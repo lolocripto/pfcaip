@@ -22,6 +22,7 @@ import org.apache.lucene.document.FieldSelector;
 import org.apache.lucene.document.FieldSelectorResult;
 import org.apache.lucene.document.Fieldable;
 import org.apache.lucene.search.FieldCache; // not great (circular); used only to purge FieldCache entry on close
+import org.apache.lucene.util.Constants;
 
 import java.io.IOException;
 import java.util.*;
@@ -387,10 +388,26 @@ public class ParallelReader extends IndexReader {
     IndexReader reader = fieldToReader.get(term.field());
     return reader==null ? 0 : reader.docFreq(term);
   }
+  //AIP change code: getting the docFreq from CatchAll Field instead
+  @Override
+  public int docFreq(String t) throws IOException {
+      Term term = new Term(Constants.CATCHALL_FIELD,t);
+    ensureOpen();
+    IndexReader reader = fieldToReader.get(term.field());
+    return reader==null ? 0 : reader.docFreq(term);
+  }
 
   //AIP change code: adding a similar method than the previous but for colFreq instead
   @Override
   public int colDocFreq(Term term) throws IOException {
+      ensureOpen();
+      IndexReader reader = ((IndexReader)fieldToReader.get(term.field()));
+      return reader==null ? 0 : reader.colDocFreq(term);
+  }
+  //AIP change code: getting colFreq from CatchAll Field instead
+  @Override
+  public int colDocFreq(String t) throws IOException {
+      Term term = new Term(Constants.CATCHALL_FIELD,t);
       ensureOpen();
       IndexReader reader = ((IndexReader)fieldToReader.get(term.field()));
       return reader==null ? 0 : reader.colDocFreq(term);

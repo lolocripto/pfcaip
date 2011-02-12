@@ -790,11 +790,27 @@ public abstract class IndexReader implements Cloneable,Closeable {
    */
   public abstract TermEnum terms(Term t) throws IOException;
 
+  /**
+   * AIP change code: given the real term <code>t</code> (without specifying any Field), this method
+   * 	will return the docFreq (number of documents in whatever Field that contains the Term),
+   * 	getting the value from the CatchAll Field.
+   * @throws IOException if there is a low-level IO error 	
+   */
+  public abstract int docFreq(String t) throws IOException;
+
   /** Returns the number of documents containing the term <code>t</code>.
    * @throws IOException if there is a low-level IO error
    */
   public abstract int docFreq(Term t) throws IOException;
 
+  /** AIP change code: Returns the total number of times containing the term <code>t</code> 
+   * 	in all documents no matter the Field where the term <code>t</code> is, this means that
+   * 	the method returns the real Document Frequency.
+   * 	The value is got from CatchAll Field.
+   * @throws IOException if there is a low-level IO error
+   */
+  public abstract int colDocFreq(String t) throws IOException;
+  
   /** AIP change code: Returns the total number of times containing the term <code>t</code> 
    * 	in all documents for the specific Term (Field/Term).
    * @throws IOException if there is a low-level IO error
