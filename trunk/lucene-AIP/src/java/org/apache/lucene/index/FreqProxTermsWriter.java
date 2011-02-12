@@ -211,8 +211,9 @@ final class FreqProxTermsWriter extends TermsHashConsumer {
         //AIP change code: getting CF vble.
 //      final int colDocFreq = minState.getColFreq();
       final int colDocFreq = minState.colFreq;
-        
-        final FormatPostingsPositionsConsumer posConsumer = docConsumer.addDoc(minState.docID, termDocFreq);
+
+      // AIP change code: adding colDocFreq as well
+      final FormatPostingsPositionsConsumer posConsumer = docConsumer.addDoc(minState.docID, termDocFreq, colDocFreq);
 
         final ByteSliceReader prox = minState.prox;
 

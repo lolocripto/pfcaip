@@ -8,6 +8,7 @@ import org.apache.lucene.index.Term;
 import org.apache.lucene.index.TermEnum;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.SimpleFSDirectory;
+import org.apache.lucene.util.Constants;
 
 
 /**
@@ -51,7 +52,7 @@ public class IdxReader {
 //			System.out.println(text + " " + docFreq);
 		}
 		//lectura del CatchAll fields
-		Term t = new Term("CatchAllFields","aaa");
+		Term t = new Term(Constants.CATCHALL_FIELD,"aaa");
 		System.out.println("Col Freq de aaa["+idx.colDocFreq(t)+"]");
 		
 		

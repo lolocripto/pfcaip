@@ -17,12 +17,16 @@ package org.apache.lucene.document;
  * limitations under the License.
  */
 
+import org.apache.commons.io.IOUtils;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.index.IndexWriter;   // for javadoc
+import org.apache.lucene.util.Constants;
 import org.apache.lucene.util.StringHelper;
 
+import java.io.IOException;
 import java.io.Reader;
 import java.io.Serializable;
+import java.io.StringReader;
 
 /**
   A field is a section of a Document.  Each field has two parts, a name and a
@@ -563,4 +567,70 @@ public final class Field extends AbstractField implements Fieldable, Serializabl
     
     setStoreTermVector(TermVector.NO);
   }
-}
+  
+//AIP change code: new constructor only setting the name needed for the "copyToGlobalField()" method
+  protected Field(String name){
+      this.name = StringHelper.intern(name);
+  }
+  
+/**
+ *  AIP change code: generate a new field that will be a copy of the current one but with the
+ *  	same global name, the practical action that this will do is just adding the terms to the global field
+ *  Important obs.- this field is meant to be only to calculate global stats, i.e. the Collection Frequency,
+ *  	this means that it has special values:
+ *  	- don't have TermVector
+ *  	- is not stored never
+ *  	- omitNorms = true --> to save the memory usage at search time
+ *  
+ * @return the copied global Field
+ */
+  public Field copyToGlobalField(){
+      Field fout=null;
+      fout = new Field(Constants.CATCHALL_FIELD);
+      
+      //TODO comprobar bien que cuando se mezclan dos tipos de Field distintos, tokenized y no tokenized
+//      	se hace en cada caso lo apropiado
+      fout.isTokenized = this.isTokenized;
+      
+//      fout.isCompressed = this.isCompressed;
+      fout.lazy = this.lazy;//TODO no se exactamente qué poner aqui
+      
+//    not needed values
+//      fout.binaryLength = this.binaryLength;
+//      fout.binaryOffset = this.binaryOffset;
+	  
+// Special values for being a global copied field for stats purposes
+//    Storing the values as when Field.TermVector.NO
+      fout.storeTermVector = false;
+      fout.storePositionWithTermVector = false;
+      fout.storeOffsetWithTermVector = false;
+
+      fout.isStored = false;
+      fout.isIndexed = true;
+      fout.omitNorms = true;
+
+      fout.omitTermFreqAndPositions = false;//if set to "true", Freq are not calculated so not working
+      fout.isBinary = false;//the binary field are never indexed
+      fout.boost = 0; //not important field
+      
+      try {
+    	  if (this.fieldsData instanceof String){
+    		  fout.fieldsData = new String((String)this.fieldsData);
+    	  }else if (this.fieldsData instanceof Reader){
+    		  Reader data = (Reader) fieldsData;
+    		  String readerData = IOUtils.toString(data);
+    		  //	      TODO as optimization, to avoid make garbage coll work too much, the original Reader coud be reset
+    		  StringReader copiedReader = new StringReader(readerData);
+    		  StringReader origReader = new StringReader(readerData);
+    		  this.fieldsData = origReader;
+    		  fout.fieldsData = copiedReader;
+    	  }
+      } catch (IOException e) {
+    	  // TODO Auto-generated catch block
+    	  e.printStackTrace();
+      }
+//    AIP  TODO: faltaria el TokenStream!!
+      
+      return fout;
+  }
+ }

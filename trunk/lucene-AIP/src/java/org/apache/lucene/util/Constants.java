@@ -48,6 +48,9 @@ public final class Constants {
   public static final String OS_VERSION = System.getProperty("os.version");
   public static final String JAVA_VENDOR = System.getProperty("java.vendor");
 
+  //AIP Change code: CatchAll Field
+  public static final String CATCHALL_FIELD = "CatchAllField_1234567890987654321";
+  
   // NOTE: this logic may not be correct; if you know of a
   // more reliable approach please raise it on java-dev!
   public static final boolean JRE_IS_64BIT;

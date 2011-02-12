@@ -661,6 +661,7 @@ class DirectoryReader extends IndexReader implements Cloneable {
   }
 
   //AIP change code: a similar method but adding CFs instead
+  @Override
   public int colDocFreq(Term t) throws IOException {
 	    ensureOpen();
 	    int total = 0;          // sum freqs in segments
