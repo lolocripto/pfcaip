@@ -119,6 +119,10 @@ final class SegmentTermEnum extends TermEnum implements Cloneable {
   }
 
   /** Increments the enumeration to the next element.  True if one exists.*/
+  /*
+   * AIP comment: in the inicialization of the IndexReader this is executed for all Terms, so if
+   * 			finally I want to use another file (aip) to store the stats, here should be read 
+   */
   @Override
   public final boolean next() throws IOException {
     if (position++ >= size - 1) {
@@ -131,6 +135,8 @@ final class SegmentTermEnum extends TermEnum implements Cloneable {
     termBuffer.read(input, fieldInfos);
 
     termInfo.docFreq = input.readVInt();	  // read doc freq
+    //AIP change code: reading colFreq, remember that it was stored in the file just after it
+    termInfo.colFreq = input.readVInt();
     termInfo.freqPointer += input.readVLong();	  // read freq pointer
     termInfo.proxPointer += input.readVLong();	  // read prox pointer
     
@@ -194,6 +200,11 @@ final class SegmentTermEnum extends TermEnum implements Cloneable {
   @Override
   public final int docFreq() {
     return termInfo.docFreq;
+  }
+
+  //AIP change code: adding this method to read colFreq stored in "termInfo"
+  public final int colFreq(){
+	  return termInfo.colFreq;
   }
 
   /* Returns the freqPointer from the current TermInfo in the enumeration.

@@ -48,6 +48,11 @@ public interface TermDocs extends Closeable {
    is invalid until {@link #next()} is called for the first time.*/
   int freq();
 
+  /** AIP change code
+   *  Returns the collection frequecy of the term within the current docuement. <p> This
+   is invalid until {@link #next()} is called for the first time.   */
+  int colFreq();
+
   /** Moves to the next pair in the enumeration.  <p> Returns true iff there is
    such a next pair in the enumeration. */
   boolean next() throws IOException;

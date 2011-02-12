@@ -795,6 +795,12 @@ public abstract class IndexReader implements Cloneable,Closeable {
    */
   public abstract int docFreq(Term t) throws IOException;
 
+  /** AIP change code: Returns the total number of times containing the term <code>t</code> 
+   * 	in all documents for the specific Term (Field/Term).
+   * @throws IOException if there is a low-level IO error
+   */
+  public abstract int colDocFreq(Term t) throws IOException;
+
   /** Returns an enumeration of all the documents which contain
    * <code>term</code>. For each document, the document number, the frequency of
    * the term in that document is also provided, for use in

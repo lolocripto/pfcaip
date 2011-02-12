@@ -64,7 +64,9 @@ final class FormatPostingsDocsWriter extends FormatPostingsDocsConsumer {
 
   int lastDocID;
   int df;
+  int colFreq;  //AIP change code
 
+  //AIP comment: this method writes the stats in "frq" file
   /** Adds a new doc in this term.  If this returns null
    *  then we just skip consuming positions/payloads. */
   @Override
@@ -96,6 +98,13 @@ final class FormatPostingsDocsWriter extends FormatPostingsDocsConsumer {
     return posWriter;
   }
 
+  //AIP change code: overloading addDoc to add colFreq vble
+  FormatPostingsPositionsConsumer addDoc(int docID, int termDocFreq, int colFreq) throws IOException {
+	  this.colFreq = colFreq;
+	  
+	  return addDoc(docID,termDocFreq);
+  }
+
   private final TermInfo termInfo = new TermInfo();  // minimize consing
   final UnicodeUtil.UTF8Result utf8 = new UnicodeUtil.UTF8Result();
 
@@ -106,7 +115,10 @@ final class FormatPostingsDocsWriter extends FormatPostingsDocsConsumer {
 
     // TODO: this is abstraction violation -- we should not
     // peek up into parents terms encoding format
-    termInfo.set(df, parent.freqStart, parent.proxStart, (int) (skipPointer - parent.freqStart));
+
+    // AIP change code: changing this called to include colFreq
+    //termInfo.set(df, parent.freqStart, parent.proxStart, (int) (skipPointer - parent.freqStart));
+    termInfo.set(df,colFreq, parent.freqStart, parent.proxStart, (int) (skipPointer - parent.freqStart));
 
     // TODO: we could do this incrementally
     UnicodeUtil.UTF16toUTF8(parent.currentTerm, parent.currentTermStart, utf8);
@@ -120,6 +132,7 @@ final class FormatPostingsDocsWriter extends FormatPostingsDocsConsumer {
 
     lastDocID = 0;
     df = 0;
+    colFreq = 0; //AIP change code
   }
 
   void close() throws IOException {

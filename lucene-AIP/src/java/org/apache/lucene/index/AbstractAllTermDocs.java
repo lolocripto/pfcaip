@@ -55,6 +55,11 @@ public abstract class AbstractAllTermDocs implements TermDocs {
     return 1;
   }
 
+  //AIP change code. TODO code review: check if this is ok or not
+  public int colFreq(){
+      return 1;
+  }
+
   public boolean next() throws IOException {
     return skipTo(doc+1);
   }

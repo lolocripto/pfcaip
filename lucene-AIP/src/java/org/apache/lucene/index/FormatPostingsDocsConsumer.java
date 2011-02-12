@@ -29,6 +29,9 @@ abstract class FormatPostingsDocsConsumer {
    *  then we just skip consuming positions/payloads. */
   abstract FormatPostingsPositionsConsumer addDoc(int docID, int termDocFreq) throws IOException;
 
+  // AIP change code: adding 'colFreq' vble
+  abstract FormatPostingsPositionsConsumer addDoc(int docID, int termDocFreq, int colFreq) throws IOException;
+  
   /** Called when we are done adding docs to this term */
   abstract void finish() throws IOException;
 }

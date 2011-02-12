@@ -47,6 +47,7 @@ public class FilterIndexReader extends IndexReader {
     public void seek(TermEnum termEnum) throws IOException { in.seek(termEnum); }
     public int doc() { return in.doc(); }
     public int freq() { return in.freq(); }
+    public int colFreq() { return in.colFreq(); }    //AIP change code
     public boolean next() throws IOException { return in.next(); }
     public int read(int[] docs, int[] freqs) throws IOException {
       return in.read(docs, freqs);
@@ -92,6 +93,9 @@ public class FilterIndexReader extends IndexReader {
     public Term term() { return in.term(); }
     @Override
     public int docFreq() { return in.docFreq(); }
+    @Override
+    public int colFreq() { return in.colFreq(); }    //AIP change code
+
     @Override
     public void close() throws IOException { in.close(); }
   }
@@ -215,6 +219,13 @@ public class FilterIndexReader extends IndexReader {
   public int docFreq(Term t) throws IOException {
     ensureOpen();
     return in.docFreq(t);
+  }
+
+  //AIP change code: adding a similar method for CF
+  @Override
+  public int colDocFreq(Term t) throws IOException {
+    ensureOpen();
+    return in.colDocFreq(t);
   }
 
   @Override

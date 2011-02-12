@@ -171,6 +171,9 @@ final class TermInfosWriter {
     writeTerm(fieldNumber, termBytes, termBytesLength);                        // write term
 
     output.writeVInt(ti.docFreq);                       // write doc freq
+    //AIP change code: writting in the output (tis file!!) the CF variable
+    output.writeVInt(ti.colFreq);
+    
     output.writeVLong(ti.freqPointer - lastTi.freqPointer); // write pointers
     output.writeVLong(ti.proxPointer - lastTi.proxPointer);
 

@@ -35,6 +35,9 @@ public abstract class TermEnum implements Closeable {
   /** Returns the docFreq of the current Term in the enumeration.*/
   public abstract int docFreq();
 
+  //AIP change code: adding method to get colFreq
+  public abstract int colFreq();
+
   /** Closes the enumeration to further activity, freeing resources. */
   public abstract void close() throws IOException;
 }
