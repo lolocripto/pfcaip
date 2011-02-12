@@ -52,8 +52,7 @@ public class IdxReader {
 //			System.out.println(text + " " + docFreq);
 		}
 		//lectura del CatchAll fields
-		Term t = new Term(Constants.CATCHALL_FIELD,"aaa");
-		System.out.println("Col Freq de aaa["+idx.colDocFreq(t)+"]");
+		System.out.println("Col Freq de aaa["+idx.colDocFreq("aaa")+"]");
 		
 		
 		idx.close();
