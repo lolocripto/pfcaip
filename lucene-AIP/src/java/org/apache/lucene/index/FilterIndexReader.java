@@ -21,6 +21,7 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.FieldSelector;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.search.FieldCache; // not great (circular); used only to purge FieldCache entry on close
+import org.apache.lucene.util.Constants;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -220,12 +221,26 @@ public class FilterIndexReader extends IndexReader {
     ensureOpen();
     return in.docFreq(t);
   }
+  //AIP change code: getting the docFreq from CatchAll Field
+  @Override
+  public int docFreq(String t) throws IOException {
+      Term term = new Term(Constants.CATCHALL_FIELD,t);
+    ensureOpen();
+    return in.docFreq(term);
+  }
 
   //AIP change code: adding a similar method for CF
   @Override
   public int colDocFreq(Term t) throws IOException {
     ensureOpen();
     return in.colDocFreq(t);
+  }
+  //AIP change code: adding a similar method for CF, but from CatchAll Field
+  @Override
+  public int colDocFreq(String t) throws IOException {
+      Term term = new Term(Constants.CATCHALL_FIELD,t);
+    ensureOpen();
+    return in.colDocFreq(term);
   }
 
   @Override

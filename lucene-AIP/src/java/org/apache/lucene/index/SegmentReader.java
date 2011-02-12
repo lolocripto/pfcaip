@@ -37,6 +37,7 @@ import org.apache.lucene.store.IndexInput;
 import org.apache.lucene.store.IndexOutput;
 import org.apache.lucene.util.BitVector;
 import org.apache.lucene.util.CloseableThreadLocal;
+import org.apache.lucene.util.Constants;
 import org.apache.lucene.search.FieldCache; // not great (circular); used only to purge FieldCache entry on close
 
 /** @version $Id */
@@ -979,17 +980,38 @@ public class SegmentReader extends IndexReader implements Cloneable {
     else
       return 0;
   }
+  //AIP change code: getting the docFreq from CatchAll Field
+  @Override
+  public int docFreq(String t) throws IOException {
+      Term term = new Term(Constants.CATCHALL_FIELD,t);
+    ensureOpen();
+    TermInfo ti = core.getTermsReader().get(term);
+    if (ti != null)
+      return ti.docFreq;
+    else
+      return 0;
+  }
 
-  /**
-   * AIP change code: adding a similar method to get the CF
-   */
+  //AIP change code: adding a similar method to get the CF
+  @Override
   public int colDocFreq(Term t) throws IOException {
-	  ensureOpen();
-	  TermInfo ti = core.getTermsReader().get(t);
-	  if (ti != null)
-	    return ti.colFreq;
-	  else
-	    return 0;
+      ensureOpen();
+      TermInfo ti = core.getTermsReader().get(t);
+      if (ti != null)
+	  return ti.colFreq;
+      else
+	  return 0;
+  }
+  //AIP change code: adding a similar method to get the CF but getting the value from CatchAll Field
+  @Override
+  public int colDocFreq(String t) throws IOException {
+      Term term = new Term(Constants.CATCHALL_FIELD,t);
+      ensureOpen();
+      TermInfo ti = core.getTermsReader().get(term);
+      if (ti != null)
+	  return ti.colFreq;
+      else
+	  return 0;
   }
 
   @Override
