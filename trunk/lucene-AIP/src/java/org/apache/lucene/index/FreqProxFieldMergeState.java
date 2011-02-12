@@ -43,6 +43,7 @@ final class FreqProxFieldMergeState {
 
   int docID;
   int termFreq;
+  int colFreq;//AIP change code
 
   public FreqProxFieldMergeState(FreqProxTermsWriterPerField field) {
     this.field = field;
@@ -81,6 +82,7 @@ final class FreqProxFieldMergeState {
         if (!field.omitTermFreqAndPositions)
           termFreq = p.docFreq;
         p.lastDocCode = -1;
+        colFreq = p.colFreq;//AIP change code
         return true;
       } else
         // EOF
@@ -98,8 +100,16 @@ final class FreqProxFieldMergeState {
         termFreq = freq.readVInt();
     }
 
+    // AIP Comment: no habria que leer aqui el colFreq de la misma manera que se ha leido el docFreq con readVInt()??
+    colFreq = p.colFreq;
+    
     assert docID != p.lastDocID;
 
     return true;
   }
+  // AIP change code: we need this method since "p" is private
+//public int getColFreq(){
+//	  return p.colFreq;
+//}  
+
 }

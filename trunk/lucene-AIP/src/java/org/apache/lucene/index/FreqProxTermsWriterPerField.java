@@ -105,6 +105,13 @@ final class FreqProxTermsWriterPerField extends TermsHashConsumerPerField implem
     p.lastPosition = fieldState.position;
   }
 
+  /**
+   * AIP comment: aqui es donde escribe en el indice la frecuencia del termino en el documento
+   * 		vamos lo que hace es: como es un termino nuevo apunta en el indice que dicho
+   * 		termino aparece en el documento poniendo 1 y en el indice guardara el num de 
+   * 		documento en el que aparece dicho termino
+   * 		En mi caso como el CF cuenta el total, la primera vez lo iniciamos en 1 como el DF.
+   */
   @Override
   final void newTerm(RawPostingList p0) {
     // First time we're seeing this term since the last
@@ -117,10 +124,19 @@ final class FreqProxTermsWriterPerField extends TermsHashConsumerPerField implem
     } else {
       p.lastDocCode = docState.docID << 1;
       p.docFreq = 1;
+      //AIP change code: añadimos la nueva cf
+      p.colFreq = 1;
       writeProx(p, fieldState.position);
     }
   }
 
+  /**
+   * AIP comment: actualiza la frecuencia de los tokens en los nuevos documentID
+   * 		este metodo lo usa para actualizar terminos que ya estan insertados en el indice
+   * 		y tiene que incrementar la frecuencia del termino
+   * 		primero comprueba que los docID son distintos, para actualizarlo con el CF
+   * 		simplemente tengo que incrementarlo aunque fuesen el mismo documento
+   */
   @Override
   final void addTerm(RawPostingList p0) {
 
@@ -154,9 +170,11 @@ final class FreqProxTermsWriterPerField extends TermsHashConsumerPerField implem
         p.docFreq = 1;
         p.lastDocCode = (docState.docID - p.lastDocID) << 1;
         p.lastDocID = docState.docID;
+        p.colFreq++; //AIP change code
         writeProx(p, fieldState.position);
       } else {
         p.docFreq++;
+        p.colFreq++; //AIP change code
         writeProx(p, fieldState.position-p.lastPosition);
       }
     }

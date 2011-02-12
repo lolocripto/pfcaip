@@ -687,7 +687,10 @@ final class SegmentMerger {
         doc += base;                              // convert to merged space
 
         final int freq = postings.freq();
-        final FormatPostingsPositionsConsumer posConsumer = docConsumer.addDoc(doc, freq);
+        final int colFreq = postings.colFreq();		//AIP change code
+        //AIP change code: here should be called the new overload method including the CF vble
+//      final FormatPostingsPositionsConsumer posConsumer = docConsumer.addDoc(doc, freq);
+      final FormatPostingsPositionsConsumer posConsumer = docConsumer.addDoc(doc, freq, colFreq);
 
         if (!omitTermFreqAndPositions) {
           for (int j = 0; j < freq; j++) {

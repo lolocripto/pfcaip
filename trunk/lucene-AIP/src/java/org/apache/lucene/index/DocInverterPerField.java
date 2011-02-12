@@ -122,6 +122,7 @@ final class DocInverterPerField extends DocFieldConsumerPerField {
               reader = perThread.stringReader;
             }
           
+            // AIP comment: in "stream" is added all the terms of all docs for a certain Field
             // Tokenize field and add to postingTable
             stream = docState.analyzer.reusableTokenStream(fieldInfo.name, reader);
           }
@@ -143,6 +144,7 @@ final class DocInverterPerField extends DocFieldConsumerPerField {
             
             consumer.start(field);
             
+            // AIP comment: all the terms from "stream" will be processed
             for(;;) {
 
               // If we hit an exception in stream.next below

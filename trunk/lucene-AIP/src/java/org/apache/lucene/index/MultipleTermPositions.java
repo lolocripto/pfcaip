@@ -161,6 +161,11 @@ public class MultipleTermPositions implements TermPositions {
     return _freq;
   }
 
+  //AIP change code TODO review this because I think it is wrong
+  public final int colFreq(){
+      return _freq;
+  }
+
   public final void close() throws IOException {
     while (_termPositionsQueue.size() > 0)
       _termPositionsQueue.pop().close();

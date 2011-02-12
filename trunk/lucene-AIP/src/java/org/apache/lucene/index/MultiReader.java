@@ -360,6 +360,16 @@ public class MultiReader extends IndexReader implements Cloneable {
     return total;
   }
 
+  //AIP change code: adding a similar method than the previous but getting colFreq instead
+  @Override
+  public int colDocFreq(Term t) throws IOException {
+      ensureOpen();
+      int total = 0;          // sum freqs in segments
+      for (int i = 0; i < subReaders.length; i++)
+	  total += subReaders[i].colDocFreq(t);
+      return total;
+  }
+
   @Override
   public TermDocs termDocs() throws IOException {
     ensureOpen();

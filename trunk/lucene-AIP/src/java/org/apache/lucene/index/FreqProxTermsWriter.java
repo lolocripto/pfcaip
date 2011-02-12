@@ -174,6 +174,7 @@ final class FreqProxTermsWriter extends TermsHashConsumer {
 
     final boolean currentFieldOmitTermFreqAndPositions = fields[0].fieldInfo.omitTermFreqAndPositions;
 
+    //AIP comment: this loop look over all terms
     while(numFields > 0) {
 
       // Get the next term to merge
@@ -198,14 +199,19 @@ final class FreqProxTermsWriter extends TermsHashConsumer {
       // which all share the same term.  Now we must
       // interleave the docID streams.
       while(numToMerge > 0) {
-        
+	//AIP comment: 'minState' contains the element 'p' with the stats
         FreqProxFieldMergeState minState = termStates[0];
         for(int i=1;i<numToMerge;i++)
           if (termStates[i].docID < minState.docID)
             minState = termStates[i];
 
+        //TODO AIP comment: mirar bien porqué el anterior "termFreq" se pilla del atributo!!
         final int termDocFreq = minState.termFreq;
 
+        //AIP change code: getting CF vble.
+//      final int colDocFreq = minState.getColFreq();
+      final int colDocFreq = minState.colFreq;
+        
         final FormatPostingsPositionsConsumer posConsumer = docConsumer.addDoc(minState.docID, termDocFreq);
 
         final ByteSliceReader prox = minState.prox;
@@ -278,6 +284,8 @@ final class FreqProxTermsWriter extends TermsHashConsumer {
     int lastDocID;                                  // Last docID where this term occurred
     int lastDocCode;                                // Code for prior doc
     int lastPosition;                               // Last position where this term occurred
+    
+    int colFreq;             // AIP change code: collection frequency
   }
 
   @Override

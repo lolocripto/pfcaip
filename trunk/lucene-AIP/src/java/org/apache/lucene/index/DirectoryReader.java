@@ -660,6 +660,15 @@ class DirectoryReader extends IndexReader implements Cloneable {
     return total;
   }
 
+  //AIP change code: a similar method but adding CFs instead
+  public int colDocFreq(Term t) throws IOException {
+	    ensureOpen();
+	    int total = 0;          // sum freqs in segments
+	    for (int i = 0; i < subReaders.length; i++)
+	      total += subReaders[i].colDocFreq(t);
+	    return total;
+  }
+
   @Override
   public TermDocs termDocs() throws IOException {
     ensureOpen();
@@ -1008,6 +1017,8 @@ class DirectoryReader extends IndexReader implements Cloneable {
   
     private Term term;
     private int docFreq;
+    private int colFreq;    //AIP change code
+
     final SegmentMergeInfo[] matchingSegments; // null terminated array of matching segments
 
     public MultiTermEnum(IndexReader topReader, IndexReader[] readers, int[] starts, Term t)
@@ -1060,11 +1071,13 @@ class DirectoryReader extends IndexReader implements Cloneable {
   
       term = top.term;
       docFreq = 0;
-  
+      colFreq = 0;      //AIP change code
+
       while (top != null && term.compareTo(top.term) == 0) {
         matchingSegments[numMatchingSegments++] = top;
         queue.pop();
         docFreq += top.termEnum.docFreq();    // increment freq
+        colFreq += top.termEnum.colFreq();	  //AIP change code: adding col freq
         top = queue.top();
       }
 
@@ -1080,6 +1093,11 @@ class DirectoryReader extends IndexReader implements Cloneable {
     @Override
     public int docFreq() {
       return docFreq;
+    }
+    //AIP change code
+    @Override
+    public int colFreq() {
+	return colFreq;
     }
   
     @Override
@@ -1117,6 +1135,10 @@ class DirectoryReader extends IndexReader implements Cloneable {
     }
     public int freq() {
       return current.freq();
+    }
+    //AIP change code
+    public int colFreq(){
+    	return current.colFreq();
     }
   
     public void seek(Term term) {

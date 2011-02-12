@@ -124,6 +124,7 @@ public class SegmentReader extends IndexReader implements Cloneable {
         if (termsIndexDivisor == -1) {
           tisNoIndex = reader;
         } else {
+          //AIP comment: "tis" will have the content of "tis" file
           tis = reader;
           tisNoIndex = null;
         }
@@ -199,7 +200,7 @@ public class SegmentReader extends IndexReader implements Cloneable {
         } else {
           dir0 = dir;
         }
-
+        //AIP comment: 'tis' will have the term information
         tis = new TermInfosReader(dir0, segment, fieldInfos, readBufferSize, termsIndexDivisor);
       }
     }
@@ -977,6 +978,18 @@ public class SegmentReader extends IndexReader implements Cloneable {
       return ti.docFreq;
     else
       return 0;
+  }
+
+  /**
+   * AIP change code: adding a similar method to get the CF
+   */
+  public int colDocFreq(Term t) throws IOException {
+	  ensureOpen();
+	  TermInfo ti = core.getTermsReader().get(t);
+	  if (ti != null)
+	    return ti.colFreq;
+	  else
+	    return 0;
   }
 
   @Override

@@ -66,6 +66,13 @@ public abstract class FilteredTermEnum extends TermEnum {
         assert actualEnum != null;
         return actualEnum.docFreq();
     }
+    //AIP change code: similar to the previous to get the colFreq
+    @Override
+    public int colFreq() {
+        if (currentTerm == null) return -1;
+        assert actualEnum != null;
+        return actualEnum.colFreq();
+    }
     
     /** Increments the enumeration to the next element.  True if one exists. */
     @Override

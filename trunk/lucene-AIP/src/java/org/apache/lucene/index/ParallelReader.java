@@ -388,6 +388,14 @@ public class ParallelReader extends IndexReader {
     return reader==null ? 0 : reader.docFreq(term);
   }
 
+  //AIP change code: adding a similar method than the previous but for colFreq instead
+  @Override
+  public int colDocFreq(Term term) throws IOException {
+      ensureOpen();
+      IndexReader reader = ((IndexReader)fieldToReader.get(term.field()));
+      return reader==null ? 0 : reader.colDocFreq(term);
+  }
+
   @Override
   public TermDocs termDocs(Term term) throws IOException {
     ensureOpen();
@@ -554,6 +562,15 @@ public class ParallelReader extends IndexReader {
       return termEnum.docFreq();
     }
 
+    //AIP change code: adding a similar method than the previous
+    @Override
+    public int colFreq() {
+        if (termEnum==null)
+          return 0;
+
+        return termEnum.colFreq();
+    }
+
     @Override
     public void close() throws IOException {
       if (termEnum!=null)
@@ -576,6 +593,8 @@ public class ParallelReader extends IndexReader {
 
     public int doc() { return termDocs.doc(); }
     public int freq() { return termDocs.freq(); }
+    //AIP change code
+    public int colFreq() { return termDocs.colFreq(); }
 
     public void seek(Term term) throws IOException {
       IndexReader reader = fieldToReader.get(term.field());
