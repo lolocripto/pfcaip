@@ -140,7 +140,9 @@ final class NormsWriter extends InvertedDocEndConsumer {
             for(;upto<minDocID;upto++)
               normsOut.writeByte(defaultNorm);
 
-            normsOut.writeByte(fields[minLoc].norms[uptos[minLoc]]);
+            normsOut.writeByte(fields[minLoc].norms[uptos[minLoc]]);//AIP comment: stores the norm information per field
+            //AIP change code (DL): stores the size information per field just after the norm information
+            normsOut.writeInt(fields[minLoc].sizes[uptos[minLoc]]);//AIP change code (DL)
             (uptos[minLoc])++;
             upto++;
 
