@@ -60,7 +60,7 @@ final class NormsWriterPerField extends InvertedDocEndConsumerPerField implement
   public int compareTo(NormsWriterPerField other) {
     return fieldInfo.name.compareTo(other.fieldInfo.name);
   }
-  
+  //AIP TODO ahora tendriamos que cambiar este metodo, el nuevo CatchAll Field computa el norm y afectara a los computos del resto no?
   @Override
   void finish() {
     assert docIDs.length == norms.length;
@@ -71,7 +71,7 @@ final class NormsWriterPerField extends InvertedDocEndConsumerPerField implement
         norms = ArrayUtil.grow(norms, 1+upto);
       }
       final float norm = docState.similarity.computeNorm(fieldInfo.name, fieldState);
-      norms[upto] = Similarity.encodeNorm(norm);
+      norms[upto] = Similarity.encodeNorm(norm);//AIP Comment: this array stores the "norm" value per document (upto==docId)
       docIDs[upto] = docState.docID;
       upto++;
     }

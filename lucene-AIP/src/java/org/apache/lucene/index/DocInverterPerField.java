@@ -63,7 +63,7 @@ final class DocInverterPerField extends DocFieldConsumerPerField {
 
     fieldState.reset(docState.doc.getBoost());
 
-    final int maxFieldLength = docState.maxFieldLength;
+    final int maxFieldLength = docState.maxFieldLength;//AIP TODO qué se guarda en maxFieldLength?? qué es exactamente docState??
 
     final boolean doInvert = consumer.start(fields, count);
 
