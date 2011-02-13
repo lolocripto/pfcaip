@@ -568,19 +568,19 @@ public final class Field extends AbstractField implements Fieldable, Serializabl
     setStoreTermVector(TermVector.NO);
   }
   
-//AIP change code: new constructor only setting the name needed for the "copyToGlobalField()" method
+//AIP change code (CA): new constructor only setting the name needed for the "copyToGlobalField()" method
   protected Field(String name){
       this.name = StringHelper.intern(name);
   }
   
 /**
- *  AIP change code: generate a new field that will be a copy of the current one but with the
+ *  AIP change code (CA): generate a new field that will be a copy of the current one but with the
  *  	same global name, the practical action that this will do is just adding the terms to the global field
  *  Important obs.- this field is meant to be only to calculate global stats, i.e. the Collection Frequency,
  *  	this means that it has special values:
  *  	- don't have TermVector
  *  	- is not stored never
- *  	- omitNorms = true --> to save the memory usage at search time
+ *  	- omitNorms = false --> we need the norm to find out the size of the Field
  *  
  * @return the copied global Field
  */
@@ -607,7 +607,7 @@ public final class Field extends AbstractField implements Fieldable, Serializabl
 
       fout.isStored = false;
       fout.isIndexed = true;
-      fout.omitNorms = true;
+      fout.omitNorms = false;//this has to be set to false so we can compute Norms (field size)
 
       fout.omitTermFreqAndPositions = false;//if set to "true", Freq are not calculated so not working
       fout.isBinary = false;//the binary field are never indexed

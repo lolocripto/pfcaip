@@ -95,7 +95,7 @@ public final class Document implements java.io.Serializable {
    */
   public final void add(Fieldable field) {
     fields.add(field);
-    //AIP change code: only for indexed fields
+    //AIP change code (CA): only for indexed fields
     if (field.isIndexed() & (field.tokenStreamValue() == null)){
     	if (field instanceof Field){
     		Field f = (Field) field;
@@ -103,7 +103,7 @@ public final class Document implements java.io.Serializable {
 	    
     		fields.add(globalF);
     	}
-    }//end AIP change code
+    }//end AIP change code (CA)
   }
   
   /**
