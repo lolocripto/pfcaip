@@ -18,6 +18,7 @@ package org.apache.lucene.index;
  */
 
 import org.apache.lucene.util.ArrayUtil;
+import org.apache.lucene.util.Constants;
 import org.apache.lucene.search.Similarity;
 
 /** Taps into DocInverter, as an InvertedDocEndConsumer,
@@ -31,9 +32,11 @@ final class NormsWriterPerField extends InvertedDocEndConsumerPerField implement
   final FieldInfo fieldInfo;
   final DocumentsWriter.DocState docState;
 
+  //AIP comment: the below arrays will store the norms/sizes (number of terms), each position of the array correspond to the docId
   // Holds all docID/norm pairs we've seen
   int[] docIDs = new int[1];
   byte[] norms = new byte[1];
+  int[] sizes = new int[1];//AIP change code (DL) this will store document sizes (number of terms) taking that size from CatchAll Field
   int upto;
 
   final FieldInvertState fieldState;
@@ -42,6 +45,7 @@ final class NormsWriterPerField extends InvertedDocEndConsumerPerField implement
     // Shrink back if we are overallocated now:
     docIDs = ArrayUtil.shrink(docIDs, upto);
     norms = ArrayUtil.shrink(norms, upto);
+    sizes = ArrayUtil.shrink(sizes, upto);//AIP change code (DL)
     upto = 0;
   }
 
@@ -69,10 +73,12 @@ final class NormsWriterPerField extends InvertedDocEndConsumerPerField implement
         assert docIDs.length == upto;
         docIDs = ArrayUtil.grow(docIDs, 1+upto);
         norms = ArrayUtil.grow(norms, 1+upto);
+        sizes = ArrayUtil.grow(sizes, 1+upto);
       }
       final float norm = docState.similarity.computeNorm(fieldInfo.name, fieldState);
       norms[upto] = Similarity.encodeNorm(norm);//AIP Comment: this array stores the "norm" value per document (upto==docId)
       docIDs[upto] = docState.docID;
+      sizes[upto] = fieldState.getLength(); //AIP change code (DL)	
       upto++;
     }
   }
