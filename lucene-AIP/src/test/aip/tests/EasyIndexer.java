@@ -52,10 +52,11 @@ public class EasyIndexer {
 	Directory dir = new SimpleFSDirectory(new File(indexDir));
     	 
 	writer = new IndexWriter(dir, new StandardAnalyzer(
-		Version.LUCENE_CURRENT), true,
+		Version.LUCENE_30), true,
 		IndexWriter.MaxFieldLength.UNLIMITED);
 	writer.setInfoStream(System.out);
-	writer.setUseCompoundFile(false);
+//	writer.setUseCompoundFile(false);
+	writer.setUseCompoundFile(true);//lo deja todo en un mismo fichero con ext cfs
     }
 
     public void close() throws IOException {
@@ -63,7 +64,7 @@ public class EasyIndexer {
     }
 
     public int index01() throws Exception {
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < 2; i++) {
 	    addDoc(i);
 	}
 	return 0;
@@ -73,10 +74,7 @@ public class EasyIndexer {
 	Document doc = new Document();
 	doc.add(new Field("id", "document_" + i, Field.Store.YES,Field.Index.ANALYZED));
 	doc.add(new Field("content", "aaa bb", Field.Store.YES,Field.Index.ANALYZED));
-	doc.add(new Field("content4", "path1 path2 path3",Field.Store.YES,Field.Index.NOT_ANALYZED));
-	doc.add(new Field("content5", "path1 path2 path3",Field.Store.YES,Field.Index.NOT_ANALYZED));
 	doc.add(new Field("content", "aaa cc", Field.Store.YES,Field.Index.ANALYZED));
-	doc.add(new Field("content3", "aaa", Field.Store.YES,Field.Index.ANALYZED));
 	
 	writer.addDocument(doc);
     }
