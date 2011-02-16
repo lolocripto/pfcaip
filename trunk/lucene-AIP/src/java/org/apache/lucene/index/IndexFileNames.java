@@ -34,6 +34,9 @@ final class IndexFileNames {
    
   /** Extension of norms file */
   static final String NORMS_EXTENSION = "nrm";
+  
+  /** Extension of sizes file */
+  static final String SIZES_EXTENSION = "siz";//AIP Change code (DL): adding the new file extension for sizes
 
   /** Extension of freq postings file */
   static final String FREQ_EXTENSION = "frq";

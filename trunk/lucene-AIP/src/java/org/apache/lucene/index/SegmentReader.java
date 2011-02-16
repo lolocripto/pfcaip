@@ -68,6 +68,9 @@ public class SegmentReader extends IndexReader implements Cloneable {
 
   // optionally used for the .nrm file shared by multiple norms
   private IndexInput singleNormStream;
+  //AIP change code (DL): a new Stream to store the sizes
+  private IndexInput singleSizesStream;
+  
   private Ref singleNormRef;
 
   CoreReaders core;
@@ -369,8 +372,8 @@ public class SegmentReader extends IndexReader implements Cloneable {
     
     public Norm(IndexInput in, int number, long normSeek) {
       this.in = in;
-      this.number = number;
-      this.normSeek = normSeek;
+      this.number = number;//AIP comment: numero de campo
+      this.normSeek = normSeek;//AIP comment: el valor del norm es, dentro del "in" a partir de normSeek + number
     }
 
     public synchronized void incRef() {
@@ -389,6 +392,11 @@ public class SegmentReader extends IndexReader implements Cloneable {
           if (singleNormRef.decRef() == 0) {
             singleNormStream.close();
             singleNormStream = null;
+            
+            //AIP change code (DL)
+            singleSizesStream.close();
+            singleSizesStream = null;
+            //end AIP change code
           }
         }
 
@@ -441,6 +449,11 @@ public class SegmentReader extends IndexReader implements Cloneable {
       }
     }
 
+    /*
+     * AIP comment: te devuelve un array de bytes, cada uno de los cuales es el "norm" de un doc
+     * 		"normSeek" es el comienzo y lee desde "normSeek" y luego un byte por documento
+     * 		hasta "maxDoc", el grupo de bytes[] leido corresponde a un Field espeficico
+     */
     // Load & cache full bytes array.  Returns bytes.
     public synchronized byte[] bytes() throws IOException {
       assert refCount > 0 && (origNorm == null || origNorm.refCount > 0);
@@ -1141,7 +1154,10 @@ public class SegmentReader extends IndexReader implements Cloneable {
       }
       if (fi.isIndexed && !fi.omitNorms) {
         Directory d = directory();
+        //AIP comment: the file name depends on the field number (only for separate norms)
         String fileName = si.getNormFileName(fi.number);
+        String sizesFileName = si.getSizesFileName();
+        
         if (!si.hasSeparateNorms(fi.number)) {
           d = cfsDir;
         }
@@ -1151,8 +1167,10 @@ public class SegmentReader extends IndexReader implements Cloneable {
         IndexInput normInput = null;
         long normSeek;
 
+        //AIP comment: for size file always will be just one file
         if (singleNormFile) {
           normSeek = nextNormSeek;
+          //AIP Comment: parece que va leyendo el fichero .nrm en bloques de "readBufferSize" y lo asigna a "singleNormStream"
           if (singleNormStream == null) {
             singleNormStream = d.openInput(fileName, readBufferSize);
             singleNormRef = new Ref();
@@ -1167,7 +1185,16 @@ public class SegmentReader extends IndexReader implements Cloneable {
           normSeek = 0;
           normInput = d.openInput(fileName);
         }
+        
+        //AIP change code (DL)
+        if (singleSizesStream == null){
+            singleSizesStream = d.openInput(sizesFileName,readBufferSize);
+            
+        }
 
+        //AIP comment: parece que el "norm" del campo "fi.name" es uno de los bytes de "normInput", 
+        //	       justo el que empieza en el byte "normSeek" mas "fi.number"
+        //	       como aclaracion decir que guarda un puntero a "normInput" no clona el objeto
         norms.put(fi.name, new Norm(normInput, fi.number, normSeek));
         nextNormSeek += maxDoc; // increment also if some norms are separate
       }
