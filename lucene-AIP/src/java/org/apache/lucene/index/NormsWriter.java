@@ -38,6 +38,9 @@ import org.apache.lucene.search.Similarity;
 final class NormsWriter extends InvertedDocEndConsumer {
 
   private static final byte defaultNorm = Similarity.encodeNorm(1.0f);
+  //AIP change code (DL)
+  private static final int defaultSize = 0;
+  
   private FieldInfos fieldInfos;
   @Override
   public InvertedDocEndConsumerPerThread addThread(DocInverterPerThread docInverterPerThread) {
@@ -91,7 +94,13 @@ final class NormsWriter extends InvertedDocEndConsumer {
     final String normsFileName = state.segmentName + "." + IndexFileNames.NORMS_EXTENSION;
     state.flushedFiles.add(normsFileName);
     IndexOutput normsOut = state.directory.createOutput(normsFileName);
-
+    
+    //AIP change code (DL)
+    final String sizesFileName = state.segmentName + "." + IndexFileNames.SIZES_EXTENSION;
+    state.flushedFiles.add(sizesFileName);
+    IndexOutput sizesOut = state.directory.createOutput(normsFileName);
+    //end AIP change code (DL)
+    
     try {
       normsOut.writeBytes(SegmentMerger.NORMS_HEADER, 0, SegmentMerger.NORMS_HEADER.length);
 
@@ -137,12 +146,15 @@ final class NormsWriter extends InvertedDocEndConsumer {
             assert minDocID < state.numDocs;
 
             // Fill hole
-            for(;upto<minDocID;upto++)
+            for(;upto<minDocID;upto++){
               normsOut.writeByte(defaultNorm);
+              sizesOut.writeInt(defaultSize);//AIP change code (DL)
+            }
 
             normsOut.writeByte(fields[minLoc].norms[uptos[minLoc]]);//AIP comment: stores the norm information per field
             //AIP change code (DL): stores the size information per field just after the norm information
-            normsOut.writeInt(fields[minLoc].sizes[uptos[minLoc]]);//AIP change code (DL)
+            sizesOut.writeInt(fields[minLoc].sizes[uptos[minLoc]]);//AIP change code (DL)
+            
             (uptos[minLoc])++;
             upto++;
 
@@ -157,13 +169,17 @@ final class NormsWriter extends InvertedDocEndConsumer {
           }
           
           // Fill final hole with defaultNorm
-          for(;upto<state.numDocs;upto++)
+          for(;upto<state.numDocs;upto++){
             normsOut.writeByte(defaultNorm);
+            sizesOut.writeInt(defaultSize);//AIP change code (DL)
+          }
         } else if (fieldInfo.isIndexed && !fieldInfo.omitNorms) {
           normCount++;
           // Fill entire field with default norm:
-          for(;upto<state.numDocs;upto++)
+          for(;upto<state.numDocs;upto++){
             normsOut.writeByte(defaultNorm);
+            sizesOut.writeInt(defaultSize);//AIP change code (DL)
+          }
         }
 
         assert 4+normCount*state.numDocs == normsOut.getFilePointer() : ".nrm file size mismatch: expected=" + (4+normCount*state.numDocs) + " actual=" + normsOut.getFilePointer();

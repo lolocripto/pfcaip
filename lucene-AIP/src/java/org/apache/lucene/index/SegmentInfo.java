@@ -459,6 +459,14 @@ public final class SegmentInfo {
     prefix = ".f";
     return IndexFileNames.fileNameFromGeneration(name, prefix + number, WITHOUT_GEN);
   }
+  
+  //AIP change code (DL)
+  public String getSizesFileName() throws IOException{
+      String prefix;
+      prefix = "." + IndexFileNames.SIZES_EXTENSION;
+
+      return IndexFileNames.fileNameFromGeneration(name, prefix, WITHOUT_GEN);
+  }
 
   /**
    * Mark whether this segment is stored as a compound file.
