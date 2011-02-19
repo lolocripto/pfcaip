@@ -711,6 +711,14 @@ public abstract class IndexReader implements Cloneable,Closeable {
    * @see org.apache.lucene.document.Field#setBoost(float)
    */
   public abstract byte[] norms(String field) throws IOException;
+  
+  /**
+   * AIP change code (DL)
+   * @param field
+   * @return
+   * @throws IOException
+   */
+  public abstract int[] sizes(String field) throws IOException;
 
   /** Reads the byte-encoded normalization factor for the named field of every
    *  document.  This is used by the search code to score documents.

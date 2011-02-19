@@ -352,6 +352,14 @@ public class ParallelReader extends IndexReader {
     IndexReader reader = fieldToReader.get(field);
     return reader==null ? null : reader.norms(field);
   }
+  
+  //AIP change code (DL)
+  @Override
+  public int[] sizes(String field) throws IOException{
+      ensureOpen();
+      IndexReader reader = fieldToReader.get(field);
+      return reader==null ? null :  reader.sizes(field);
+  }
 
   @Override
   public void norms(String field, byte[] result, int offset)

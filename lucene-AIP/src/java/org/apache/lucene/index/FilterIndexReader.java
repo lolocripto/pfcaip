@@ -193,6 +193,13 @@ public class FilterIndexReader extends IndexReader {
     return in.norms(f);
   }
 
+  //AIP change code (DL)
+  @Override
+  public int[] sizes(String f) throws IOException{
+      ensureOpen();
+      return in.sizes(f);
+  }
+  
   @Override
   public void norms(String f, byte[] bytes, int offset) throws IOException {
     ensureOpen();

@@ -311,6 +311,21 @@ public class MultiReader extends IndexReader implements Cloneable {
     return bytes;
   }
 
+  //AIP change code (DL)
+  @Override
+  public synchronized int[] sizes(String field) throws IOException{
+      ensureOpen();
+      if (!hasNorms(field))
+	  return null;
+      int[] result = null;
+      for (int i=0; i < subReaders.length; i++)
+	  result = subReaders[i].sizes(field);
+      
+      return result;
+  }
+
+
+  
   @Override
   public synchronized void norms(String field, byte[] result, int offset)
     throws IOException {
