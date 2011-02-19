@@ -119,7 +119,7 @@ public class SimpleFSDirectory extends FSDirectory {
               // LUCENE-1566 - work around JVM Bug by breaking very large reads into chunks
               readLength = chunkSize;
             }
-            final int i = file.read(b, offset + total, readLength);
+            final int i = file.read(b, offset + total, readLength);//AIP comment: aqui es realmente donde lee del fichero
             if (i == -1) {
               throw new IOException("read past EOF");
             }
