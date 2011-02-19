@@ -369,7 +369,7 @@ public class SegmentReader extends IndexReader implements Cloneable {
     // null until bytes is set
     private Ref bytesRef;
     private byte[] bytes;
-    private int[] ints;//AIP change code (DL)
+    private int[] fSizes;//AIP change code (DL)
     private boolean dirty;
     private int number;
     private boolean rollbackDirty;
@@ -513,8 +513,9 @@ public class SegmentReader extends IndexReader implements Cloneable {
      * 		The group of int[] correspond to one certain Field
      */
     public synchronized int[] sizes() throws IOException {
+	if (fSizes == null){		// value not yet read
           final int count = maxDoc();
-          ints = new int[count];
+          fSizes = new int[count];
 
           byte[] bAux = new byte[count*4];
           
@@ -524,10 +525,11 @@ public class SegmentReader extends IndexReader implements Cloneable {
             inS.readBytes(bAux, 0, count*4, false);//AIP comment: 1 int = 4 bytes
           }
 
-          ints = ArrayUtil.byteArrayToInt(bAux);  //AIP comment: casting from byte[] to int[]
+          fSizes = ArrayUtil.byteArrayToInt(bAux);  //AIP comment: casting from byte[] to int[]
           closeInput();
+	}
 
-      return ints;
+      return fSizes;
     } 
     
     // Only for testing
