@@ -98,7 +98,7 @@ final class NormsWriter extends InvertedDocEndConsumer {
     //AIP change code (DL)
     final String sizesFileName = state.segmentName + "." + IndexFileNames.SIZES_EXTENSION;
     state.flushedFiles.add(sizesFileName);
-    IndexOutput sizesOut = state.directory.createOutput(normsFileName);
+    IndexOutput sizesOut = state.directory.createOutput(sizesFileName);
     //end AIP change code (DL)
     
     try {
@@ -187,6 +187,7 @@ final class NormsWriter extends InvertedDocEndConsumer {
 
     } finally {
       normsOut.close();
+      sizesOut.close();//AIP change code (DL)
     }
   }
 
