@@ -35,6 +35,7 @@ import org.apache.lucene.store.BufferedIndexInput;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.IndexInput;
 import org.apache.lucene.store.IndexOutput;
+import org.apache.lucene.util.ArrayUtil;
 import org.apache.lucene.util.BitVector;
 import org.apache.lucene.util.CloseableThreadLocal;
 import org.apache.lucene.util.Constants;
@@ -361,19 +362,26 @@ public class SegmentReader extends IndexReader implements Cloneable {
     private Norm origNorm;
 
     private IndexInput in;
+    private IndexInput inS;//AIP change code (DL)
     private long normSeek;
+    private long sizeSeek;//AIP change code (DL)
 
     // null until bytes is set
     private Ref bytesRef;
     private byte[] bytes;
+    private int[] ints;//AIP change code (DL)
     private boolean dirty;
     private int number;
     private boolean rollbackDirty;
     
-    public Norm(IndexInput in, int number, long normSeek) {
-      this.in = in;
-      this.number = number;//AIP comment: numero de campo
+//    public Norm(IndexInput in, int number, long normSeek) {
+    //AIP change code (DL)
+    public Norm(IndexInput in, IndexInput inS, int number, long normSeek, long sizeSeek) {
+      this.in = in;  	   //AIP comment: contiene una referencia al fichero con los datos de los Norms
+      this.inS= inS; // AIP change code (DL)
+      this.number = number;//AIP comment: Field number
       this.normSeek = normSeek;//AIP comment: el valor del norm es, dentro del "in" a partir de normSeek + number
+      this.sizeSeek = sizeSeek;//AIP change code (DL)
     }
 
     public synchronized void incRef() {
@@ -401,6 +409,7 @@ public class SegmentReader extends IndexReader implements Cloneable {
         }
 
         in = null;
+        inS= null;
       }
     }
 
@@ -495,6 +504,32 @@ public class SegmentReader extends IndexReader implements Cloneable {
       return bytes;
     }
 
+    /*
+     * AIP change code: return int[], each position correspond to the size of one document, taking
+     * 			the number of the term as the size of the document.
+     * 
+     * 		"sizeSeek" is the start and we have to read from "sizeSeek" until maxDoc()*4
+     * 		since we will read bytes and 1 int is 4 bytes
+     * 		The group of int[] correspond to one certain Field
+     */
+    public synchronized int[] sizes() throws IOException {
+          final int count = maxDoc();
+          ints = new int[count];
+
+          byte[] bAux = new byte[count*4];
+          
+          // Read from disk.
+          synchronized(inS) {
+            inS.seek(sizeSeek);
+            inS.readBytes(bAux, 0, count*4, false);//AIP comment: 1 int = 4 bytes
+          }
+
+          ints = ArrayUtil.byteArrayToInt(bAux);  //AIP comment: casting from byte[] to int[]
+          closeInput();
+
+      return ints;
+    } 
+    
     // Only for testing
     Ref bytesRef() {
       return bytesRef;
@@ -586,7 +621,7 @@ public class SegmentReader extends IndexReader implements Cloneable {
       }
       this.dirty = false;
     }
-  }
+  }//AIP comment: end Norm class
 
   Map<String,Norm> norms = new HashMap<String,Norm>();
   
@@ -1114,6 +1149,14 @@ public class SegmentReader extends IndexReader implements Cloneable {
     byte[] bytes = getNorms(field);
     return bytes;
   }
+  
+  //AIP change code (DL)
+  @Override
+  public synchronized int[] sizes(String field) throws IOException {
+      Norm norm = norms.get(field);
+      if (norm == null) return null;  // not indexed, or norms not stored
+      return norm.sizes();
+    }
 
   @Override
   protected void doSetNorm(int doc, String field, byte value)
@@ -1144,6 +1187,7 @@ public class SegmentReader extends IndexReader implements Cloneable {
 
   private void openNorms(Directory cfsDir, int readBufferSize) throws IOException {
     long nextNormSeek = SegmentMerger.NORMS_HEADER.length; //skip header (header unused for now)
+    long sizeSeek = 0;
     int maxDoc = maxDoc();
     for (int i = 0; i < core.fieldInfos.size(); i++) {
       FieldInfo fi = core.fieldInfos.fieldInfo(i);
@@ -1154,7 +1198,7 @@ public class SegmentReader extends IndexReader implements Cloneable {
       }
       if (fi.isIndexed && !fi.omitNorms) {
         Directory d = directory();
-        //AIP comment: the file name depends on the field number (only for separate norms)
+        //AIP comment: for 'norms' sometimes the file name depends on the field number (only for separate norms)
         String fileName = si.getNormFileName(fi.number);
         String sizesFileName = si.getSizesFileName();
         
@@ -1165,6 +1209,8 @@ public class SegmentReader extends IndexReader implements Cloneable {
         // singleNormFile means multiple norms share this file
         boolean singleNormFile = fileName.endsWith("." + IndexFileNames.NORMS_EXTENSION);
         IndexInput normInput = null;
+        IndexInput sizesInput= null;//AIP change code (DL)
+        
         long normSeek;
 
         //AIP comment: for size file always will be just one file
@@ -1189,14 +1235,16 @@ public class SegmentReader extends IndexReader implements Cloneable {
         //AIP change code (DL)
         if (singleSizesStream == null){
             singleSizesStream = d.openInput(sizesFileName,readBufferSize);
-            
         }
-
+        sizesInput = singleSizesStream;
+        //end AIP change code
+        
         //AIP comment: parece que el "norm" del campo "fi.name" es uno de los bytes de "normInput", 
         //	       justo el que empieza en el byte "normSeek" mas "fi.number"
         //	       como aclaracion decir que guarda un puntero a "normInput" no clona el objeto
-        norms.put(fi.name, new Norm(normInput, fi.number, normSeek));
+        norms.put(fi.name, new Norm(normInput, sizesInput, fi.number, normSeek, sizeSeek));
         nextNormSeek += maxDoc; // increment also if some norms are separate
+        sizeSeek += maxDoc * 4; //AIP change code(DL) por cada doc hay 4bytes (1 int)
       }
     }
   }
