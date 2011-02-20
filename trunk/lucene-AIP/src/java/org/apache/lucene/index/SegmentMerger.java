@@ -155,6 +155,8 @@ final class SegmentMerger {
     mergedDocs = mergeFields();
     mergeTerms();
     mergeNorms();
+    //AIP change code (DL)
+    mergeSizes();
 
     if (mergeDocStores && fieldInfos.hasVectors())
       mergeVectors();
@@ -754,6 +756,58 @@ final class SegmentMerger {
     }
   }
 
+
+  /*
+   * AIP change code (DL)
+   */
+  private void mergeSizes() throws IOException {
+    byte[] sizesBuffer = null;
+    IndexOutput output = null;
+    try {
+      int numFieldInfos = fieldInfos.size();
+      for (int i = 0; i < numFieldInfos; i++) {
+        FieldInfo fi = fieldInfos.fieldInfo(i);
+        if (fi.isIndexed && !fi.omitNorms) {
+          if (output == null) { 
+            output = directory.createOutput(segment + "." + IndexFileNames.SIZES_EXTENSION);
+//            output.writeBytes(NORMS_HEADER,NORMS_HEADER.length);
+          }
+          for ( IndexReader reader : readers) {
+            int maxDoc = reader.maxDoc();
+            if (sizesBuffer == null || sizesBuffer.length < maxDoc*4) {
+              // the buffer is too small for the current segment
+              sizesBuffer = new byte[maxDoc*4];
+            }
+//            reader.norms(fi.name, normBuffer, 0);
+            reader.sizes(fi.name, sizesBuffer, 0);
+            if (!reader.hasDeletions()) {
+              //optimized case for segments without deleted docs
+              output.writeBytes(sizesBuffer, maxDoc*4);
+            } else {
+              // this segment has deleted docs, so we have to
+              // check for every doc if it is deleted or not
+              for (int k = 0; k < maxDoc; k++) {
+                if (!reader.isDeleted(k)) {
+                  output.writeByte(sizesBuffer[k*4]);
+                  output.writeByte(sizesBuffer[k*4+1]);
+                  output.writeByte(sizesBuffer[k*4+2]);
+                  output.writeByte(sizesBuffer[k*4+3]);
+                }
+              }
+            }
+            checkAbort.work(maxDoc);
+          }
+        }
+      }
+    } finally {
+      if (output != null) { 
+        output.close();
+      }
+    }
+  }
+
+  
+  
   static class CheckAbort {
     private double workCount;
     private MergePolicy.OneMerge merge;

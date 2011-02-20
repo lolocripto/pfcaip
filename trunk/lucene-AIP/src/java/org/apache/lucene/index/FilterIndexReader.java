@@ -206,6 +206,20 @@ public class FilterIndexReader extends IndexReader {
     in.norms(f, bytes, offset);
   }
 
+  //AIP change code (DL)
+  @Override
+  public void sizes(String f, int[] fSizes, int offset) throws IOException{
+      ensureOpen();
+      in.sizes(f, fSizes, offset);
+  }
+  
+  //AIP change code (DL)
+  @Override
+  public void sizes(String f, byte[] fSizesBytes, int offset) throws IOException{
+      ensureOpen();
+      in.sizes(f, fSizesBytes, offset);
+  }
+  
   @Override
   protected void doSetNorm(int d, String f, byte b) throws CorruptIndexException, IOException {
     in.setNorm(d, f, b);

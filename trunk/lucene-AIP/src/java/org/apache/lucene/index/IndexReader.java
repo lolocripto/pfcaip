@@ -728,6 +728,26 @@ public abstract class IndexReader implements Cloneable,Closeable {
   public abstract void norms(String field, byte[] bytes, int offset)
     throws IOException;
 
+  /**
+   * AIP change code (DL), this methods, among other places is used in Merging Segments
+   * @param field
+   * @param fSizes
+   * @param offset
+   * @throws IOException
+   */
+  public abstract void sizes(String field, int[] fSizes, int offset)
+  	throws IOException;
+
+  /**
+   * AIP change code (DL) needed for merging segments, it doesn't transform the byte[] to int[]
+   * @param field
+   * @param fSizesBytes
+   * @param offset
+   * @throws IOException
+   */
+  public abstract void sizes(String field, byte[] fSizesBytes, int offset) 
+  	throws IOException;
+  
   /** Expert: Resets the normalization factor for the named field of the named
    * document.  The norm represents the product of the field's {@link
    * org.apache.lucene.document.Fieldable#setBoost(float) boost} and its {@link Similarity#lengthNorm(String,

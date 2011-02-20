@@ -27,6 +27,7 @@ import java.util.ArrayList;
 
 import org.apache.lucene.store.IndexOutput;
 import org.apache.lucene.search.Similarity;
+import org.apache.lucene.util.Constants;
 
 // TODO FI: norms could actually be stored as doc store
 
@@ -38,8 +39,6 @@ import org.apache.lucene.search.Similarity;
 final class NormsWriter extends InvertedDocEndConsumer {
 
   private static final byte defaultNorm = Similarity.encodeNorm(1.0f);
-  //AIP change code (DL)
-  private static final int defaultSize = 0;
   
   private FieldInfos fieldInfos;
   @Override
@@ -148,7 +147,7 @@ final class NormsWriter extends InvertedDocEndConsumer {
             // Fill hole
             for(;upto<minDocID;upto++){
               normsOut.writeByte(defaultNorm);
-              sizesOut.writeInt(defaultSize);//AIP change code (DL)
+              sizesOut.writeInt(Constants.DEFAULT_SIZE);//AIP change code (DL)
             }
 
             normsOut.writeByte(fields[minLoc].norms[uptos[minLoc]]);//AIP comment: stores the norm information per field
@@ -171,14 +170,14 @@ final class NormsWriter extends InvertedDocEndConsumer {
           // Fill final hole with defaultNorm
           for(;upto<state.numDocs;upto++){
             normsOut.writeByte(defaultNorm);
-            sizesOut.writeInt(defaultSize);//AIP change code (DL)
+            sizesOut.writeInt(Constants.DEFAULT_SIZE);//AIP change code (DL)
           }
         } else if (fieldInfo.isIndexed && !fieldInfo.omitNorms) {
           normCount++;
           // Fill entire field with default norm:
           for(;upto<state.numDocs;upto++){
             normsOut.writeByte(defaultNorm);
-            sizesOut.writeInt(defaultSize);//AIP change code (DL)
+            sizesOut.writeInt(Constants.DEFAULT_SIZE);//AIP change code (DL)
           }
         }
 
