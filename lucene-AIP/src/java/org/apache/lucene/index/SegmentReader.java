@@ -532,6 +532,44 @@ public class SegmentReader extends IndexReader implements Cloneable {
       return fSizes;
     } 
     
+    /*
+     * AIP change code (DL)
+     * Load bytes but do not cache them if they were not already cached
+     */
+    public synchronized void sizes(int[] sizesOut, int offset, int len) throws IOException {
+      if (fSizes != null) {
+        // Already cached -- copy from cache:
+        System.arraycopy(fSizes, 0, sizesOut, offset, len);
+      } else {
+          // We are orig -- read ourselves from disk:
+	  byte[] bAux = new byte[len*4];
+	  
+          synchronized(inS) {
+            inS.seek(sizeSeek);
+            inS.readBytes(bAux, offset, len*4, false); //AIP comment: 1 int = 4 bytes
+          }
+          
+          sizesOut = ArrayUtil.byteArrayToInt(bAux); //AIP comment: casting from byte[] to int[]
+          closeInput();
+      }
+    }
+    
+    /*
+     * AIP change code (DL) this method is needed for the merging, it does the same than the one which 
+     * 		returns the int[], the only different is that this one, apart from not reading it from
+     * 		cache never, this one doesn't transform the result to int[] but it leave the result in byte[]
+     * 		thus, in the merging, that have to use the method writeBytes we have not transform it again
+     */
+    public synchronized void sizes(byte[] sizesOutBytes, int offset, int len) throws IOException{
+	byte[] bAux = new byte[len*4];
+	
+	synchronized(inS){
+	    inS.seek(sizeSeek);
+	    inS.readBytes(bAux, offset, len*4, false);
+	}
+	closeInput();
+    }
+    
     // Only for testing
     Ref bytesRef() {
       return bytesRef;
@@ -1186,7 +1224,45 @@ public class SegmentReader extends IndexReader implements Cloneable {
     norm.bytes(bytes, offset, maxDoc());
   }
 
+  /*
+   * AIP change code (DL): this method is needed for merging segments
+   * (non-Javadoc)
+   * @see org.apache.lucene.index.IndexReader#sizes(java.lang.String, int[], int)
+   */
+  public synchronized void sizes(String field, int[] fSizes, int offset) throws IOException{
+      ensureOpen();
+      Norm norm = norms.get(field);
+      if (norm == null){
+	  Arrays.fill(fSizes, offset, fSizes.length, Constants.DEFAULT_SIZE);
+	  return;
+      }
+      
+      norm.sizes(fSizes, offset, maxDoc());
+  }
 
+  /*
+   * AIP change code (DL), needed for Merging, it doesn't transform the byte[] to int[]
+   * (non-Javadoc)
+   * @see org.apache.lucene.index.IndexReader#sizes(java.lang.String, int[], int)
+   */
+  public synchronized void sizes(String field, byte[] fSizesBytes, int offset) throws IOException{
+      ensureOpen();
+      Norm norm = norms.get(field);
+      if (norm == null){
+	  Arrays.fill(fSizesBytes, offset, fSizesBytes.length, (byte)Constants.DEFAULT_SIZE);
+	  return;
+      }
+      
+      norm.sizes(fSizesBytes, offset, maxDoc());//AIP comment: the result byte[] length is 4*maxDoc()
+  }
+  
+
+  /*
+   * AIP comment: this method doesn't read directly from the file but this stores info about where in the
+   * 		info should be present in the file, everything is stored in the map<field,norm>
+   * 		Afterwards, when the user ask for the norm, if it has not read before, it is read
+   * 		from the file and stored in the map so it is available for future requests 
+   */
   private void openNorms(Directory cfsDir, int readBufferSize) throws IOException {
     long nextNormSeek = SegmentMerger.NORMS_HEADER.length; //skip header (header unused for now)
     long sizeSeek = 0;

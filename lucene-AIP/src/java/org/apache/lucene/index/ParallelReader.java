@@ -369,6 +369,24 @@ public class ParallelReader extends IndexReader {
     if (reader!=null)
       reader.norms(field, result, offset);
   }
+  
+  //AIP change code (DL)
+  @Override
+  public void sizes(String field, int[] result, int offset) throws IOException{
+      ensureOpen();
+      IndexReader reader = fieldToReader.get(field);
+      if (reader != null)
+	  reader.sizes(field, result, offset);
+  }
+
+  //AIP change code (DL)
+  @Override
+  public void sizes(String field, byte[] resultB, int offset) throws IOException{
+      ensureOpen();
+      IndexReader reader = fieldToReader.get(field);
+      if (reader != null)
+	  reader.sizes(field, resultB, offset);
+  }
 
   @Override
   protected void doSetNorm(int n, String field, byte value)

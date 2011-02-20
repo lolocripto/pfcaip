@@ -323,16 +323,15 @@ public class MultiReader extends IndexReader implements Cloneable {
       
       return result;
   }
-
-
   
   @Override
   public synchronized void norms(String field, byte[] result, int offset)
     throws IOException {
     ensureOpen();
     byte[] bytes = normsCache.get(field);
-    for (int i = 0; i < subReaders.length; i++)      // read from segments
-      subReaders[i].norms(field, result, offset + starts[i]);
+    //AIP change code: the two following lines are "extra", they should be commented
+//    for (int i = 0; i < subReaders.length; i++)      // read from segments
+//      subReaders[i].norms(field, result, offset + starts[i]);
 
     if (bytes==null && !hasNorms(field)) {
       Arrays.fill(result, offset, result.length, DefaultSimilarity.encodeNorm(1.0f));
@@ -345,6 +344,34 @@ public class MultiReader extends IndexReader implements Cloneable {
     }
   }
 
+  //AIP change code (DL) TODO aplicar cache como normsCache
+  @Override
+  public synchronized void sizes(String field, int[] result, int offset) throws IOException {
+      ensureOpen();
+  
+      if (!hasNorms(field)){
+	  Arrays.fill(result, offset, result.length, Constants.DEFAULT_SIZE);
+      }else{
+	  for (int i = 0; i < subReaders.length; i++) {
+	    subReaders[i].sizes(field, result, offset + starts[i]);
+	}
+      }
+  }
+
+  //AIP change code (DL) 
+  @Override
+  public synchronized void sizes(String field, byte[] resultBytes, int offset) throws IOException {
+      ensureOpen();
+  
+      if (!hasNorms(field)){
+	  Arrays.fill(resultBytes, offset, resultBytes.length, (byte)Constants.DEFAULT_SIZE);
+      }else{
+	  for (int i = 0; i < subReaders.length; i++) {
+	    subReaders[i].sizes(field, resultBytes, offset + starts[i]);
+	}
+      }
+  }
+  
   @Override
   protected void doSetNorm(int n, String field, byte value)
     throws CorruptIndexException, IOException {
