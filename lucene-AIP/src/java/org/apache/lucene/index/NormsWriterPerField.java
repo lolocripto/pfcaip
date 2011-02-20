@@ -64,7 +64,7 @@ final class NormsWriterPerField extends InvertedDocEndConsumerPerField implement
   public int compareTo(NormsWriterPerField other) {
     return fieldInfo.name.compareTo(other.fieldInfo.name);
   }
-  //AIP TODO ahora tendriamos que cambiar este metodo, el nuevo CatchAll Field computa el norm y afectara a los computos del resto no?
+
   @Override
   void finish() {
     assert docIDs.length == norms.length;
