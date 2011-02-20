@@ -51,6 +51,9 @@ public final class Constants {
   //AIP Change code (CA): CatchAll Field
   public static final String CATCHALL_FIELD = "CatchAllField_1234567890987654321";
   
+  //AIP change code (DL)
+  public static final int DEFAULT_SIZE = 0;
+  
   // NOTE: this logic may not be correct; if you know of a
   // more reliable approach please raise it on java-dev!
   public static final boolean JRE_IS_64BIT;
