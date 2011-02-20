@@ -719,6 +719,16 @@ public abstract class IndexReader implements Cloneable,Closeable {
    * @throws IOException
    */
   public abstract int[] sizes(String field) throws IOException;
+  
+  /**
+   * AIP change code (AVGL)
+   */
+  public abstract int avgDocSize() throws IOException;
+  
+  /**
+   * AIP change code (AVGL)
+   */
+  public abstract long docSizes() throws IOException;
 
   /** Reads the byte-encoded normalization factor for the named field of every
    *  document.  This is used by the search code to score documents.

@@ -72,6 +72,9 @@ public class SegmentReader extends IndexReader implements Cloneable {
   //AIP change code (DL): a new Stream to store the sizes
   private IndexInput singleSizesStream;
   
+  //AIP change code (AVGL): this new stream will contain the avg size of the documents
+  private IndexInput avgSizeStream;
+  
   private Ref singleNormRef;
 
   CoreReaders core;
@@ -664,6 +667,8 @@ public class SegmentReader extends IndexReader implements Cloneable {
   }//AIP comment: end Norm class
 
   Map<String,Norm> norms = new HashMap<String,Norm>();
+  int avgDocSize = 0;
+  long docSizes = 0;
   
   /**
    * @throws CorruptIndexException if the index is corrupt
@@ -1198,6 +1203,18 @@ public class SegmentReader extends IndexReader implements Cloneable {
       return norm.sizes();
     }
 
+  //AIP change code (AVGL)
+  @Override
+  public synchronized int avgDocSize() throws IOException{
+      return avgDocSize;
+  }
+  
+  //AIP change code (AVGL)
+  @Override
+  public synchronized long docSizes() throws IOException{
+      return docSizes;
+  }
+  
   @Override
   protected void doSetNorm(int doc, String field, byte value)
           throws IOException {
@@ -1267,6 +1284,8 @@ public class SegmentReader extends IndexReader implements Cloneable {
     long nextNormSeek = SegmentMerger.NORMS_HEADER.length; //skip header (header unused for now)
     long sizeSeek = 0;
     int maxDoc = maxDoc();
+    String avgFileName = si.getAvgFileName();     //AIP change code (AVGL)
+    String sizesFileName = si.getSizesFileName(); //AIP change code (DL)
     for (int i = 0; i < core.fieldInfos.size(); i++) {
       FieldInfo fi = core.fieldInfos.fieldInfo(i);
       if (norms.containsKey(fi.name)) {
@@ -1278,7 +1297,6 @@ public class SegmentReader extends IndexReader implements Cloneable {
         Directory d = directory();
         //AIP comment: for 'norms' sometimes the file name depends on the field number (only for separate norms)
         String fileName = si.getNormFileName(fi.number);
-        String sizesFileName = si.getSizesFileName();
         
         if (!si.hasSeparateNorms(fi.number)) {
           d = cfsDir;
@@ -1324,7 +1342,12 @@ public class SegmentReader extends IndexReader implements Cloneable {
         nextNormSeek += maxDoc; // increment also if some norms are separate
         sizeSeek += maxDoc * 4; //AIP change code(DL) por cada doc hay 4bytes (1 int)
       }
-    }
+    }//end for
+    
+    //AIP change code (AVGL) read the avgSize
+    avgSizeStream = cfsDir.openInput(avgFileName);
+    avgDocSize    = avgSizeStream.readInt();
+    docSizes      = avgSizeStream.readLong();
   }
 
   boolean termsIndexLoaded() {

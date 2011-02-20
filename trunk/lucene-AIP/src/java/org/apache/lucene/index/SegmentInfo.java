@@ -468,6 +468,13 @@ public final class SegmentInfo {
       return IndexFileNames.fileNameFromGeneration(name, prefix, WITHOUT_GEN);
   }
 
+  //AIP change code (AVGL)
+  public String getAvgFileName() throws IOException{
+      String prefix;
+      prefix = "." + IndexFileNames.AVG_EXTENSION;
+      
+      return IndexFileNames.fileNameFromGeneration(name, prefix, WITHOUT_GEN);
+  }
   /**
    * Mark whether this segment is stored as a compound file.
    *

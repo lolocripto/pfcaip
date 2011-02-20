@@ -111,12 +111,12 @@ final class NormsWriter extends InvertedDocEndConsumer {
 
       int normCount = 0;
       
-      //AIP change code (DL)
+      //AIP change code (AVGL)
       int avgSize = 0; 
       int fieldSize = 0; 
-      int dSize = 0;
+      long dSize = 0;
       int dCount= 0;
-      //end AIP change code (DL)
+      //end AIP change code (AVGL)
 
       for(int fieldNumber=0;fieldNumber<numField;fieldNumber++) {
 
@@ -162,14 +162,14 @@ final class NormsWriter extends InvertedDocEndConsumer {
             }
 
             normsOut.writeByte(fields[minLoc].norms[uptos[minLoc]]);//AIP comment: stores the norm information per field
-            //AIP change code (DL): stores the size information per field just after the norm information
+            //AIP change code (AVGL/DL): stores the size information per field just after the norm information
             fieldSize = fields[minLoc].sizes[uptos[minLoc]];
             sizesOut.writeInt(fieldSize);
             if (fieldInfo.name.equals(Constants.CATCHALL_FIELD)){
         	dSize += fieldSize; //AIP comment only catchAll Field represent the size of the doc
         	dCount++;
             }
-            //end AIP change code (DL)
+            //end AIP change code (AVGL/DL)
             
             (uptos[minLoc])++;
             upto++;
@@ -201,15 +201,16 @@ final class NormsWriter extends InvertedDocEndConsumer {
         assert 4+normCount*state.numDocs == normsOut.getFilePointer() : ".nrm file size mismatch: expected=" + (4+normCount*state.numDocs) + " actual=" + normsOut.getFilePointer();
       }//end for
       
-      //AIP change code (DL) document avg size
-      avgSize = dSize / dCount;  
+      //AIP change code (AVGL) document avg size
+      avgSize = (int) dSize / dCount;  
       avgOut.writeInt(avgSize);
-      //end AIP change code (DL)
+      avgOut.writeLong(dSize);
+      //end AIP change code (AVGL)
 
     } finally {
       normsOut.close();
-      sizesOut.close();//AIP change code (DL)
-      avgOut.close();  //AIP change code (DL)
+      sizesOut.close();//AIP change code (AVGL)
+      avgOut.close();  //AIP change code (AVGL)
     }
   }
 
