@@ -98,6 +98,10 @@ final class NormsWriter extends InvertedDocEndConsumer {
     final String sizesFileName = state.segmentName + "." + IndexFileNames.SIZES_EXTENSION;
     state.flushedFiles.add(sizesFileName);
     IndexOutput sizesOut = state.directory.createOutput(sizesFileName);
+    
+    final String avgFileName = state.segmentName + "." + IndexFileNames.AVG_EXTENSION;
+    state.flushedFiles.add(avgFileName);
+    IndexOutput avgOut = state.directory.createOutput(avgFileName);
     //end AIP change code (DL)
     
     try {
@@ -106,6 +110,13 @@ final class NormsWriter extends InvertedDocEndConsumer {
       final int numField = fieldInfos.size();
 
       int normCount = 0;
+      
+      //AIP change code (DL)
+      int avgSize = 0; 
+      int fieldSize = 0; 
+      int dSize = 0;
+      int dCount= 0;
+      //end AIP change code (DL)
 
       for(int fieldNumber=0;fieldNumber<numField;fieldNumber++) {
 
@@ -152,7 +163,13 @@ final class NormsWriter extends InvertedDocEndConsumer {
 
             normsOut.writeByte(fields[minLoc].norms[uptos[minLoc]]);//AIP comment: stores the norm information per field
             //AIP change code (DL): stores the size information per field just after the norm information
-            sizesOut.writeInt(fields[minLoc].sizes[uptos[minLoc]]);//AIP change code (DL)
+            fieldSize = fields[minLoc].sizes[uptos[minLoc]];
+            sizesOut.writeInt(fieldSize);
+            if (fieldInfo.name.equals(Constants.CATCHALL_FIELD)){
+        	dSize += fieldSize; //AIP comment only catchAll Field represent the size of the doc
+        	dCount++;
+            }
+            //end AIP change code (DL)
             
             (uptos[minLoc])++;
             upto++;
@@ -182,11 +199,17 @@ final class NormsWriter extends InvertedDocEndConsumer {
         }
 
         assert 4+normCount*state.numDocs == normsOut.getFilePointer() : ".nrm file size mismatch: expected=" + (4+normCount*state.numDocs) + " actual=" + normsOut.getFilePointer();
-      }
+      }//end for
+      
+      //AIP change code (DL) document avg size
+      avgSize = dSize / dCount;  
+      avgOut.writeInt(avgSize);
+      //end AIP change code (DL)
 
     } finally {
       normsOut.close();
       sizesOut.close();//AIP change code (DL)
+      avgOut.close();  //AIP change code (DL)
     }
   }
 
