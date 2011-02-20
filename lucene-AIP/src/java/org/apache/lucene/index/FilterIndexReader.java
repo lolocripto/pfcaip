@@ -200,6 +200,20 @@ public class FilterIndexReader extends IndexReader {
       return in.sizes(f);
   }
   
+  //AIP change code (AVGL)
+  @Override
+  public int avgDocSize() throws IOException{
+      ensureOpen();
+      return in.avgDocSize();
+  }
+  
+  //AIP change code (AVGL)
+  @Override
+  public long docSizes() throws IOException{
+      ensureOpen();
+      return in.docSizes();
+  }
+  
   @Override
   public void norms(String f, byte[] bytes, int offset) throws IOException {
     ensureOpen();

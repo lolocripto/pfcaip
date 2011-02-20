@@ -361,6 +361,22 @@ public class ParallelReader extends IndexReader {
       return reader==null ? null :  reader.sizes(field);
   }
 
+  //AIP change code (AVGL)
+  @Override
+  public int avgDocSize() throws IOException{
+      ensureOpen();
+      IndexReader reader = fieldToReader.get(Constants.CATCHALL_FIELD);
+      return reader==null ? null :  reader.avgDocSize();
+  }
+  
+  //AIP change code (AVGL)
+  @Override
+  public long docSizes() throws IOException{
+      ensureOpen();
+      IndexReader reader = fieldToReader.get(Constants.CATCHALL_FIELD);
+      return reader==null ? null :  reader.docSizes();
+  }
+  
   @Override
   public void norms(String field, byte[] result, int offset)
     throws IOException {

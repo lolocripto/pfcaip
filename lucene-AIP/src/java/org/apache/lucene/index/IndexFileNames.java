@@ -39,7 +39,7 @@ final class IndexFileNames {
   static final String SIZES_EXTENSION = "siz";//AIP Change code (DL): adding the new file extension for sizes
   
   /** Extension for the file to store the avg size of the indexed documents*/
-  static final String AVG_EXTENSION = "avg";
+  static final String AVG_EXTENSION = "avg";//AIP change code (AVGL): this file will store avg length
 
   /** Extension of freq postings file */
   static final String FREQ_EXTENSION = "frq";

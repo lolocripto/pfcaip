@@ -323,6 +323,36 @@ public class MultiReader extends IndexReader implements Cloneable {
       
       return result;
   }
+
+  /**
+   * AIP change code (AVGL). Return the avgSize of all segments
+   */
+  @Override
+  public synchronized int avgDocSize() throws IOException{
+      ensureOpen();
+      int docNumber = 0;
+      long totalDocSizes = 0;
+      for (int i=0; i < subReaders.length; i++){
+	  docNumber += subReaders[i].maxDoc();
+	  totalDocSizes += subReaders[i].docSizes();
+      }
+      
+      return (int) totalDocSizes / docNumber;
+  }
+  
+  /**
+   * AIP change code (AVGL). Return the sum of the docSizes of all segments
+   */
+  @Override
+  public synchronized long docSizes() throws IOException{
+      ensureOpen();
+      long totalDocSizes = 0;
+      for (int i=0; i < subReaders.length; i++){
+	  totalDocSizes += subReaders[i].docSizes();
+      }
+      
+      return totalDocSizes;
+  }
   
   @Override
   public synchronized void norms(String field, byte[] result, int offset)
