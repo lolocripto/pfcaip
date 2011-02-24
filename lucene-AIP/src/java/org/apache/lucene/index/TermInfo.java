@@ -30,7 +30,6 @@ final class TermInfo {
 
   TermInfo() {}
 
-  //TODO AIP: Comprobar que a los metodos de esta clase que no tienen el cf NO se les llama
   TermInfo(int df, long fp, long pp) {
     docFreq = df;
     freqPointer = fp;
