@@ -588,12 +588,10 @@ public final class Field extends AbstractField implements Fieldable, Serializabl
       Field fout=null;
       fout = new Field(Constants.CATCHALL_FIELD);
       
-      //TODO comprobar bien que cuando se mezclan dos tipos de Field distintos, tokenized y no tokenized
-//      	se hace en cada caso lo apropiado
       fout.isTokenized = this.isTokenized;
       
 //      fout.isCompressed = this.isCompressed;
-      fout.lazy = this.lazy;//TODO no se exactamente qué poner aqui
+      fout.lazy = this.lazy;//TODO no se exactamente qué valor deberia tomar el clone
       
 //    not needed values
 //      fout.binaryLength = this.binaryLength;
@@ -629,7 +627,7 @@ public final class Field extends AbstractField implements Fieldable, Serializabl
     	  // TODO Auto-generated catch block
     	  e.printStackTrace();
       }
-//    AIP  TODO: faltaria el TokenStream!!
+//    AIP TODO: se necesitaria tb clonar el TokenStream?
       
       return fout;
   }
