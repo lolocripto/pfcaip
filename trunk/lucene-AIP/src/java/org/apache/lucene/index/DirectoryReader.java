@@ -614,7 +614,7 @@ class DirectoryReader extends IndexReader implements Cloneable {
     return bytes;
   }
   
-  //AIP change code (DL) TODO meterlo en la cache del mismo modo que esta los norms en "normsCache"
+  //AIP change code (DL) TODO si fuese necesario meterlo en la cache del mismo modo que esta los norms en "normsCache"
   @Override
   public synchronized int[] sizes(String field) throws IOException{
       ensureOpen();
@@ -673,7 +673,7 @@ class DirectoryReader extends IndexReader implements Cloneable {
     }
   }
   
-  //AIP change code (DL) TODO aplicar cache como normsCache
+  //AIP change code (DL) TODO si fuese necesario aplicar cache como normsCache
   @Override
   public synchronized void sizes(String field, int[] result, int offset) throws IOException{
       ensureOpen();
@@ -681,7 +681,7 @@ class DirectoryReader extends IndexReader implements Cloneable {
 	  Arrays.fill(result, offset, result.length, Constants.DEFAULT_SIZE);
       }else{
 	  for (int i = 0; i < subReaders.length; i++) {	
-	      subReaders[i].sizes(field, result, offset + starts[i]);//AIP TODO check: seria "i" o "i*4" ??
+	      subReaders[i].sizes(field, result, offset + starts[i]);//TODO AIP check: seria "i" o "i*4" ??
 	}
       }
   }
