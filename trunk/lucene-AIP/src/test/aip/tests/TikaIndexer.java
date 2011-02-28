@@ -8,12 +8,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 import org.apache.lucene.document.Document;
@@ -21,13 +17,13 @@ import org.apache.lucene.document.Field;
 import org.apache.tika.config.TikaConfig;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.AutoDetectParser;
+import org.apache.tika.parser.Parser;
 import org.apache.tika.sax.BodyContentHandler;
 import org.xml.sax.ContentHandler;
 
-
 public class TikaIndexer extends Indexer {
-	private boolean DEBUG = true; // 1
-	static Set textualMetadataFields = new HashSet(); // 2
+	private boolean DEBUG = false; // 1
+	static Set<String> textualMetadataFields = new HashSet<String>(); // 2
 	static { // 2
 		textualMetadataFields.add(Metadata.TITLE); // 2
 		textualMetadataFields.add(Metadata.AUTHOR); // 2
@@ -41,18 +37,19 @@ public class TikaIndexer extends Indexer {
 			throw new Exception("Usage: java " + TikaIndexer.class.getName() + " <index dir> <data dir>");
 		}
 		TikaConfig config = TikaConfig.getDefaultConfig(); // 3
-		List<String> parsers = new ArrayList(config.getParsers().keySet()); // 3
-		Collections.sort(parsers); // 3
-		Iterator<String> it = parsers.iterator(); // 3
-		System.out.println("Mime type parsers:"); // 3
-		while (it.hasNext()) { // 3
-			System.out.println(" " + it.next()); // 3
-		} // 3
-		System.out.println(); // 3
+//		List<String> parsers = new ArrayList(config.getParsers().keySet()); // 3
+//		Collections.sort(parsers); // 3
+//		Iterator<String> it = parsers.iterator(); // 3
+//		System.out.println("Mime type parsers:"); // 3
+//		while (it.hasNext()) { // 3
+//			System.out.println(" " + it.next()); // 3
+//		} // 3
+//		System.out.println(); // 3
 		String indexDir = args[0];
 		String dataDir = args[1];
 		long start = new Date().getTime();
-		TikaIndexer indexer = new TikaIndexer(indexDir);
+		TikaIndexer indexer = new TikaIndexer(indexDir); //set the output index dir
+		// fetch all the files contained in the directory "dataDir" and index all the files
 		int numIndexed = indexer.index(dataDir);
 		indexer.close();
 		long end = new Date().getTime();
@@ -61,9 +58,12 @@ public class TikaIndexer extends Indexer {
 	public TikaIndexer(String indexDir) throws IOException {
 		super(indexDir);
 	}
+	@Override
 	protected boolean acceptFile(File f) {
 		return true; // 4
 	}
+	
+	@Override
 	protected Document getDocument(File f) throws Exception {
 		Metadata metadata = new Metadata();
 

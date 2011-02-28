@@ -1,22 +1,17 @@
 package aip.tests;
 
-import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.store.Directory;
-import org.apache.lucene.store.FSDirectory;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+
+import org.apache.commons.io.FileUtils;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-import org.apache.lucene.document.Field.Index;
-import org.apache.lucene.document.Field.Store;
-
-import org.apache.commons.io.FileUtils;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.FileReader;
-import java.io.Reader;
-import java.util.Date;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.SimpleFSDirectory;
+import org.apache.lucene.util.Version;
 /**
  * This code was originally written for Erik's Lucene intro java.net article
  */
@@ -37,9 +32,10 @@ public class Indexer {
 	}
 	private IndexWriter writer;
 	public Indexer(String indexDir) throws IOException {
-//		Directory dir = new FSDirectory(new File(indexDir), null);
-		writer = new IndexWriter(new File(indexDir), // 3
-				new StandardAnalyzer(), true, IndexWriter.MaxFieldLength.UNLIMITED);
+	    	Directory dir = new SimpleFSDirectory(new File(indexDir));
+	    	writer = new IndexWriter(dir, new StandardAnalyzer(
+			Version.LUCENE_30), true,
+			IndexWriter.MaxFieldLength.UNLIMITED);
 		writer.setInfoStream(System.out);
 		writer.setUseCompoundFile(false);
 	}
