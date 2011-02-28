@@ -31,18 +31,19 @@ import org.apache.lucene.util.Version;
 public class EasyIndexer {
 
     public static void main(String[] args) throws Exception {
-	if (args.length < 1) {
+	if (args.length == 0) {
 	    throw new Exception("Usage: java " + EasyIndexer.class.getName()
 		    + " <index dir>");
 	}
 	String indexDir = args[0];
 	EasyIndexer indexer = new EasyIndexer(indexDir);
 
-//	String fileToIndex = args[1];
+	String fileToIndex = args[1];
 	int numIndexed = indexer.index01();
 //	indexer.index02();
 //	indexer.completeTest01();
 //	indexer.indexFile(fileToIndex);
+	assert indexer.test("probando chiquillo");
 	indexer.close();
     }
 
@@ -55,8 +56,7 @@ public class EasyIndexer {
 		Version.LUCENE_30), true,
 		IndexWriter.MaxFieldLength.UNLIMITED);
 	writer.setInfoStream(System.out);
-//	writer.setUseCompoundFile(false);
-	writer.setUseCompoundFile(true);//lo deja todo en un mismo fichero con ext cfs
+	writer.setUseCompoundFile(false);
     }
 
     public void close() throws IOException {
@@ -64,16 +64,20 @@ public class EasyIndexer {
     }
 
     public int index01() throws Exception {
-	for (int i = 0; i < 2; i++) {
+	for (int i = 0; i < 10; i++) {
 	    addDoc(i);
 	}
+	
 	return 0;
     }
 
+    public boolean test(String a){
+	return true;
+    }
     void addDoc(int i) throws Exception {
 	Document doc = new Document();
 	doc.add(new Field("id", "document_" + i, Field.Store.YES,Field.Index.ANALYZED));
-	doc.add(new Field("content", "aaa bb", Field.Store.YES,Field.Index.ANALYZED));
+	doc.add(new Field("content", "aaa bb ss", Field.Store.YES,Field.Index.ANALYZED));
 	doc.add(new Field("content", "aaa cc", Field.Store.YES,Field.Index.ANALYZED));
 	
 	writer.addDocument(doc);
