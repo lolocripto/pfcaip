@@ -77,7 +77,7 @@ public class TikaIndexer extends Indexer {
 		// should also set Metadata.CONTENT_ENCODING
 		InputStream is = new FileInputStream(f);
 		AutoDetectParser parser = new AutoDetectParser();
-		ContentHandler handler = new BodyContentHandler();
+		ContentHandler handler = new BodyContentHandler(-1);
 		try {
 			parser.parse(is, handler, metadata);
 		} finally {
