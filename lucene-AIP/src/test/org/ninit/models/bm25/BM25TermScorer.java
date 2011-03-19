@@ -64,7 +64,7 @@ public class BM25TermScorer extends Scorer {
 	}
 
 	@Override
-	public int doc() {
+	public int docID() {
 		return this.termDocs.doc();
 	}
 
@@ -149,6 +149,7 @@ public class BM25TermScorer extends Scorer {
 	 * 
 	 * @see org.apache.lucene.search.Scorer#skipTo(int)
 	 */
+	/*
 	@Override
 	public boolean skipTo(int target) throws IOException {
 		while (this.next() && this.doc() < target) {
@@ -156,4 +157,5 @@ public class BM25TermScorer extends Scorer {
 
 		return this.doc() == target;
 	}
+	*/
 }

@@ -41,6 +41,8 @@ import org.apache.lucene.search.TermQuery;
  */
 public class BM25FTermScorer extends Scorer {
 
+    	public static final int NO_MORE_DOCS = Integer.MAX_VALUE;
+    
 	private TermDocs[] termDocs;
 	private TermQuery term;
 	private float idf = 0f;
@@ -52,6 +54,15 @@ public class BM25FTermScorer extends Scorer {
 	private int doc = Integer.MAX_VALUE;
 	private boolean initializated = false;
 
+	/**
+	 * Storing in "termDocs", for each field, an array of the docId that the term "term" appears
+	 * @param reader
+	 * @param term
+	 * @param fields
+	 * @param boosts
+	 * @param bParams
+	 * @param similarity
+	 */
 	public BM25FTermScorer(IndexReader reader, TermQuery term, String[] fields,
 			float[] boosts, float[] bParams, Similarity similarity) {
 		super(similarity);
@@ -68,6 +79,8 @@ public class BM25FTermScorer extends Scorer {
 				this.termDocs[i] = reader.termDocs(new Term(this.fields[i],
 						term.getTerm().text()));
 
+			//idf value only depends on the term frequency in the doc, this stats is given by Lucene
+			//AIP comment: creo que esto hay que cambiarlo!!
 			this.idf = this.getSimilarity().idf(
 					this.reader.docFreq(new Term(BM25FParameters.getIdfField(),
 							term.getTerm().text())), this.reader.numDocs());
@@ -84,7 +97,7 @@ public class BM25FTermScorer extends Scorer {
 	 * @see org.apache.lucene.search.Scorer#doc()
 	 */
 	@Override
-	public int doc() {
+	public int docID() {
 		return this.doc;
 	}
 
@@ -148,32 +161,35 @@ public class BM25FTermScorer extends Scorer {
 		return result;
 	}
 
-	private boolean init() throws IOException {
-		boolean result = false;
+	/**
+	 * termDocsNext is an array that stored, in ascendent order, the docIDs 
+	 * @return
+	 * @throws IOException
+	 */
+	private int init() throws IOException {
 		for (int i = 0; i < this.fields.length; i++) {
 			this.termDocsNext[i] = this.termDocs[i].next();
 			if (this.termDocsNext[i] && this.termDocs[i].doc() < this.doc) {
-				result = true;
 				this.doc = this.termDocs[i].doc();
 			}
 		}
-		return result;
+		return this.doc;
 	}
 
 	/*
-	 * (non-Javadoc)
+	 * Returns: doc = next() ? doc() : NO_MORE_DOCS;
 	 * 
 	 * @see org.apache.lucene.search.Scorer#next()
 	 */
 	@Override
-	public boolean next() throws IOException {
+	public int nextDoc() throws IOException {
 
 		if (!initializated) {
 			this.initializated = true;
 			return this.init();
 		}
 
-		int min = Integer.MAX_VALUE;
+		int min = NO_MORE_DOCS;
 
 		for (int i = 0; i < this.fields.length; i++) {
 			if (this.termDocsNext[i] && this.termDocs[i].doc() == this.doc) {
@@ -182,7 +198,7 @@ public class BM25FTermScorer extends Scorer {
 			if (this.termDocsNext[i] && this.termDocs[i].doc() < min)
 				min = this.termDocs[i].doc();
 		}
-		return ((this.doc = min) != Integer.MAX_VALUE);
+		return this.doc;//AIP comment: nose nose
 
 	}
 
@@ -203,7 +219,7 @@ public class BM25FTermScorer extends Scorer {
 				float av_length = (float) BM25FParameters
 						.getAverageLength(this.fields[i]);
 				float length = 0f;
-				float normV = Similarity.decodeNorm(norm[this.doc()]);
+				float normV = Similarity.decodeNorm(norm[this.docID()]);
 				length = 1 / (normV * normV);
 
 				float aux = 0f;
@@ -225,6 +241,7 @@ public class BM25FTermScorer extends Scorer {
 	 * 
 	 * @see org.apache.lucene.search.Scorer#skipTo(int)
 	 */
+	/* Not needed in this implementation
 	@Override
 	public boolean skipTo(int target) throws IOException {
 		while (this.doc() < target && this.next()) {
@@ -232,4 +249,5 @@ public class BM25FTermScorer extends Scorer {
 
 		return this.doc() == target;
 	}
+	*/
 }
