@@ -29,6 +29,7 @@ import org.apache.lucene.search.Explanation;
 import org.apache.lucene.search.Scorer;
 import org.apache.lucene.search.Similarity;
 import org.apache.lucene.search.TermQuery;
+import org.apache.lucene.util.Constants;
 
 /**
  * Calculate the relevance value of a single term applying BM25 function
@@ -40,12 +41,15 @@ import org.apache.lucene.search.TermQuery;
  */
 public class BM25TermScorer extends Scorer {
 
+	public static final int NO_MORE_DOCS = Integer.MAX_VALUE;
+	
 	private TermQuery term;
 	private IndexReader reader;
 	private TermDocs termDocs;
 	private float idf;
 	private float av_length;
-	private byte[] norm;
+//	private byte[] norm;
+	private int[] sizes;
 	private float b;
 	private float k1;
 
@@ -55,8 +59,11 @@ public class BM25TermScorer extends Scorer {
 		this.reader = reader;
 		this.term = term;
 		this.idf = this.getSimilarity().idf(reader.docFreq(term.getTerm()), reader.numDocs());
-		this.norm = this.reader.norms(this.term.getTerm().field());
-		this.av_length = BM25Parameters.getAverageLength(this.term.getTerm().field());
+//		this.norm = this.reader.norms(this.term.getTerm().field());
+		this.sizes = this.reader.sizes(Constants.CATCHALL_FIELD);
+//		this.av_length = BM25Parameters.getAverageLength(this.term.getTerm().field());
+		this.av_length = (float) this.reader.avgDocSize();
+		
 		this.b = BM25Parameters.getB();
 		this.k1 = BM25Parameters.getK1();
 		this.termDocs = this.reader.termDocs(this.term.getTerm());
@@ -73,6 +80,7 @@ public class BM25TermScorer extends Scorer {
 	 * 
 	 * @see org.apache.lucene.search.Scorer#explain(int)
 	 */
+	/*
 	@Override
 	public Explanation explain(int doc) throws IOException {
 		// Init termDocs
@@ -112,22 +120,25 @@ public class BM25TermScorer extends Scorer {
 
 		return resultE;
 	}
-
+	*/
+	
 	@Override
-	public boolean next() throws IOException {
+	public int nextDoc() throws IOException {
 
 		boolean result = this.termDocs.next();
 		if (!result)
 			this.termDocs.close();
-		return result;
-
+		
+//		return result;
+		return (result? this.docID():NO_MORE_DOCS);
 	}
 
 	@Override
 	public float score() throws IOException {
 		float length = 0f;
-		float norm = Similarity.decodeNorm(this.norm[this.doc()]);
-		length = 1 / (norm * norm);
+//		float norm = Similarity.decodeNorm(this.norm[this.doc()]);
+//		length = 1 / (norm * norm);
+		length = (float) this.sizes[this.docID()];
 
 		// length = Similarity.decodeNorm(this.norm[this.doc()]);
 
@@ -158,4 +169,11 @@ public class BM25TermScorer extends Scorer {
 		return this.doc() == target;
 	}
 	*/
+	 public int advance(int target) throws IOException{
+		while (this.docID() < target) {
+			 this.nextDoc();
+		}
+
+			return this.docID();
+	 }
 }

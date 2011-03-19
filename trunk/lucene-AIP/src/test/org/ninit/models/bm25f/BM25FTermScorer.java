@@ -30,6 +30,7 @@ import org.apache.lucene.search.Explanation;
 import org.apache.lucene.search.Scorer;
 import org.apache.lucene.search.Similarity;
 import org.apache.lucene.search.TermQuery;
+import org.apache.lucene.util.Constants;
 
 /**
  * Calculate the relevance value of a term applying BM25F function ranking. The
@@ -41,7 +42,7 @@ import org.apache.lucene.search.TermQuery;
  */
 public class BM25FTermScorer extends Scorer {
 
-    	public static final int NO_MORE_DOCS = Integer.MAX_VALUE;
+    public static final int NO_MORE_DOCS = Integer.MAX_VALUE;
     
 	private TermDocs[] termDocs;
 	private TermQuery term;
@@ -106,10 +107,12 @@ public class BM25FTermScorer extends Scorer {
 	 * 
 	 * @see org.apache.lucene.search.Scorer#explain(int)
 	 */
+	/*
 	@Override
 	public Explanation explain(int doc) throws IOException {
-		if (!this.skipTo(doc))
+		if (this.advance(doc) == NO_MORE_DOCS)
 			return null;
+		
 		float acum = 0f;
 		Explanation result = new Explanation();
 		Explanation tf = new Explanation();
@@ -160,7 +163,8 @@ public class BM25FTermScorer extends Scorer {
 
 		return result;
 	}
-
+	*/
+	
 	/**
 	 * termDocsNext is an array that stored, in ascendent order, the docIDs 
 	 * @return
@@ -214,13 +218,15 @@ public class BM25FTermScorer extends Scorer {
 		for (int i = 0; i < this.fields.length; i++) {
 
 			if (this.termDocs[i].doc() == doc) {
-				byte[] norm = this.reader.norms(this.fields[i]);
+//				byte[] norm = this.reader.norms(this.fields[i]);
+				int[] sizes = this.reader.sizes(Constants.CATCHALL_FIELD);
 
-				float av_length = (float) BM25FParameters
-						.getAverageLength(this.fields[i]);
+//				float av_length = (float) BM25FParameters.getAverageLength(this.fields[i]);
+				float av_length = (float) this.reader.avgDocSize();
 				float length = 0f;
-				float normV = Similarity.decodeNorm(norm[this.docID()]);
-				length = 1 / (normV * normV);
+//				float normV = Similarity.decodeNorm(norm[this.docID()]);
+//				length = 1 / (normV * normV);
+				length = sizes[this.docID()];
 
 				float aux = 0f;
 				aux = this.bParam[i] * length / av_length;
@@ -250,4 +256,11 @@ public class BM25FTermScorer extends Scorer {
 		return this.doc() == target;
 	}
 	*/
+	 public int advance(int target) throws IOException{
+		while (this.docID() < target) {
+			 this.nextDoc();
+		}
+
+			return this.docID();
+	 }
 }
