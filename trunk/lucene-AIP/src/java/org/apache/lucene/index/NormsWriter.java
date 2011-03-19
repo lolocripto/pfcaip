@@ -112,7 +112,7 @@ final class NormsWriter extends InvertedDocEndConsumer {
       int normCount = 0;
       
       //AIP change code (AVGL)
-      int avgSize = 0; 
+      float avgSize = 0; 
       int fieldSize = 0; 
       long dSize = 0;
       int dCount= 0;
@@ -202,8 +202,8 @@ final class NormsWriter extends InvertedDocEndConsumer {
       }//end for
       
       //AIP change code (AVGL) document avg size
-      avgSize = (int) dSize / dCount;  
-      avgOut.writeInt(avgSize);
+      avgSize = (float) dSize / dCount;  
+      avgOut.writeString(""+avgSize);
       avgOut.writeLong(dSize);
       //end AIP change code (AVGL)
 

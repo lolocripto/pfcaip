@@ -667,7 +667,7 @@ public class SegmentReader extends IndexReader implements Cloneable {
   }//AIP comment: end Norm class
 
   Map<String,Norm> norms = new HashMap<String,Norm>();
-  int avgDocSize = 0;
+  float avgDocSize = 0;
   long docSizes = 0;
   
   /**
@@ -1205,7 +1205,7 @@ public class SegmentReader extends IndexReader implements Cloneable {
 
   //AIP change code (AVGL)
   @Override
-  public synchronized int avgDocSize() throws IOException{
+  public synchronized float avgDocSize() throws IOException{
       return avgDocSize;
   }
   
@@ -1346,7 +1346,7 @@ public class SegmentReader extends IndexReader implements Cloneable {
     
     //AIP change code (AVGL) read the avgSize
     avgSizeStream = cfsDir.openInput(avgFileName);
-    avgDocSize    = avgSizeStream.readInt();
+    avgDocSize    = Float.parseFloat(avgSizeStream.readString());
     docSizes      = avgSizeStream.readLong();
   }
 

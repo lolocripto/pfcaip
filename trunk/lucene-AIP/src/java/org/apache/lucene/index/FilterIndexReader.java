@@ -202,7 +202,7 @@ public class FilterIndexReader extends IndexReader {
   
   //AIP change code (AVGL)
   @Override
-  public int avgDocSize() throws IOException{
+  public float avgDocSize() throws IOException{
       ensureOpen();
       return in.avgDocSize();
   }

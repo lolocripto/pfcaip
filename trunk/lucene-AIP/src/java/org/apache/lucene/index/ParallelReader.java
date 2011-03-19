@@ -363,7 +363,7 @@ public class ParallelReader extends IndexReader {
 
   //AIP change code (AVGL)
   @Override
-  public int avgDocSize() throws IOException{
+  public float avgDocSize() throws IOException{
       ensureOpen();
       IndexReader reader = fieldToReader.get(Constants.CATCHALL_FIELD);
       return reader==null ? null :  reader.avgDocSize();

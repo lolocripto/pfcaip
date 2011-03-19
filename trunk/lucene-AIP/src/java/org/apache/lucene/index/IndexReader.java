@@ -723,7 +723,7 @@ public abstract class IndexReader implements Cloneable,Closeable {
   /**
    * AIP change code (AVGL)
    */
-  public abstract int avgDocSize() throws IOException;
+  public abstract float avgDocSize() throws IOException;
   
   /**
    * AIP change code (AVGL)
