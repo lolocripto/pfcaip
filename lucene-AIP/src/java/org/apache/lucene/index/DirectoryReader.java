@@ -631,7 +631,7 @@ class DirectoryReader extends IndexReader implements Cloneable {
    * AIP change code (AVGL). Return the avgSize of all segments
    */
   @Override
-  public synchronized int avgDocSize() throws IOException{
+  public synchronized float avgDocSize() throws IOException{
       ensureOpen();
       int docNumber = 0;
       long totalDocSizes = 0;
@@ -640,7 +640,7 @@ class DirectoryReader extends IndexReader implements Cloneable {
 	  totalDocSizes += subReaders[i].docSizes();
       }
       
-      return (int) totalDocSizes / docNumber;
+      return (float) totalDocSizes / docNumber;
   }
   
   /**
