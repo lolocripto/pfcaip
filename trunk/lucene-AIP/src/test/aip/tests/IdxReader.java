@@ -44,6 +44,10 @@ public class IdxReader {
 	    System.out.println("size[" + i + "]: " + sizes2[i]);
 	}
 
+	int[] sizes3 = idx.sizes("content");
+	for (int i = 0; i < sizes3.length; i++) {
+	    System.out.println("size content["+i+"]: " + sizes3[i]);
+	}
 	/**
 	 * AIP: el fichero del indice lo va leyendo directamente desde el
 	 * fichero en el metodo "next" el metodo idx.terms() lo lee del
