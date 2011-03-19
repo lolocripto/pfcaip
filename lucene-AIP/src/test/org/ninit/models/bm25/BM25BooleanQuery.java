@@ -40,6 +40,7 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.Searcher;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.Weight;
+import org.apache.lucene.util.Version;
 import org.ninit.models.bm25f.BM25FParameters;
 
 /**
@@ -83,7 +84,7 @@ public class BM25BooleanQuery extends Query {
 	@SuppressWarnings("unchecked")
 	public BM25BooleanQuery(String query, String field, Analyzer analyzer)
 			throws ParseException, IOException {
-		QueryParser qp = new QueryParser(field, analyzer);
+		QueryParser qp = new QueryParser(Version.LUCENE_30,field, analyzer);
 		Query q = qp.parse(query);
 
 		if (q instanceof BooleanQuery) {
@@ -281,7 +282,7 @@ public class BM25BooleanQuery extends Query {
 	public static void main(String args[]) throws ParseException,
 			CorruptIndexException, IOException {
 		BM25BooleanQuery q = new BM25BooleanQuery("(+product +faroe +islands +exported)", "CONTENT",
-				new StandardAnalyzer());
+				new StandardAnalyzer(Version.LUCENE_30));
 		System.out.println(q);
 	}
 
