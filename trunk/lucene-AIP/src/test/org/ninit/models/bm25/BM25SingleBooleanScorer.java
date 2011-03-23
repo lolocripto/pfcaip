@@ -31,6 +31,7 @@ import org.apache.lucene.search.Similarity;
 import org.ninit.models.bm25.BM25BooleanQuery.BooleanTermQuery;
 import org.ninit.models.bm25f.BM25FTermScorer;
 import org.ninit.models.bool.AbstractBooleanScorer;
+import org.ninit.models.bool.MatchAllBooleanScorer;
 import org.ninit.models.bool.MustBooleanScorer;
 import org.ninit.models.bool.NotBooleanScorer;
 import org.ninit.models.bool.ShouldBooleanScorer;
@@ -49,14 +50,18 @@ public class BM25SingleBooleanScorer extends Scorer {
 	public BM25SingleBooleanScorer(IndexReader reader,
 			BooleanTermQuery[] termQuery, Similarity similarity)
 			throws IOException {
-		super(similarity);
+
+	    super(similarity);
 
 		Scorer[] scorer = new Scorer[termQuery.length];
 		for (int i = 0; i < scorer.length; i++) {
 			scorer[i] = new BM25TermScorer(reader, termQuery[i].termQuery,
 					similarity);
 		}
-
+		
+//		this.booleanScorer = new MatchAllBooleanScorer(similarity, reader.numDocs());
+		this.booleanScorer = new MustBooleanScorer(similarity, scorer);
+		 /*
 		if (termQuery[0].occur == BooleanClause.Occur.MUST)
 			this.booleanScorer = new MustBooleanScorer(similarity, scorer);
 		else if (termQuery[0].occur == BooleanClause.Occur.SHOULD)
@@ -64,6 +69,7 @@ public class BM25SingleBooleanScorer extends Scorer {
 		else
 			this.booleanScorer = new NotBooleanScorer(similarity, scorer,
 					reader.numDocs());
+		*/
 
 	}
 
@@ -79,6 +85,9 @@ public class BM25SingleBooleanScorer extends Scorer {
 					fields, boosts, bParams, similarity);
 		}
 
+		this.booleanScorer = new MatchAllBooleanScorer(similarity, reader.numDocs());
+		
+		/* 
 		if (termQuery[0].occur == BooleanClause.Occur.MUST)
 			this.booleanScorer = new MustBooleanScorer(similarity, scorer);
 		else if (termQuery[0].occur == BooleanClause.Occur.SHOULD)
@@ -86,6 +95,7 @@ public class BM25SingleBooleanScorer extends Scorer {
 		else
 			this.booleanScorer = new NotBooleanScorer(similarity, scorer,
 					reader.numDocs());
+		*/
 
 	}
 
@@ -95,8 +105,8 @@ public class BM25SingleBooleanScorer extends Scorer {
 	 * @see org.apache.lucene.search.Scorer#doc()
 	 */
 	@Override
-	public int doc() {
-		return booleanScorer.doc();
+	public int docID() {
+		return booleanScorer.docID();
 	}
 
 	/*
@@ -104,6 +114,7 @@ public class BM25SingleBooleanScorer extends Scorer {
 	 * 
 	 * @see org.apache.lucene.search.Scorer#explain(int)
 	 */
+	/*
 	@Override
 	public Explanation explain(int doc) throws IOException {
 		Explanation result = new Explanation();
@@ -113,15 +124,16 @@ public class BM25SingleBooleanScorer extends Scorer {
 		result.setValue(detail.getValue());
 		return result;
 	}
-
+	*/
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see org.apache.lucene.search.Scorer#next()
 	 */
 	@Override
-	public boolean next() throws IOException {
-		return booleanScorer.next();
+	public int nextDoc() throws IOException {
+	    	int result = booleanScorer.nextDoc(); 
+		return result;
 	}
 
 	/*
@@ -131,7 +143,8 @@ public class BM25SingleBooleanScorer extends Scorer {
 	 */
 	@Override
 	public float score() throws IOException {
-		return booleanScorer.score();
+	    float result = booleanScorer.score();
+		return result;
 
 	}
 
@@ -141,11 +154,12 @@ public class BM25SingleBooleanScorer extends Scorer {
 	 * @see org.apache.lucene.search.Scorer#skipTo(int)
 	 */
 	@Override
-	public boolean skipTo(int target) throws IOException {
-		while (this.next() && this.doc() < target) {
+	public int advance(int target) throws IOException {
+		while (this.docID() < target) {
+		    this.nextDoc();
 		}
 
-		return this.doc() == target;
+		return this.docID();
 	}
 
 }
