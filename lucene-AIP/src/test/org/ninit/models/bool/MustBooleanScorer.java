@@ -50,7 +50,7 @@ public class MustBooleanScorer extends AbstractBooleanScorer {
 	 * @see org.apache.lucene.search.Scorer#doc()
 	 */
 	@Override
-	public int doc() {
+	public int docID() {
 		return this.doc;
 	}
 
@@ -59,6 +59,7 @@ public class MustBooleanScorer extends AbstractBooleanScorer {
 	 * 
 	 * @see org.apache.lucene.search.Scorer#explain(int)
 	 */
+	/*
 	@Override
 	public Explanation explain(int doc) throws IOException {
 
@@ -76,15 +77,17 @@ public class MustBooleanScorer extends AbstractBooleanScorer {
 		result.setValue(value);
 		return result;
 	}
-
-	private boolean init() throws IOException {
+	*/
+	
+	private int init() throws IOException {
 		for (int i = 0; i < this.subScorer.length; i++) {
-			this.subScorerNext[i] = this.subScorer[i].next();
-			if (this.subScorerNext[i] && this.subScorer[i].doc() > this.doc) {
-				this.doc = this.subScorer[i].doc();
+		    int aux = this.subScorer[i].nextDoc();
+			this.subScorerNext[i] = (aux != NO_MORE_DOCS);
+			if (this.subScorerNext[i] && this.subScorer[i].docID() > this.doc) {
+				this.doc = this.subScorer[i].docID();
 			}
 		}
-		return false;
+		return this.doc;
 	}
 
 	/*
@@ -93,7 +96,7 @@ public class MustBooleanScorer extends AbstractBooleanScorer {
 	 * @see org.apache.lucene.search.Scorer#next()
 	 */
 	@Override
-	public boolean next() throws IOException {
+	public int nextDoc() throws IOException {
 		// INIT SUBSCORERS
 		if (!this.initializated) {
 			this.init();
@@ -102,10 +105,11 @@ public class MustBooleanScorer extends AbstractBooleanScorer {
 			int max = -1;
 			for (int i = 0; i < this.subScorer.length; i++) {
 				if (this.subScorerNext[i]
-						&& this.subScorer[i].doc() == this.doc) {
-					this.subScorerNext[i] = this.subScorer[i].next();
-					if (this.subScorerNext[i] && this.subScorer[i].doc() > max)
-						max = this.subScorer[i].doc();
+						&& this.subScorer[i].docID() == this.doc) {
+				    	int aux = this.subScorer[i].nextDoc();
+					this.subScorerNext[i] = (aux != NO_MORE_DOCS);
+					if (this.subScorerNext[i] && this.subScorer[i].docID() > max)
+						max = this.subScorer[i].docID();
 				}
 			}
 			this.doc = max;
@@ -115,22 +119,23 @@ public class MustBooleanScorer extends AbstractBooleanScorer {
 			boolean more = true;
 			for (int i = 0; i < this.subScorer.length && more; i++) {
 				if (this.subScorerNext[i]) {
-					if (this.subScorer[i].doc() == this.doc) {
+					if (this.subScorer[i].docID() == this.doc) {
 						count++;
 					}
-					if (this.subScorer[i].doc() < this.doc) {
-						this.subScorerNext[i] = this.subScorer[i].next();
+					if (this.subScorer[i].docID() < this.doc) {
+					    int aux = this.subScorer[i].nextDoc();
+						this.subScorerNext[i] = (aux != NO_MORE_DOCS);
 						if (this.subScorerNext[i]
-								&& this.subScorer[i].doc() > this.doc) {
-							this.doc = this.subScorer[i].doc();
+								&& this.subScorer[i].docID() > this.doc) {
+							this.doc = this.subScorer[i].docID();
 							more = false;
 							count = 0;
 						}
 					}
 					if (count == this.subScorer.length)
-						return true;
+						return this.doc;
 				} else
-					return false;
+					return NO_MORE_DOCS;
 			}
 
 		}
@@ -145,7 +150,7 @@ public class MustBooleanScorer extends AbstractBooleanScorer {
 	public float score() throws IOException {
 		double result = 0f;
 		for (int i = 0; i < this.subScorer.length; i++) {
-			if (this.subScorer[i].doc() == this.doc)
+			if (this.subScorer[i].docID() == this.doc)
 				result = this.subScorer[i].score() + result;
 
 		}
@@ -158,11 +163,12 @@ public class MustBooleanScorer extends AbstractBooleanScorer {
 	 * @see org.apache.lucene.search.Scorer#skipTo(int)
 	 */
 	@Override
-	public boolean skipTo(int target) throws IOException {
-		while (this.doc() < target && this.next()) {
+	public int advance(int target) throws IOException {
+		while (this.docID() < target) {
+		    this.nextDoc();
 		}
 
-		return this.doc() == target;
+		return this.docID();
 	}
 
 }
