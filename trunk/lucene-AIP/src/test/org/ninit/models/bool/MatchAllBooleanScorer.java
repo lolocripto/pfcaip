@@ -24,6 +24,7 @@ package org.ninit.models.bool;
 import java.io.IOException;
 
 import org.apache.lucene.search.Explanation;
+import org.apache.lucene.search.Scorer;
 import org.apache.lucene.search.Similarity;
 
 /**
@@ -34,6 +35,8 @@ import org.apache.lucene.search.Similarity;
  */
 public class MatchAllBooleanScorer extends AbstractBooleanScorer {
 
+	public static final int NO_MORE_DOCS = Integer.MAX_VALUE;
+
 	private int doc = -1;
 	private int ndocs;
 
@@ -43,13 +46,32 @@ public class MatchAllBooleanScorer extends AbstractBooleanScorer {
 		this.ndocs = numDocs;
 	}
 
+	public MatchAllBooleanScorer(Similarity similarity, Scorer[] scorer, int numDocs)
+			throws IOException {
+	    	super(similarity, scorer);
+	    	this.ndocs = numDocs;
+	}	
+	
+
+	private int init() throws IOException {
+		for (int i = 0; i < this.subScorer.length; i++) {
+		    int aux = this.subScorer[i].nextDoc();
+			this.subScorerNext[i] = (aux != NO_MORE_DOCS);
+			if (this.subScorerNext[i] && this.subScorer[i].docID() > this.doc) {
+				this.doc = this.subScorer[i].docID();
+			}
+		}
+		return this.doc;
+	}
+
+	
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see org.apache.lucene.search.Scorer#doc()
 	 */
 	@Override
-	public int doc() {
+	public int docID() {
 		return this.doc;
 	}
 
@@ -58,20 +80,21 @@ public class MatchAllBooleanScorer extends AbstractBooleanScorer {
 	 * 
 	 * @see org.apache.lucene.search.Scorer#explain(int)
 	 */
+	/*
 	@Override
 	public Explanation explain(int doc) throws IOException {
 		return null;
 	}
-
+	*/
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see org.apache.lucene.search.Scorer#next()
 	 */
 	@Override
-	public boolean next() throws IOException {
+	public int nextDoc() throws IOException {
 		this.doc++;
-		return this.doc < this.ndocs;
+		return (this.doc < this.ndocs)? this.doc : NO_MORE_DOCS;
 	}
 
 	/*
@@ -90,8 +113,8 @@ public class MatchAllBooleanScorer extends AbstractBooleanScorer {
 	 * @see org.apache.lucene.search.Scorer#skipTo(int)
 	 */
 	@Override
-	public boolean skipTo(int target) throws IOException {
-		return target < this.ndocs;
+	public int advance(int target) throws IOException {
+		return (target < this.ndocs)?target:this.ndocs;
 	}
 
 }
