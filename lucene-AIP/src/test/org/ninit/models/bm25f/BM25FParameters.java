@@ -102,7 +102,13 @@ public class BM25FParameters extends BM25Parameters {
 	 * @throws NumberFormatException
 	 * @throws IOException
 	 */
-
+	/* AIP comment: This method shouldn't be used any more since we have now available the real 
+	 * 		average lenght of the documents compute in number of terms via API:
+	 * 
+	 *  			reader.avgDocSize()
+	 * 
+	 */
+	@Deprecated 
 	public static void load(String path) throws NumberFormatException, IOException {
 		BufferedReader in = new BufferedReader(new FileReader(path));
 		String line;

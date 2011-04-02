@@ -43,7 +43,6 @@ public class EasyIndexer {
 //	indexer.index02();
 //	indexer.completeTest01();
 //	indexer.indexFile(fileToIndex);
-	assert indexer.test("probando chiquillo");
 	indexer.close();
     }
 
@@ -64,10 +63,12 @@ public class EasyIndexer {
     }
 
     public int index01() throws Exception {
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < 7; i++) {
 	    addDoc(i);
 	}
-	
+	Document doc = new Document();
+	doc.add(new Field("new","jj",Field.Store.YES,Field.Index.ANALYZED));
+	writer.addDocument(doc);
 	return 0;
     }
 
@@ -76,7 +77,7 @@ public class EasyIndexer {
     }
     void addDoc(int i) throws Exception {
 	Document doc = new Document();
-	doc.add(new Field("id", "document_" + i, Field.Store.YES,Field.Index.ANALYZED));
+	doc.add(new Field("filename", "document_" + i, Field.Store.YES,Field.Index.ANALYZED));
 	doc.add(new Field("content", "aaa bb ss", Field.Store.YES,Field.Index.ANALYZED));
 	doc.add(new Field("content", "aaa cc", Field.Store.YES,Field.Index.ANALYZED));
 	
@@ -204,9 +205,6 @@ public class EasyIndexer {
     	    while(tdocs.next()) {
     	      count++;
     	    }
-
-    	    assert true:"blabla";
-    	    
     	    System.out.println("docFreq gg:"+reader.docFreq(new Term("content", "gg")));
     	    reader.close();
     	    dir.close();

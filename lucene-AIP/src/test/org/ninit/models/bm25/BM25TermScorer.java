@@ -52,22 +52,26 @@ public class BM25TermScorer extends Scorer {
 	private int[] sizes;
 	private float b;
 	private float k1;
+	
+	int aux1;
+	int aux2;
 
 	public BM25TermScorer(IndexReader reader, TermQuery term, Similarity similarity)
 			throws IOException {
 		super(similarity);
 		this.reader = reader;
 		this.term = term;
-		this.idf = this.getSimilarity().idf(reader.docFreq(term.getTerm()), reader.numDocs());
+		aux1 = reader.docFreq(term.getTerm());
+		aux2 = reader.numDocs();
+		this.idf = this.getSimilarity().idf(aux1, aux2);
 //		this.norm = this.reader.norms(this.term.getTerm().field());
 		this.sizes = this.reader.sizes(Constants.CATCHALL_FIELD);
 //		this.av_length = BM25Parameters.getAverageLength(this.term.getTerm().field());
-		this.av_length = (float) this.reader.avgDocSize();
+		this.av_length = this.reader.avgDocSize();
 		
 		this.b = BM25Parameters.getB();
 		this.k1 = BM25Parameters.getK1();
 		this.termDocs = this.reader.termDocs(this.term.getTerm());
-
 	}
 
 	@Override
