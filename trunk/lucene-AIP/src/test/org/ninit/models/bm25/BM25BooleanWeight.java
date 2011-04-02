@@ -159,7 +159,7 @@ public class BM25BooleanWeight extends Weight {
 
 	/**
 	 * AIP Change code: added this new method to update this code that was made for 
-	 * 	2.4.1 version of Lucene and we are using 2.9.0
+	 * 	2.4.1 version of Lucene and we are using 3.0.3
 	 */
 	public Scorer scorer(IndexReader reader, boolean scoreDocsInOrder,
 		      boolean topScorer) throws IOException{

@@ -81,10 +81,11 @@ public class BM25FTermScorer extends Scorer {
 						term.getTerm().text()));
 
 			//idf value only depends on the term frequency in the doc, this stats is given by Lucene
-			//AIP comment: creo que esto hay que cambiarlo!!
+			//AIP comment: aqui he puesto el collection frequency del termino
 			this.idf = this.getSimilarity().idf(
-					this.reader.docFreq(new Term(BM25FParameters.getIdfField(),
-							term.getTerm().text())), this.reader.numDocs());
+//					this.reader.docFreq(new Term(BM25FParameters.getIdfField(),
+//							term.getTerm().text())), this.reader.numDocs());
+				this.reader.colDocFreq(term.getTerm().text()), this.reader.numDocs());
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -202,27 +203,26 @@ public class BM25FTermScorer extends Scorer {
 			if (this.termDocsNext[i] && this.termDocs[i].doc() < min)
 				min = this.termDocs[i].doc();
 		}
-		return this.doc;//AIP comment: nose nose
+		return this.doc;//AIP comment: devolver el current doc
 
 	}
 
 	/*
-	 * (non-Javadoc)
+	 * Compute de score
 	 * 
 	 * @see org.apache.lucene.search.Scorer#score()
 	 */
 	@Override
 	public float score() throws IOException {
 		float acum = 0f;
-
+		int[] sizes = this.reader.sizes(Constants.CATCHALL_FIELD);//AIP comment esto seria el tamaño del campo o el tamaño total del documento?
+		
 		for (int i = 0; i < this.fields.length; i++) {
 
 			if (this.termDocs[i].doc() == doc) {
 //				byte[] norm = this.reader.norms(this.fields[i]);
-				int[] sizes = this.reader.sizes(Constants.CATCHALL_FIELD);
-
 //				float av_length = (float) BM25FParameters.getAverageLength(this.fields[i]);
-				float av_length = (float) this.reader.avgDocSize();
+				float av_length = this.reader.avgDocSize();
 				float length = 0f;
 //				float normV = Similarity.decodeNorm(norm[this.docID()]);
 //				length = 1 / (normV * normV);

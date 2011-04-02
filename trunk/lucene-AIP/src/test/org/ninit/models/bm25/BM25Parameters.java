@@ -96,6 +96,13 @@ public class BM25Parameters {
 	 * @throws NumberFormatException
 	 * @throws IOException
 	 */
+	/* AIP comment: This method shouldn't be used any more since we have now available the real 
+	 * 		average lenght of the documents compute in number of terms via API:
+	 * 
+	 *  			reader.avgDocSize()
+	 * 
+	 */
+	@Deprecated 
 	public static void load(String path) throws NumberFormatException,
 			IOException {
 		BufferedReader in = new BufferedReader(new FileReader(path));
@@ -114,6 +121,13 @@ public class BM25Parameters {
 	 * @param field
 	 * @param avg
 	 */
+	/* AIP comment: This method shouldn't be used any more since we have now available the real 
+	 * 		average lenght of the documents compute in number of terms via API:
+	 * 
+	 *  			reader.avgDocSize()
+	 * 
+	 */
+	@Deprecated 
 	public static void setAverageLength(String field, float avg) {
 		BM25Parameters.avgLength.put(field, avg);
 	}
@@ -124,6 +138,13 @@ public class BM25Parameters {
 	 * @param field
 	 * @return field average length
 	 */
+	/* AIP comment: This method shouldn't be used any more since we have now available the real 
+	 * 		average lenght of the documents compute in number of terms via API:
+	 * 
+	 *  			reader.avgDocSize()
+	 * 
+	 */
+	@Deprecated 
 	public static float getAverageLength(String field) {
 		try {
 			return BM25Parameters.avgLength.get(field);
