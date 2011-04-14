@@ -47,7 +47,7 @@ public class BM25FParameters extends BM25Parameters {
 	/**
 	 * 
 	 * @return The field with the longest average length
-	 */
+	 *//*
 	public static String getIdfField() {
 		if (idfField == null) {
 			float max = -1;
@@ -65,7 +65,7 @@ public class BM25FParameters extends BM25Parameters {
 		}
 		return idfField;
 
-	}
+	}*/
 
 	/**
 	 * 

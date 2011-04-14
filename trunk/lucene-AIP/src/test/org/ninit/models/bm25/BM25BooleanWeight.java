@@ -41,7 +41,6 @@ import org.ninit.models.bm25.BM25BooleanQuery.BooleanTermQuery;
  * 
  */
 @SuppressWarnings("serial")
-//public class BM25BooleanWeight implements Weight {
 public class BM25BooleanWeight extends Weight {
 
 	private BooleanTermQuery[] should;
@@ -89,6 +88,7 @@ public class BM25BooleanWeight extends Weight {
 	 */
 	@Override
 	public Explanation explain(IndexReader reader, int doc) throws IOException {
+	    /*
 		if (this.fields == null)
 			return new BM25BooleanScorer(reader, this.should, this.must,
 					this.not, new BM25Similarity()).explain(doc);
@@ -96,6 +96,8 @@ public class BM25BooleanWeight extends Weight {
 			return new BM25BooleanScorer(reader, this.should, this.must,
 					this.not, new BM25Similarity(), this.fields, this.boosts,
 					this.bParams).explain(doc);
+					*/
+	    return null;
 	}
 
 	/*

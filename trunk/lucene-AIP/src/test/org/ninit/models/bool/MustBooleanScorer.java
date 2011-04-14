@@ -36,6 +36,8 @@ import org.apache.lucene.search.Similarity;
  */
 public class MustBooleanScorer extends AbstractBooleanScorer {
 
+	public static final int NO_MORE_DOCS = Integer.MAX_VALUE;
+
 	private boolean initializated = false;
 	private int doc = -1;
 
@@ -58,12 +60,11 @@ public class MustBooleanScorer extends AbstractBooleanScorer {
 	 * (non-Javadoc)
 	 * 
 	 * @see org.apache.lucene.search.Scorer#explain(int)
-	 */
-	/*
+	 *//*
 	@Override
 	public Explanation explain(int doc) throws IOException {
 
-		if (!this.skipTo(doc))
+		if (this.advance(doc) == NO_MORE_DOCS)
 			return null;
 		Explanation result = new Explanation();
 		Explanation detail;
@@ -76,8 +77,7 @@ public class MustBooleanScorer extends AbstractBooleanScorer {
 		}
 		result.setValue(value);
 		return result;
-	}
-	*/
+	}*/
 	
 	private int init() throws IOException {
 		for (int i = 0; i < this.subScorer.length; i++) {

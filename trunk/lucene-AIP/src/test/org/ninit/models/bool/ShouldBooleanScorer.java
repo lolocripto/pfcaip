@@ -36,6 +36,8 @@ import org.apache.lucene.search.Similarity;
  */
 public class ShouldBooleanScorer extends AbstractBooleanScorer {
 
+	public static final int NO_MORE_DOCS = Integer.MAX_VALUE;
+
 	private boolean initializated = false;
 	private int doc = Integer.MAX_VALUE;
 
@@ -50,7 +52,7 @@ public class ShouldBooleanScorer extends AbstractBooleanScorer {
 	 * @see org.apache.lucene.search.Scorer#doc()
 	 */
 	@Override
-	public int doc() {
+	public int docID() {
 		return this.doc;
 	}
 
@@ -58,17 +60,17 @@ public class ShouldBooleanScorer extends AbstractBooleanScorer {
 	 * (non-Javadoc)
 	 * 
 	 * @see org.apache.lucene.search.Scorer#explain(int)
-	 */
+	 *//*
 	@Override
 	public Explanation explain(int doc) throws IOException {
-		if (!this.skipTo(doc))
+		if (this.advance(doc) == NO_MORE_DOCS)
 			return null;
 		Explanation result = new Explanation();
 		Explanation detail;
 		result.setDescription("OR");
 		float value = 0f;
 		for (int i = 0; i < this.subScorer.length; i++) {
-			if (this.subScorer[i].doc() == doc) {
+			if (this.subScorer[i].docID() == doc) {
 				detail = this.subScorer[i].explain(doc);
 				result.addDetail(detail);
 				value += detail.getValue();
@@ -76,7 +78,7 @@ public class ShouldBooleanScorer extends AbstractBooleanScorer {
 		}
 		result.setValue(value);
 		return result;
-	}
+	}*/
 
 	/*
 	 * (non-Javadoc)
@@ -84,21 +86,22 @@ public class ShouldBooleanScorer extends AbstractBooleanScorer {
 	 * @see org.apache.lucene.search.Scorer#next()
 	 */
 	@Override
-	public boolean next() throws IOException {
+	public int nextDoc() throws IOException {
 		if (!this.initializated) {
 			this.initializated = true;
 			return this.init();
 		}
-		int min = Integer.MAX_VALUE;
+		int min = NO_MORE_DOCS;
 		// AVANZO LOS TERMDOCS CON MENOR ID
 		for (int i = 0; i < this.subScorer.length; i++) {
-			if (this.subScorerNext[i] && this.subScorer[i].doc() == this.doc) {
-				this.subScorerNext[i] = this.subScorer[i].next();
+			if (this.subScorerNext[i] && this.subScorer[i].docID() == this.doc) {
+				this.subScorerNext[i] = (this.subScorer[i].nextDoc() != NO_MORE_DOCS);
 			}
-			if (this.subScorerNext[i] && this.subScorer[i].doc() < min)
-				min = this.subScorer[i].doc();
+			if (this.subScorerNext[i] && this.subScorer[i].docID() < min)
+				min = this.subScorer[i].docID();
 		}
-		return ((this.doc = min) != Integer.MAX_VALUE);
+
+		return this.docID();
 	}
 
 	/*
@@ -107,11 +110,12 @@ public class ShouldBooleanScorer extends AbstractBooleanScorer {
 	 * @see org.apache.lucene.search.Scorer#skipTo(int)
 	 */
 	@Override
-	public boolean skipTo(int target) throws IOException {
-		while (this.doc() < target && this.next()) {
+	public int advance(int target) throws IOException {
+		while (this.docID() < target) {
+		    this.nextDoc();
 		}
 
-		return this.doc() == target;
+		return this.docID();
 	}
 
 	/*
@@ -123,20 +127,20 @@ public class ShouldBooleanScorer extends AbstractBooleanScorer {
 	public float score() throws IOException {
 		double result = 0f;
 		for (int i = 0; i < this.subScorer.length; i++) {
-			if (this.subScorer[i].doc() == this.doc)
+			if (this.subScorer[i].docID() == this.doc)
 				result += this.subScorer[i].score();
 
 		}
 		return (float) result;
 	}
 
-	private boolean init() throws IOException {
-		boolean result = false;
+	private int init() throws IOException {
+		int result = NO_MORE_DOCS;
 		for (int i = 0; i < this.subScorer.length; i++) {
-			this.subScorerNext[i] = this.subScorer[i].next();
-			if (this.subScorerNext[i] && this.subScorer[i].doc() < this.doc) {
-				this.doc = this.subScorer[i].doc();
-				result = true;
+			this.subScorerNext[i] = (this.subScorer[i].nextDoc() != NO_MORE_DOCS);
+			if (this.subScorerNext[i] && this.subScorer[i].docID() < this.doc) {
+				this.doc = this.subScorer[i].docID();
+				result = this.docID();
 			}
 		}
 		return result;

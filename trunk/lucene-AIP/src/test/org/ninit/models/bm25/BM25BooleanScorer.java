@@ -44,6 +44,8 @@ import org.ninit.models.bool.ShouldBooleanScorer;
  */
 public class BM25BooleanScorer extends Scorer {
 
+	public static final int NO_MORE_DOCS = Integer.MAX_VALUE;
+
 	private AbstractBooleanScorer shouldBooleanScorer;
 	private AbstractBooleanScorer mustBooleanScorer;
 	private AbstractBooleanScorer notBooleanScorer;
@@ -61,44 +63,33 @@ public class BM25BooleanScorer extends Scorer {
 		this.ndocs = reader.numDocs();
 
 		if (should != null && should.length > 0) {
-
 			Scorer[] shouldScorer = new Scorer[should.length];
 			for (int i = 0; i < shouldScorer.length; i++) {
 				shouldScorer[i] = new BM25TermScorer(reader,
 						should[i].termQuery, similarity);
 			}
-			this.shouldBooleanScorer = new ShouldBooleanScorer(similarity,
-					shouldScorer);
-
+			this.shouldBooleanScorer = new ShouldBooleanScorer(similarity, shouldScorer);
 		} else
-			this.shouldBooleanScorer = new MatchAllBooleanScorer(similarity,
-					this.ndocs);
+			this.shouldBooleanScorer = new MatchAllBooleanScorer(similarity, this.ndocs);
 
 		if (must != null && must.length > 0) {
 			Scorer[] mustScorer = new Scorer[must.length];
 			for (int i = 0; i < mustScorer.length; i++) {
-				mustScorer[i] = new BM25TermScorer(reader, must[i].termQuery,
-						similarity);
+				mustScorer[i] = new BM25TermScorer(reader, must[i].termQuery, similarity);
 			}
-
-			this.mustBooleanScorer = new MustBooleanScorer(similarity,
-					mustScorer);
+			this.mustBooleanScorer = new MustBooleanScorer(similarity, mustScorer);
 		} else
-			this.mustBooleanScorer = new MatchAllBooleanScorer(similarity,
-					this.ndocs);
+			this.mustBooleanScorer = new MatchAllBooleanScorer(similarity, this.ndocs);
 
 		if (not != null && not.length > 0) {
 			Scorer[] notScorer = new Scorer[not.length];
 			for (int i = 0; i < notScorer.length; i++) {
-				notScorer[i] = new BM25TermScorer(reader, not[i].termQuery,
-						similarity);
+				notScorer[i] = new BM25TermScorer(reader, not[i].termQuery, similarity);
 			}
 
-			this.notBooleanScorer = new NotBooleanScorer(similarity, notScorer,
-					this.ndocs);
+			this.notBooleanScorer = new NotBooleanScorer(similarity, notScorer, this.ndocs);
 		} else
-			this.notBooleanScorer = new MatchAllBooleanScorer(similarity,
-					this.ndocs);
+			this.notBooleanScorer = new MatchAllBooleanScorer(similarity, this.ndocs);
 	}
 
 	public BM25BooleanScorer(IndexReader reader, BooleanTermQuery[] should,
@@ -155,7 +146,7 @@ public class BM25BooleanScorer extends Scorer {
 	 * @see org.apache.lucene.search.Scorer#doc()
 	 */
 	@Override
-	public int doc() {
+	public int docID() {
 		return this.doc;
 	}
 
@@ -163,23 +154,24 @@ public class BM25BooleanScorer extends Scorer {
 	 * (non-Javadoc)
 	 * 
 	 * @see org.apache.lucene.search.Scorer#explain(int)
-	 */
+	 *//*
 	@Override
 	public Explanation explain(int doc) throws IOException {
-		if (!this.skipTo(doc))
+		if (this.advance(doc) == NO_MORE_DOCS)
 			return null;
+		
 		Explanation result = new Explanation();
 		result.setDescription("Total");
 		Explanation detail = null;
 		float value = 0f;
-		if (this.hasMoreMust && this.mustBooleanScorer.doc() == doc)
+		if (this.hasMoreMust && this.mustBooleanScorer.docID() == doc)
 			detail = this.mustBooleanScorer.explain(doc);
 		if (detail != null) {
 			result.addDetail(this.mustBooleanScorer.explain(doc));
 			value += detail.getValue();
 		}
 
-		if (this.hasMoreShould && this.shouldBooleanScorer.doc() == doc)
+		if (this.hasMoreShould && this.shouldBooleanScorer.docID() == doc)
 			detail = this.shouldBooleanScorer.explain(doc);
 		if (detail != null) {
 			result.addDetail(this.shouldBooleanScorer.explain(doc));
@@ -187,21 +179,21 @@ public class BM25BooleanScorer extends Scorer {
 		}
 		result.setValue(value);
 		return result;
-	}
+	}*/
 
 	private void init() throws IOException {
-		this.hasMoreShould = this.shouldBooleanScorer.next();
-		this.hasMoreMust = this.mustBooleanScorer.next();
-		this.hasMoreNot = this.notBooleanScorer.next();
+		this.hasMoreShould = (this.shouldBooleanScorer.nextDoc() != NO_MORE_DOCS);
+		this.hasMoreMust = (this.mustBooleanScorer.nextDoc() != NO_MORE_DOCS);
+		this.hasMoreNot = (this.notBooleanScorer.nextDoc() != NO_MORE_DOCS);
 	}
 
 	private void doNext() throws IOException {
-		if (this.hasMoreShould && this.shouldBooleanScorer.doc() == this.doc)
-			this.hasMoreShould = this.shouldBooleanScorer.next();
-		if (this.hasMoreMust && this.mustBooleanScorer.doc() == this.doc)
-			this.hasMoreMust = this.mustBooleanScorer.next();
-		if (this.hasMoreNot && this.notBooleanScorer.doc() == this.doc)
-			this.hasMoreNot = this.notBooleanScorer.next();
+		if (this.hasMoreShould && this.shouldBooleanScorer.docID() == this.doc)
+			this.hasMoreShould = (this.shouldBooleanScorer.nextDoc() != NO_MORE_DOCS);
+		if (this.hasMoreMust && this.mustBooleanScorer.docID() == this.doc)
+			this.hasMoreMust = (this.mustBooleanScorer.nextDoc() != NO_MORE_DOCS);
+		if (this.hasMoreNot && this.notBooleanScorer.docID() == this.doc)
+			this.hasMoreNot = (this.notBooleanScorer.nextDoc() != NO_MORE_DOCS);
 	}
 
 	/*
@@ -210,7 +202,7 @@ public class BM25BooleanScorer extends Scorer {
 	 * @see org.apache.lucene.search.Scorer#next()
 	 */
 	@Override
-	public boolean next() throws IOException {
+	public int nextDoc() throws IOException {
 
 		if (!this.initialized) {
 			this.initialized = true;
@@ -222,30 +214,30 @@ public class BM25BooleanScorer extends Scorer {
 		while (this.doc < this.ndocs - 1) {
 			this.doc++;
 			if (this.hasMoreMust) {
-				if (this.mustBooleanScorer.doc() < this.doc)
-					this.hasMoreMust = this.mustBooleanScorer.next();
+				if (this.mustBooleanScorer.docID() < this.doc)
+					this.hasMoreMust = (this.mustBooleanScorer.nextDoc() != NO_MORE_DOCS);
 			} else
-				return false;
+				return NO_MORE_DOCS;
 
 			if (this.hasMoreNot) {
-				if (this.notBooleanScorer.doc() < this.doc)
-					this.hasMoreNot = this.notBooleanScorer.next();
+				if (this.notBooleanScorer.docID() < this.doc)
+					this.hasMoreNot = (this.notBooleanScorer.nextDoc() != NO_MORE_DOCS);
 			} else
-				return false;
+				return NO_MORE_DOCS;
 
 			if (this.hasMoreShould) {
-				if (this.shouldBooleanScorer.doc() < this.doc)
-					this.hasMoreShould = this.shouldBooleanScorer.next();
+				if (this.shouldBooleanScorer.docID() < this.doc)
+					this.hasMoreShould = (this.shouldBooleanScorer.nextDoc() != NO_MORE_DOCS);
 			}
 
 			if (this.hasMoreMust && this.hasMoreNot) {
-				if (this.mustBooleanScorer.doc() == this.notBooleanScorer.doc())
-					return true;
+				if (this.mustBooleanScorer.docID() == this.notBooleanScorer.docID())
+					return this.docID();
 			} else
-				return false;
+				return NO_MORE_DOCS;
 		}
 
-		return false;
+		return NO_MORE_DOCS;
 	}
 
 	/*
@@ -256,10 +248,10 @@ public class BM25BooleanScorer extends Scorer {
 	@Override
 	public float score() throws IOException {
 		float result = 0f;
-		if (this.hasMoreMust && this.mustBooleanScorer.doc() == doc)
+		if (this.hasMoreMust && this.mustBooleanScorer.docID() == doc)
 			result += this.mustBooleanScorer.score();
 
-		if (this.hasMoreShould && this.shouldBooleanScorer.doc() == doc)
+		if (this.hasMoreShould && this.shouldBooleanScorer.docID() == doc)
 			result += this.shouldBooleanScorer.score();
 
 		return result;
@@ -271,11 +263,12 @@ public class BM25BooleanScorer extends Scorer {
 	 * @see org.apache.lucene.search.Scorer#skipTo(int)
 	 */
 	@Override
-	public boolean skipTo(int target) throws IOException {
-		while (this.next() && this.doc() < target) {
+	public int advance(int target) throws IOException {
+		while (this.docID() < target) {
+		    this.nextDoc();
 		}
 
-		return this.doc() == target;
+		return this.docID();
 	}
 
 }

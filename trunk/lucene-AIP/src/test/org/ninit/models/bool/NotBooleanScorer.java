@@ -36,6 +36,8 @@ import org.apache.lucene.search.Similarity;
  */
 public class NotBooleanScorer extends AbstractBooleanScorer {
 
+	public static final int NO_MORE_DOCS = Integer.MAX_VALUE;
+
 	private int doc = -1;
 	private int numDocs;
 
@@ -44,7 +46,7 @@ public class NotBooleanScorer extends AbstractBooleanScorer {
 		super(similarity, scorer);
 		this.numDocs = numDocs;
 		for (int i = 0; i < this.subScorer.length; i++)
-			this.subScorerNext[i] = this.subScorer[i].next();
+			this.subScorerNext[i] = (this.subScorer[i].nextDoc() != NO_MORE_DOCS);
 
 	}
 
@@ -54,7 +56,7 @@ public class NotBooleanScorer extends AbstractBooleanScorer {
 	 * @see org.apache.lucene.search.Scorer#doc()
 	 */
 	@Override
-	public int doc() {
+	public int docID() {
 		return this.doc;
 	}
 
@@ -63,7 +65,7 @@ public class NotBooleanScorer extends AbstractBooleanScorer {
 	 * 
 	 * @see org.apache.lucene.search.Scorer#explain(int)
 	 */
-	@Override
+//	@Override
 	public Explanation explain(int doc) throws IOException {
 		return null;
 	}
@@ -74,26 +76,26 @@ public class NotBooleanScorer extends AbstractBooleanScorer {
 	 * @see org.apache.lucene.search.Scorer#next()
 	 */
 	@Override
-	public boolean next() throws IOException {
+	public int nextDoc() throws IOException {
 		while (this.doc < this.numDocs - 1) {
 			this.doc++;
 			int count = 0;
 			for (int i = 0; i < this.subScorer.length; i++) {
 				if (this.subScorerNext[i])
-					if (this.subScorer[i].doc() != this.doc) {
+					if (this.subScorer[i].docID() != this.doc) {
 						count++;
 					} else {
-						this.subScorerNext[i] = this.subScorer[i].next();
+						this.subScorerNext[i] = (this.subScorer[i].nextDoc() != NO_MORE_DOCS);
 						count = 0;
 					}
 				else
 					count++;
 				if (count == this.subScorer.length)
-					return true;
+					return this.docID();
 			}
 		}
 
-		return false;
+		return NO_MORE_DOCS;
 	}
 
 	/*
@@ -112,11 +114,12 @@ public class NotBooleanScorer extends AbstractBooleanScorer {
 	 * @see org.apache.lucene.search.Scorer#skipTo(int)
 	 */
 	@Override
-	public boolean skipTo(int target) throws IOException {
-		while (this.doc() < target && this.next()) {
+	public int advance(int target) throws IOException {
+		while (this.docID() < target) {
+		    this.nextDoc();
 		}
 
-		return this.doc() == target;
+		return this.docID();
 	}
 
 }
