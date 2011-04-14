@@ -27,17 +27,6 @@ import org.xml.sax.ContentHandler;
  * 
  */
 public class WikiIndexer extends Indexer {
-    // Directorios donde se van a crear los indices
-    public static final String INDEX_DIR_WIKI_SHORT = "H:/programacion/java/Lucene/index/wiki_short";
-    public static final String INDEX_DIR_WIKI_MEDIUM = "H:/programacion/java/Lucene/index/wiki_medium";
-    public static final String INDEX_DIR_WIKI_LARGE = "H:/programacion/java/Lucene/index/wiki_large";
-    public static final String INDEX_DIR_WIKIPEDIA = "H:/programacion/java/Lucene/index/wikipedia";
-
-    // Directorios con los documentos que se van a indexar
-    public static final String FILES_WIKI_SHORT = "H:/programacion/java/Lucene/files/wiki_short";
-    public static final String FILES_WIKI_MEDIUM = "H:/programacion/java/Lucene/files/wiki_medium";
-    public static final String FILES_WIKI_LARGE = "H:/programacion/java/Lucene/files/wiki_large";
-    public static final String FILES_WIKIPEDIA = "H:/programacion/java/Lucene/files/wikipedia";
 
     private boolean DEBUG = false;
     
@@ -53,18 +42,10 @@ public class WikiIndexer extends Indexer {
 
     public static void main(String[] args) throws Exception {
 
-	TikaConfig config = TikaConfig.getDefaultConfig();
-	// List<String> parsers = new ArrayList(config.getParsers().keySet());
-	// Collections.sort(parsers);
-	// Iterator<String> it = parsers.iterator();
-	// System.out.println("Mime type parsers:");
-	// while (it.hasNext()) {
-	// System.out.println(" " + it.next());
-	// }
-	// System.out.println();
+//	TikaConfig config = TikaConfig.getDefaultConfig();
 	
-	String indexDir = INDEX_DIR_WIKI_SHORT;
-	String dataDir = FILES_WIKI_SHORT;
+	String indexDir = AIPTestUtils.INDEX_DIR_WIKI_SHORT;
+	String dataDir = AIPTestUtils.FILES_WIKI_SHORT;
 	
 	long start = new Date().getTime();
 	WikiIndexer indexer = new WikiIndexer(indexDir); 

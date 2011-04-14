@@ -31,14 +31,11 @@ import org.apache.lucene.util.Version;
  */
 public class AIPIndexer {
 
-    //Directorios donde se van a crear los indices
-    public static final String INDEX_DIR_FIXED_DOCS = "H:/programacion/java/Lucene/index/fixed_docs";
-    
     private IndexWriter writer;
 
     public static void main(String[] args) throws Exception {
 
-	String indexDir = INDEX_DIR_FIXED_DOCS;
+	String indexDir = AIPTestUtils.INDEX_DIR_FIXED_DOCS;
 	
 	AIPIndexer indexer = new AIPIndexer(indexDir);
 
