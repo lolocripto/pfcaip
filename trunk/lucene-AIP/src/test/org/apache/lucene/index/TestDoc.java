@@ -119,13 +119,13 @@ public class TestDoc extends LuceneTestCase {
       writer.close();
 
       SegmentInfo siMerge = merge(si1, si2, "merge", false);
-      printSegment(out, siMerge);
+//      printSegment(out, siMerge);
 
       SegmentInfo siMerge2 = merge(si1, si2, "merge2", false);
-      printSegment(out, siMerge2);
+//      printSegment(out, siMerge2);
 
-      SegmentInfo siMerge3 = merge(siMerge, siMerge2, "merge3", false);
-      printSegment(out, siMerge3);
+//      SegmentInfo siMerge3 = merge(siMerge, siMerge2, "merge3", false);
+//      printSegment(out, siMerge3);
       
       directory.close();
       out.close();
@@ -147,13 +147,13 @@ public class TestDoc extends LuceneTestCase {
       writer.close();
 
       siMerge = merge(si1, si2, "merge", true);
-      printSegment(out, siMerge);
+//      printSegment(out, siMerge);
 
       siMerge2 = merge(si1, si2, "merge2", true);
-      printSegment(out, siMerge2);
+//      printSegment(out, siMerge2);
 
-      siMerge3 = merge(siMerge, siMerge2, "merge3", true);
-      printSegment(out, siMerge3);
+//      siMerge3 = merge(siMerge, siMerge2, "merge3", true);
+//      printSegment(out, siMerge3);
       
       directory.close();
       out.close();

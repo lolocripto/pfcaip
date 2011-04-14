@@ -266,60 +266,61 @@ public class TestSort extends LuceneTestCase implements Serializable {
   /**
    * Test String sorting: small queue to many matches, multi field sort, reverse sort
    */
-  public void testStringSort() throws IOException, ParseException {
-    r = newRandom();
-    ScoreDoc[] result = null;
-    IndexSearcher searcher = getFullStrings();
-    sort.setSort(
-        new SortField("string", SortField.STRING),
-        new SortField("string2", SortField.STRING, true),
-        SortField.FIELD_DOC );
-
-    result = searcher.search(new MatchAllDocsQuery(), null, 500, sort).scoreDocs;
-
-    StringBuilder buff = new StringBuilder();
-    int n = result.length;
-    String last = null;
-    String lastSub = null;
-    int lastDocId = 0;
-    boolean fail = false;
-    for (int x = 0; x < n; ++x) {
-      Document doc2 = searcher.doc(result[x].doc);
-      String[] v = doc2.getValues("tracer");
-      String[] v2 = doc2.getValues("tracer2");
-      for (int j = 0; j < v.length; ++j) {
-        if (last != null) {
-          int cmp = v[j].compareTo(last);
-          if (!(cmp >= 0)) { // ensure first field is in order
-            fail = true;
-            System.out.println("fail:" + v[j] + " < " + last);
-          }
-          if (cmp == 0) { // ensure second field is in reverse order
-            cmp = v2[j].compareTo(lastSub);
-            if (cmp > 0) {
-              fail = true;
-              System.out.println("rev field fail:" + v2[j] + " > " + lastSub);
-            } else if(cmp == 0) { // ensure docid is in order
-              if (result[x].doc < lastDocId) {
-                fail = true;
-                System.out.println("doc fail:" + result[x].doc + " > " + lastDocId);
-              }
-            }
-          }
-        }
-        last = v[j];
-        lastSub = v2[j];
-        lastDocId = result[x].doc;
-        buff.append(v[j] + "(" + v2[j] + ")(" + result[x].doc+") ");
-      }
-    }
-    if(fail) {
-      System.out.println("topn field1(field2)(docID):" + buff);
-    }
-    assertFalse("Found sort results out of order", fail);
-
-  }
-  
+//  
+//  public void testStringSort() throws IOException, ParseException {
+//    r = newRandom();
+//    ScoreDoc[] result = null;
+//    IndexSearcher searcher = getFullStrings();
+//    sort.setSort(
+//        new SortField("string", SortField.STRING),
+//        new SortField("string2", SortField.STRING, true),
+//        SortField.FIELD_DOC );
+//
+//    result = searcher.search(new MatchAllDocsQuery(), null, 500, sort).scoreDocs;
+//
+//    StringBuilder buff = new StringBuilder();
+//    int n = result.length;
+//    String last = null;
+//    String lastSub = null;
+//    int lastDocId = 0;
+//    boolean fail = false;
+//    for (int x = 0; x < n; ++x) {
+//      Document doc2 = searcher.doc(result[x].doc);
+//      String[] v = doc2.getValues("tracer");
+//      String[] v2 = doc2.getValues("tracer2");
+//      for (int j = 0; j < v.length; ++j) {
+//        if (last != null) {
+//          int cmp = v[j].compareTo(last);
+//          if (!(cmp >= 0)) { // ensure first field is in order
+//            fail = true;
+//            System.out.println("fail:" + v[j] + " < " + last);
+//          }
+//          if (cmp == 0) { // ensure second field is in reverse order
+//            cmp = v2[j].compareTo(lastSub);
+//            if (cmp > 0) {
+//              fail = true;
+//              System.out.println("rev field fail:" + v2[j] + " > " + lastSub);
+//            } else if(cmp == 0) { // ensure docid is in order
+//              if (result[x].doc < lastDocId) {
+//                fail = true;
+//                System.out.println("doc fail:" + result[x].doc + " > " + lastDocId);
+//              }
+//            }
+//          }
+//        }
+//        last = v[j];
+//        lastSub = v2[j];
+//        lastDocId = result[x].doc;
+//        buff.append(v[j] + "(" + v2[j] + ")(" + result[x].doc+") ");
+//      }
+//    }
+//    if(fail) {
+//      System.out.println("topn field1(field2)(docID):" + buff);
+//    }
+//    assertFalse("Found sort results out of order", fail);
+//
+//  }
+//  
   /** 
    * test sorts where the type of field is specified and a custom field parser 
    * is used, that uses a simple char encoding. The sorted string contains a 
