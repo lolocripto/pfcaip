@@ -33,17 +33,6 @@ public class AIPIndexer {
 
     //Directorios donde se van a crear los indices
     public static final String INDEX_DIR_FIXED_DOCS = "H:/programacion/java/Lucene/index/fixed_docs";
-    public static final String INDEX_DIR_WIKI_SHORT = "H:/programacion/java/Lucene/index/wiki_short";
-    public static final String INDEX_DIR_WIKI_MEDIUM = "H:/programacion/java/Lucene/index/wiki_medium";
-    public static final String INDEX_DIR_WIKI_LARGE = "H:/programacion/java/Lucene/index/wiki_large";
-    public static final String INDEX_DIR_WIKIPEDIA = "H:/programacion/java/Lucene/index/wikipedia";
-
-    //Directorios con los documentos que se van a indexar
-    public static final String FILES_WIKI_SHORT = "H:/programacion/java/Lucene/index/wiki_short";
-    public static final String FILES_WIKI_MEDIUM = "H:/programacion/java/Lucene/index/wiki_medium";
-    public static final String FILES_WIKI_LARGE = "H:/programacion/java/Lucene/index/wiki_large";
-    public static final String FILES_WIKIPEDIA = "H:/programacion/java/Lucene/index/wikipedia";
-
     
     private IndexWriter writer;
 

@@ -1,7 +1,6 @@
 package aip.tests;
 
 import java.io.File;
-import java.util.List;
 
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
@@ -24,7 +23,8 @@ public class AIPReader {
 
     public static void main(String[] args) throws Exception {
 	
-	read(INDEX_DIR_FIXED_DOCS);
+//	read(INDEX_DIR_FIXED_DOCS);
+	read(INDEX_DIR_WIKI_SHORT);
     }
 
     public static void read(String indexDir) throws Exception {
