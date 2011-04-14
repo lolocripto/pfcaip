@@ -60,8 +60,8 @@ public class BM25SingleBooleanScorer extends Scorer {
 		}
 		
 //		this.booleanScorer = new MatchAllBooleanScorer(similarity, reader.numDocs());
-		this.booleanScorer = new MustBooleanScorer(similarity, scorer);
-		 /*
+//		this.booleanScorer = new MustBooleanScorer(similarity, scorer);
+		 
 		if (termQuery[0].occur == BooleanClause.Occur.MUST)
 			this.booleanScorer = new MustBooleanScorer(similarity, scorer);
 		else if (termQuery[0].occur == BooleanClause.Occur.SHOULD)
@@ -69,7 +69,7 @@ public class BM25SingleBooleanScorer extends Scorer {
 		else
 			this.booleanScorer = new NotBooleanScorer(similarity, scorer,
 					reader.numDocs());
-		*/
+		
 
 	}
 
@@ -85,9 +85,9 @@ public class BM25SingleBooleanScorer extends Scorer {
 					fields, boosts, bParams, similarity);
 		}
 
-		this.booleanScorer = new MatchAllBooleanScorer(similarity, reader.numDocs());
+//		this.booleanScorer = new MatchAllBooleanScorer(similarity, reader.numDocs());
 		
-		/* 
+		 
 		if (termQuery[0].occur == BooleanClause.Occur.MUST)
 			this.booleanScorer = new MustBooleanScorer(similarity, scorer);
 		else if (termQuery[0].occur == BooleanClause.Occur.SHOULD)
@@ -95,7 +95,7 @@ public class BM25SingleBooleanScorer extends Scorer {
 		else
 			this.booleanScorer = new NotBooleanScorer(similarity, scorer,
 					reader.numDocs());
-		*/
+		
 
 	}
 
@@ -113,8 +113,7 @@ public class BM25SingleBooleanScorer extends Scorer {
 	 * (non-Javadoc)
 	 * 
 	 * @see org.apache.lucene.search.Scorer#explain(int)
-	 */
-	/*
+	 *//*
 	@Override
 	public Explanation explain(int doc) throws IOException {
 		Explanation result = new Explanation();
@@ -123,8 +122,8 @@ public class BM25SingleBooleanScorer extends Scorer {
 		result.addDetail(detail);
 		result.setValue(detail.getValue());
 		return result;
-	}
-	*/
+	}*/
+
 	/*
 	 * (non-Javadoc)
 	 * 

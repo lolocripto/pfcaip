@@ -62,7 +62,7 @@ public class BM25TermScorer extends Scorer {
 		this.reader = reader;
 		this.term = term;
 		aux1 = reader.docFreq(term.getTerm());
-		aux2 = reader.numDocs();
+		aux2 = reader.numDocs();		
 		this.idf = this.getSimilarity().idf(aux1, aux2);
 //		this.norm = this.reader.norms(this.term.getTerm().field());
 		this.sizes = this.reader.sizes(Constants.CATCHALL_FIELD);
@@ -84,8 +84,7 @@ public class BM25TermScorer extends Scorer {
 	 * 
 	 * @see org.apache.lucene.search.Scorer#explain(int)
 	 */
-	/*
-	@Override
+//	@Override
 	public Explanation explain(int doc) throws IOException {
 		// Init termDocs
 		if (this.termDocs != null)
@@ -94,14 +93,14 @@ public class BM25TermScorer extends Scorer {
 		// skipTo doc
 
 		//
-		if (!this.skipTo(doc))
+		if (this.advance(doc) == NO_MORE_DOCS)
 			return null;
 		float length = 0f;
 		byte[] norm = this.reader.norms(this.term.getTerm().field());
 
 		float av_length = BM25Parameters.getAverageLength(this.term.getTerm().field());
-		length = 1 / ((Similarity.decodeNorm(norm[this.doc()])) * (Similarity.decodeNorm(norm[this
-				.doc()])));
+		length = 1 / ((Similarity.decodeNorm(norm[this.docID()])) * (Similarity.decodeNorm(norm[this
+				.docID()])));
 
 		float tf = this.termDocs.freq();
 
@@ -124,7 +123,6 @@ public class BM25TermScorer extends Scorer {
 
 		return resultE;
 	}
-	*/
 	
 	@Override
 	public int nextDoc() throws IOException {

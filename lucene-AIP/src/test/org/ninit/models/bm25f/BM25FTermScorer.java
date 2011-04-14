@@ -73,7 +73,14 @@ public class BM25FTermScorer extends Scorer {
 		this.fields = fields;
 		this.boost = boosts;
 		this.bParam = bParams;
+		/*
+		 * AIP Comment: "termDocs" es un array donde cada posición corresponde a un field, y cada
+		 * 		una de esas posiciones contendrá otro array que seran los documentos donde
+		 * 		el término aparece (para ese campo)
+		 */
+		
 		this.termDocs = new TermDocs[this.fields.length];
+		//AIP Comment: guarda un booleando en el que, para cada campo dice si hay mas documentos o no
 		this.termDocsNext = new boolean[this.fields.length];
 		try {
 			for (int i = 0; i < this.fields.length; i++)
