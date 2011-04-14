@@ -31,23 +31,47 @@ import org.apache.lucene.util.Version;
  */
 public class AIPIndexer {
 
+    //Directorios donde se van a crear los indices
+    public static final String INDEX_DIR_FIXED_DOCS = "H:/programacion/java/Lucene/index/fixed_docs";
+    public static final String INDEX_DIR_WIKI_SHORT = "H:/programacion/java/Lucene/index/wiki_short";
+    public static final String INDEX_DIR_WIKI_MEDIUM = "H:/programacion/java/Lucene/index/wiki_medium";
+    public static final String INDEX_DIR_WIKI_LARGE = "H:/programacion/java/Lucene/index/wiki_large";
+    public static final String INDEX_DIR_WIKIPEDIA = "H:/programacion/java/Lucene/index/wikipedia";
+
+    //Directorios con los documentos que se van a indexar
+    public static final String FILES_WIKI_SHORT = "H:/programacion/java/Lucene/index/wiki_short";
+    public static final String FILES_WIKI_MEDIUM = "H:/programacion/java/Lucene/index/wiki_medium";
+    public static final String FILES_WIKI_LARGE = "H:/programacion/java/Lucene/index/wiki_large";
+    public static final String FILES_WIKIPEDIA = "H:/programacion/java/Lucene/index/wikipedia";
+
+    
+    private IndexWriter writer;
+
     public static void main(String[] args) throws Exception {
-	if (args.length == 0) {
-	    throw new Exception("Usage: java " + AIPIndexer.class.getName()
-		    + " <index dir>");
-	}
-	String indexDir = args[0];
+
+	String indexDir = INDEX_DIR_FIXED_DOCS;
+	
 	AIPIndexer indexer = new AIPIndexer(indexDir);
 
-	String fileToIndex = args[1];
-	int numIndexed = indexer.index01();
-//	indexer.index02();
-//	indexer.completeTest01();
-//	indexer.indexFile(fileToIndex);
+//	Prueba de indexacion para documentos creados en este mismo programa con una estructura muy sencilla
+	int numIndexed = indexer.fixedDocs();
+	
+/*
+ * 	La prueba "completeTest" utiliza RAMDirectory por lo que no necesita ningun directorio,
+ * 		 para crear el indice, tampoco necesita el atributo de clase "writer" donde se
+ * 		escribiran los documentos indexados, es una prueba totalmente "autonoma"
+ */
+//	int numIndexed = indexer.completeTest(); 
+	
+/*
+ * 	Este metodo indexara todos los ficheros que contenga el directorio que se pasa por argumento,
+ * 		se usara para indexar los documentos de la wikipedia
+ */
+//	int numIndexed = indexer.indexFile(fileToIndex);
+	
+	System.out.println("Numero total de ficheros indexados: " + numIndexed);
 	indexer.close();
     }
-
-    private IndexWriter writer;
 
     public AIPIndexer(String indexDir) throws IOException {
 	Directory dir = new SimpleFSDirectory(new File(indexDir));
@@ -63,24 +87,24 @@ public class AIPIndexer {
 	writer.close(); // 4
     }
 
-    public int index01() throws Exception {
-	for (int i = 0; i < 7; i++) {
+    /**
+     * Este metodo indexa documentos creados en este mismo programa de prueba
+     * @return
+     * @throws Exception
+     */
+    public int fixedDocs() throws Exception {
+	for (int i = 0; i < 5; i++) {
 	    addDoc(i);
 	}
-	Document doc = new Document();
-	doc.add(new Field("new","jj",Field.Store.YES,Field.Index.ANALYZED));
-	writer.addDocument(doc);
-	return 0;
+	
+	return writer.numDocs();
     }
 
-    public boolean test(String a){
-	return true;
-    }
     void addDoc(int i) throws Exception {
 	Document doc = new Document();
 	doc.add(new Field("filename", "document_" + i, Field.Store.YES,Field.Index.ANALYZED));
-	doc.add(new Field("content", "aaa bb ss", Field.Store.YES,Field.Index.ANALYZED));
-	doc.add(new Field("content", "aaa cc", Field.Store.YES,Field.Index.ANALYZED));
+	doc.add(new Field("content", "palabra1 palabra2 palabra3", Field.Store.YES,Field.Index.ANALYZED));
+	doc.add(new Field("content", "palabra1 palabra3", Field.Store.YES,Field.Index.ANALYZED));
 	
 	writer.addDocument(doc);
     }
@@ -111,7 +135,7 @@ public class AIPIndexer {
 	return doc;
     }
 
-    private void indexFile(String file) throws Exception {
+    private int indexFile(String file) throws Exception {
 	System.out.println("indexing "+file);
 	File f = new File(file);
 	System.out.println("Indexing " + f.getCanonicalPath());
@@ -119,38 +143,15 @@ public class AIPIndexer {
 	if (doc != null) {
 	    writer.addDocument(doc); // 9
 	}
-    }
-    
-    public void index02() throws Exception{
-	  Document doc = new Document();
-	    String contents = "aa bb cc dd ee ff gg hh ii jj kk";
-	    doc.add(new Field("content", contents, Field.Store.NO,
-	        Field.Index.ANALYZED));
-	    try {
-	      writer.addDocument(doc);
-	    } catch (Exception e) {
-	    }
-
-	    // Make sure we can add another normal document
-	    doc = new Document();
-	    doc.add(new Field("content", "aa bb cc dd", Field.Store.NO,
-	        Field.Index.ANALYZED));
-	    writer.addDocument(doc);
-
-	    // Make sure we can add another normal document
-	    doc = new Document();
-	    doc.add(new Field("content", "aa bb cc dd", Field.Store.NO,
-	        Field.Index.ANALYZED));
-	    writer.addDocument(doc);
-
-	    writer.close();
-//	    IndexReader reader = IndexReader.open(dir);
-//	    final Term t = new Term("content", "aa");
-//	    assertEquals(reader.docFreq(t), 3);
-
+	
+	return writer.numDocs();
     }
 
-    public void completeTest01() throws Exception{
+    /**
+     * Esta prueba no necesita ningun directorio para crear el indice ya que usa "MockRAMDirectory()"
+     * @throws Exception
+     */
+    public void completeTest() throws Exception{
     	    RAMDirectory dir = new MockRAMDirectory();
     	    IndexWriter writer = new IndexWriter(dir, new Analyzer() {
 
