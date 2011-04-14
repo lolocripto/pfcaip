@@ -27,16 +27,16 @@ import java.io.StringReader;
 
 public class TestStandardAnalyzer extends BaseTokenStreamTestCase {
 
-  private Analyzer a = new StandardAnalyzer(org.apache.lucene.util.Version.LUCENE_CURRENT);
+  private Analyzer a = new StandardAnalyzer(org.apache.lucene.util.Version.LUCENE_30);
 
   public void testMaxTermLength() throws Exception {
-    StandardAnalyzer sa = new StandardAnalyzer(org.apache.lucene.util.Version.LUCENE_CURRENT);
+    StandardAnalyzer sa = new StandardAnalyzer(org.apache.lucene.util.Version.LUCENE_30);
     sa.setMaxTokenLength(5);
     assertAnalyzesTo(sa, "ab cd toolong xy z", new String[]{"ab", "cd", "xy", "z"});
   }
 
   public void testMaxTermLength2() throws Exception {
-    StandardAnalyzer sa = new StandardAnalyzer(org.apache.lucene.util.Version.LUCENE_CURRENT);
+    StandardAnalyzer sa = new StandardAnalyzer(org.apache.lucene.util.Version.LUCENE_30);
     assertAnalyzesTo(sa, "ab cd toolong xy z", new String[]{"ab", "cd", "toolong", "xy", "z"});
     sa.setMaxTokenLength(5);
     
@@ -100,7 +100,7 @@ public class TestStandardAnalyzer extends BaseTokenStreamTestCase {
 
   public void testLucene1140() throws Exception {
     try {
-      StandardAnalyzer analyzer = new StandardAnalyzer(org.apache.lucene.util.Version.LUCENE_CURRENT);
+      StandardAnalyzer analyzer = new StandardAnalyzer(org.apache.lucene.util.Version.LUCENE_30);
       assertAnalyzesTo(analyzer, "www.nutch.org.", new String[]{ "www.nutch.org" }, new String[] { "<HOST>" });
     } catch (NullPointerException e) {
       fail("Should not throw an NPE and it did");
@@ -110,7 +110,7 @@ public class TestStandardAnalyzer extends BaseTokenStreamTestCase {
 
   public void testDomainNames() throws Exception {
     // Current lucene should not show the bug
-    StandardAnalyzer a2 = new StandardAnalyzer(org.apache.lucene.util.Version.LUCENE_CURRENT);
+    StandardAnalyzer a2 = new StandardAnalyzer(org.apache.lucene.util.Version.LUCENE_30);
 
     // domain names
     assertAnalyzesTo(a2, "www.nutch.org", new String[]{"www.nutch.org"});
@@ -167,11 +167,6 @@ public class TestStandardAnalyzer extends BaseTokenStreamTestCase {
     // It would be nice to change the grammar in StandardTokenizer.jj to make "C#" and "C++" end up as tokens.
     assertAnalyzesTo(a, "C++", new String[]{"c"});
     assertAnalyzesTo(a, "C#", new String[]{"c"});
-  }
-
-  public void testKorean() throws Exception {
-    // Korean words
-    assertAnalyzesTo(a, "안녕하세요 한글입니다", new String[]{"안녕하세요", "한글입니다"});
   }
 
   // Compliance with the "old" JavaCC-based analyzer, see:

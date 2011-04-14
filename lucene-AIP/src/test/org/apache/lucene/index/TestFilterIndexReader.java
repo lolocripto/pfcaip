@@ -88,7 +88,7 @@ public class TestFilterIndexReader extends LuceneTestCase {
 
   /** Main for running test case by itself. */
   public static void main(String args[]) {
-    TestRunner.run (new TestSuite(TestIndexReader.class));
+//    TestRunner.run (new TestSuite(TestIndexReader.class));
   }
     
   /**

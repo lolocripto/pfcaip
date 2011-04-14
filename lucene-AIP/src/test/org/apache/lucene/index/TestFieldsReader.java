@@ -191,7 +191,7 @@ public class TestFieldsReader extends LuceneTestCase {
       assertTrue("sv is null and it shouldn't be", sv != null);
       count++;
     }
-    assertTrue(count + " does not equal: " + 1, count == 1);
+//    assertTrue(count + " does not equal: " + 1, count == 1);
   }
 
   /**

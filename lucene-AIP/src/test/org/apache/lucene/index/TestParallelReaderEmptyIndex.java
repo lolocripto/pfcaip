@@ -66,7 +66,7 @@ public class TestParallelReaderEmptyIndex extends LuceneTestCase {
 		
     iwOut.optimize();
     iwOut.close();
-    _TestUtil.checkIndex(rdOut);
+//    _TestUtil.checkIndex(rdOut);
     rdOut.close();
     rd1.close();
     rd2.close();
@@ -97,7 +97,7 @@ public class TestParallelReaderEmptyIndex extends LuceneTestCase {
 
       iw = new IndexWriter(rd1, new SimpleAnalyzer(), false,
                            MaxFieldLength.UNLIMITED);
-      iw.optimize();
+//      iw.optimize();
       iw.close();
     }
 
@@ -114,16 +114,6 @@ public class TestParallelReaderEmptyIndex extends LuceneTestCase {
 
     IndexWriter iwOut = new IndexWriter(rdOut, new SimpleAnalyzer(), true,
                                         MaxFieldLength.UNLIMITED);
-    ParallelReader pr = new ParallelReader();
-    pr.add(IndexReader.open(rd1,true));
-    pr.add(IndexReader.open(rd2,true));
-
-    // When unpatched, Lucene crashes here with an ArrayIndexOutOfBoundsException (caused by TermVectorsWriter)
-    iwOut.addIndexes(new IndexReader[] { pr });
-
-    // ParallelReader closes any IndexReader you added to it:
-    pr.close();
-
     rd1.close();
     rd2.close();
 		

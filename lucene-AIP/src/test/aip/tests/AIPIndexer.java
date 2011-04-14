@@ -27,16 +27,17 @@ import org.apache.lucene.util.Version;
 /**
  * This class creates an Index in the dir selected by the argument The documents
  * are created here in the test program
+ * Esta clase nos servirá para realizar pruebas de indexado para pruebas de rendimiento
  */
-public class EasyIndexer {
+public class AIPIndexer {
 
     public static void main(String[] args) throws Exception {
 	if (args.length == 0) {
-	    throw new Exception("Usage: java " + EasyIndexer.class.getName()
+	    throw new Exception("Usage: java " + AIPIndexer.class.getName()
 		    + " <index dir>");
 	}
 	String indexDir = args[0];
-	EasyIndexer indexer = new EasyIndexer(indexDir);
+	AIPIndexer indexer = new AIPIndexer(indexDir);
 
 	String fileToIndex = args[1];
 	int numIndexed = indexer.index01();
@@ -48,7 +49,7 @@ public class EasyIndexer {
 
     private IndexWriter writer;
 
-    public EasyIndexer(String indexDir) throws IOException {
+    public AIPIndexer(String indexDir) throws IOException {
 	Directory dir = new SimpleFSDirectory(new File(indexDir));
     	 
 	writer = new IndexWriter(dir, new StandardAnalyzer(
@@ -169,7 +170,7 @@ public class EasyIndexer {
     	    }, true, IndexWriter.MaxFieldLength.LIMITED);
 
 //    	    IndexWriter writer = new IndexWriter(dir,new StandardAnalyzer(
-//		Version.LUCENE_CURRENT), true,IndexWriter.MaxFieldLength.LIMITED);
+//		Version.LUCENE_30), true,IndexWriter.MaxFieldLength.LIMITED);
 //    	    
     	    Document doc = new Document();
     	    String contents = "aa bb cc dd";

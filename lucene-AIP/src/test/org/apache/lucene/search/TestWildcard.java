@@ -259,7 +259,7 @@ public class TestWildcard
   public void testParsingAndSearching() throws Exception {
     String field = "content";
     boolean dbg = false;
-    QueryParser qp = new QueryParser(Version.LUCENE_CURRENT, field, new WhitespaceAnalyzer());
+    QueryParser qp = new QueryParser(Version.LUCENE_30, field, new WhitespaceAnalyzer());
     qp.setAllowLeadingWildcard(true);
     String docs[] = {
         "\\ abcdefg1",

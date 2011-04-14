@@ -322,7 +322,7 @@ public class TestFuzzyQuery extends LuceneTestCase {
   
   public void testGiga() throws Exception {
 
-    StandardAnalyzer analyzer = new StandardAnalyzer(org.apache.lucene.util.Version.LUCENE_CURRENT);
+    StandardAnalyzer analyzer = new StandardAnalyzer(org.apache.lucene.util.Version.LUCENE_30);
 
     Directory index = new MockRAMDirectory();
     IndexWriter w = new IndexWriter(index, analyzer, true, IndexWriter.MaxFieldLength.UNLIMITED);
@@ -347,7 +347,7 @@ public class TestFuzzyQuery extends LuceneTestCase {
     IndexReader r = w.getReader();
     w.close();
 
-    Query q = new QueryParser(Version.LUCENE_CURRENT, "field", analyzer).parse( "giga~0.9" );
+    Query q = new QueryParser(Version.LUCENE_30, "field", analyzer).parse( "giga~0.9" );
 
     // 3. search
     IndexSearcher searcher = new IndexSearcher(r);
