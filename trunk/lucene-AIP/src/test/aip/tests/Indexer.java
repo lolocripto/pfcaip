@@ -20,8 +20,8 @@ public class Indexer {
 		if (args.length != 2) {
 			throw new Exception("Usage: java " + Indexer.class.getName() + " <index dir> <data dir>");
 		}
-		String indexDir = args[0]; // 1
-		String dataDir = args[1]; // 2
+		String indexDir = args[0]; 
+		String dataDir = args[1]; 
 		long start = System.currentTimeMillis();
 		Indexer indexer = new Indexer(indexDir);
 		
