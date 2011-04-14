@@ -14,17 +14,11 @@ import org.apache.lucene.util.Constants;
  * Los tamaños mostrados estan medidos en numero de terminos
  */
 public class AIPReader {
-    //Directorios donde estan los indices
-    public static final String INDEX_DIR_FIXED_DOCS = "H:/programacion/java/Lucene/index/fixed_docs";
-    public static final String INDEX_DIR_WIKI_SHORT = "H:/programacion/java/Lucene/index/wiki_short";
-    public static final String INDEX_DIR_WIKI_MEDIUM = "H:/programacion/java/Lucene/index/wiki_medium";
-    public static final String INDEX_DIR_WIKI_LARGE = "H:/programacion/java/Lucene/index/wiki_large";
-    public static final String INDEX_DIR_WIKIPEDIA = "H:/programacion/java/Lucene/index/wikipedia";
-
+    
     public static void main(String[] args) throws Exception {
 	
-//	read(INDEX_DIR_FIXED_DOCS);
-	read(INDEX_DIR_WIKI_SHORT);
+//	read(AIPTestUtils.INDEX_DIR_FIXED_DOCS);
+	read(AIPTestUtils.INDEX_DIR_WIKI_SHORT);
     }
 
     public static void read(String indexDir) throws Exception {
