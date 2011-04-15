@@ -16,38 +16,39 @@ import org.ninit.models.bm25.BM25BooleanQuery;
 import org.ninit.models.bm25f.BM25FParameters;
 
 /**
- * This code was originally written for Erik's Lucene intro java.net article
+ * Programa de busquedas para pruebas
  */
 public class Searcher {
 	public static void main(String[] args) throws Exception {
-		if (args.length != 2) {
-			throw new Exception("Usage: java " + Searcher.class.getName() + " <index dir> <query>");
-		}
-		String indexDir = args[0]; // 1
-		String query = "aaa AND ss";
+
+//	    String indexDir = AIPTestUtils.INDEX_DIR_WIKI_SHORT;
+	    String indexDir = AIPTestUtils.INDEX_DIR_FIXED_DOCS;
+	    
+		String query = "palabra1";
 		String field = "content";
 		search(indexDir, field, query);
 		System.out.println("Ahora con BM25 ...");
 		searchBM25(indexDir, field, query);
 	}
+	
 	public static void search(String indexDir, String field, String q) throws Exception {
 		Directory dir = new SimpleFSDirectory(new File(indexDir), null);
-		IndexSearcher is = new IndexSearcher(dir,true); // 3
+		IndexSearcher is = new IndexSearcher(dir,true); 
 		
-		QueryParser parser = new QueryParser(Version.LUCENE_30, field, new StandardAnalyzer(Version.LUCENE_30)); // 4
-		Query query = parser.parse(q); // 4
+		QueryParser parser = new QueryParser(Version.LUCENE_30, field, new StandardAnalyzer(Version.LUCENE_30)); 
+		Query query = parser.parse(q); 
 		
 		long start = System.currentTimeMillis();
-		TopDocs hits = is.search(query, 10); // 5
+		TopDocs hits = is.search(query, 10); 
 		long end = System.currentTimeMillis();
-		System.out.println("Found " + hits.totalHits + // 6
+		System.out.println("Found " + hits.totalHits + 
 				" document(s) (in " + (end - start) + " milliseconds) that matched query '" + q + "':");
 		for (int i = 0; i < hits.scoreDocs.length; i++) {
 			ScoreDoc scoreDoc = hits.scoreDocs[i];
-			Document doc = is.doc(scoreDoc.doc); // 7
-			System.out.println(doc.get("filename") + " score["+scoreDoc.score+"]"); // 8
+			Document doc = is.doc(scoreDoc.doc); 
+			System.out.println(doc.get("filename") + " score["+scoreDoc.score+"]"); 
 		}
-		is.close(); // 9
+		is.close(); 
 	}
 	
 	public static void searchBM25(String indexDir, String field, String q) throws Exception{
@@ -56,16 +57,16 @@ public class Searcher {
 		BM25BooleanQuery query = new BM25BooleanQuery(q, field, new StandardAnalyzer(Version.LUCENE_30));
 		
 		long start = System.currentTimeMillis();
-		TopDocs hits = is.search(query, 10); // 5
+		TopDocs hits = is.search(query, 10); 
 		long end = System.currentTimeMillis();
-		System.out.println("Found " + hits.totalHits + // 6
+		System.out.println("Found " + hits.totalHits + 
 				" document(s) (in " + (end - start) + " milliseconds) that matched query '" + q + "':");
 		for (int i = 0; i < hits.scoreDocs.length; i++) {
 			ScoreDoc scoreDoc = hits.scoreDocs[i];
-			Document doc = is.doc(scoreDoc.doc); // 7
-			System.out.println(doc.get("filename") + " score["+scoreDoc.score+"]"); // 8
+			Document doc = is.doc(scoreDoc.doc); 
+			System.out.println(doc.get("filename") + " score["+scoreDoc.score+"]"); 
 		}
-		is.close(); // 9
+		is.close(); 
 	}
 
 	public static void searchBM25F(String indexDir, String[] fields, String q) throws Exception{
@@ -76,16 +77,16 @@ public class Searcher {
 		BM25BooleanQuery query = new BM25BooleanQuery(q, fields, new StandardAnalyzer(Version.LUCENE_30));
 		
 		long start = System.currentTimeMillis();
-		TopDocs hits = is.search(query, 10); // 5
+		TopDocs hits = is.search(query, 10); 
 		long end = System.currentTimeMillis();
-		System.out.println("Found " + hits.totalHits + // 6
+		System.out.println("Found " + hits.totalHits + 
 				" document(s) (in " + (end - start) + " milliseconds) that matched query '" + q + "':");
 		for (int i = 0; i < hits.scoreDocs.length; i++) {
 			ScoreDoc scoreDoc = hits.scoreDocs[i];
-			Document doc = is.doc(scoreDoc.doc); // 7
-			System.out.println(doc.get("filename") + " score["+scoreDoc.score+"]"); // 8
+			Document doc = is.doc(scoreDoc.doc); 
+			System.out.println(doc.get("filename") + " score["+scoreDoc.score+"]"); 
 		}
-		is.close(); // 9
+		is.close(); 
 	}
 
 }

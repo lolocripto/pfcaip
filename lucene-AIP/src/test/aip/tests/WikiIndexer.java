@@ -11,7 +11,6 @@ import java.util.Set;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-import org.apache.tika.config.TikaConfig;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.AutoDetectParser;
 import org.apache.tika.sax.BodyContentHandler;
@@ -46,6 +45,8 @@ public class WikiIndexer extends Indexer {
 	
 	String indexDir = AIPTestUtils.INDEX_DIR_WIKI_SHORT;
 	String dataDir = AIPTestUtils.FILES_WIKI_SHORT;
+	System.out.println("Directorio con los ficheros a indexar:"+dataDir);
+	System.out.println("Directorio con el contenido del indice:"+indexDir);
 	
 	long start = new Date().getTime();
 	WikiIndexer indexer = new WikiIndexer(indexDir); 

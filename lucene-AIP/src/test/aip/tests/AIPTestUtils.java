@@ -13,10 +13,11 @@ public final class AIPTestUtils {
     public static final String INDEX_DIR_WIKIPEDIA = DIR_BASE + "index/wikipedia";
 
     // Directorios con los documentos que se van a indexar
-    public static final String FILES_WIKI_SHORT = "files/wiki_short";
-    public static final String FILES_WIKI_MEDIUM = "files/wiki_medium";
-    public static final String FILES_WIKI_LARGE = "files/wiki_large";
-    public static final String FILES_WIKIPEDIA = "files/wikipedia";
+    public static final String FILES_WIKI_SHORT = DIR_BASE + "files/wiki_short";
+    public static final String FILES_WIKI_MEDIUM = DIR_BASE + "files/wiki_medium";
+    public static final String FILES_WIKI_LARGE = DIR_BASE + "files/wiki_large";
+    public static final String FILES_WIKIPEDIA = DIR_BASE + "files/wikipedia";
 
-
+    // Documento especifico para indexar
+    public static final String FIXED_DOC = DIR_BASE + "files/wiki_short/Lucene_conceptos.txt";
 }
