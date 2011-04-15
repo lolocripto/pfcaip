@@ -1,6 +1,7 @@
 package aip.tests;
 
 import java.io.File;
+
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -13,7 +14,6 @@ import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.standard.StandardTokenizer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-import org.apache.lucene.document.Field.TermVector;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
@@ -25,9 +25,10 @@ import org.apache.lucene.store.SimpleFSDirectory;
 import org.apache.lucene.util.Version;
 
 /**
- * This class creates an Index in the dir selected by the argument The documents
- * are created here in the test program
- * Esta clase nos servirá para realizar pruebas de indexado para pruebas de rendimiento
+ * Esta clase nos servirá para realizar tres tipos de pruebas de indexado:
+ * 	- Pruebas de documentos creados en este mismo programa con estructura sencilla
+ * 	- Pruebas de indexado del documento que especifiquemos
+ * 	- Prueba 'autonoma' en la que no necesitaremos especificar ningun directorio ni ningun fichero para indexar
  */
 public class AIPIndexer {
 
@@ -39,8 +40,14 @@ public class AIPIndexer {
 	
 	AIPIndexer indexer = new AIPIndexer(indexDir);
 
+	int numIndexed = 0;
+	
 //	Prueba de indexacion para documentos creados en este mismo programa con una estructura muy sencilla
-	int numIndexed = indexer.fixedDocs();
+	numIndexed = indexer.fixedDocs();
+	
+//	Prueba de indexacion de un documento especifico (un doc txt)
+//	numIndexed = indexer.indexFile(AIPTestUtils.FIXED_DOC);
+	
 	
 /*
  * 	La prueba "completeTest" utiliza RAMDirectory por lo que no necesita ningun directorio,
@@ -48,12 +55,6 @@ public class AIPIndexer {
  * 		escribiran los documentos indexados, es una prueba totalmente "autonoma"
  */
 //	int numIndexed = indexer.completeTest(); 
-	
-/*
- * 	Este metodo indexara todos los ficheros que contenga el directorio que se pasa por argumento,
- * 		se usara para indexar los documentos de la wikipedia
- */
-//	int numIndexed = indexer.indexFile(fileToIndex);
 	
 	System.out.println("Numero total de ficheros indexados: " + numIndexed);
 	indexer.close();
@@ -104,13 +105,13 @@ public class AIPIndexer {
      * @return
      * @throws Exception
      */
-    protected Document getDocument(File f,TermVector tv) throws Exception {
+    protected Document getDocument(File f) throws Exception {
 
 	String content = FileUtils.readFileToString(f);
 	System.out.println("content of the file["+content+"]");
 
 	Document doc = new Document();
-	Field f1 = new Field("contents", new FileReader(f), tv);
+	Field f1 = new Field("content", new FileReader(f));
 	System.out.println("f1["+f1+"]");
 	Field f2 = new Field("filename", f.getCanonicalPath(), Field.Store.YES, Field.Index.NOT_ANALYZED);
 //	Field f2 = new Field("contents", f.getCanonicalPath(), Field.Store.YES, Field.Index.NOT_ANALYZED);
@@ -125,7 +126,7 @@ public class AIPIndexer {
 	System.out.println("indexing "+file);
 	File f = new File(file);
 	System.out.println("Indexing " + f.getCanonicalPath());
-	Document doc = getDocument(f, TermVector.YES);
+	Document doc = getDocument(f);
 	if (doc != null) {
 	    writer.addDocument(doc); // 9
 	}
