@@ -71,7 +71,7 @@ public class WikiIndexer extends Indexer {
     protected Document getDocument(File f) throws Exception {
 	Metadata metadata = new Metadata();
 
-	metadata.set(Metadata.RESOURCE_NAME_KEY, f.getCanonicalPath());
+	metadata.set("filename", f.getCanonicalPath());
 	InputStream is = new FileInputStream(f);
 	AutoDetectParser parser = new AutoDetectParser();
 	ContentHandler handler = new BodyContentHandler(-1);

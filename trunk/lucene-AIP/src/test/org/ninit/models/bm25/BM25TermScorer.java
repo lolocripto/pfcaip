@@ -48,7 +48,6 @@ public class BM25TermScorer extends Scorer {
 	private TermDocs termDocs;
 	private float idf;
 	private float av_length;
-//	private byte[] norm;
 	private int[] sizes;
 	private float b;
 	private float k1;
@@ -64,9 +63,7 @@ public class BM25TermScorer extends Scorer {
 		aux1 = reader.docFreq(term.getTerm());
 		aux2 = reader.numDocs();		
 		this.idf = this.getSimilarity().idf(aux1, aux2);
-//		this.norm = this.reader.norms(this.term.getTerm().field());
 		this.sizes = this.reader.sizes(Constants.CATCHALL_FIELD);
-//		this.av_length = BM25Parameters.getAverageLength(this.term.getTerm().field());
 		this.av_length = this.reader.avgDocSize();
 		
 		this.b = BM25Parameters.getB();
@@ -131,20 +128,13 @@ public class BM25TermScorer extends Scorer {
 		if (!result)
 			this.termDocs.close();
 		
-//		return result;
 		return (result? this.docID():NO_MORE_DOCS);
 	}
 
 	@Override
 	public float score() throws IOException {
 		float length = 0f;
-//		float norm = Similarity.decodeNorm(this.norm[this.doc()]);
-//		length = 1 / (norm * norm);
 		length = (float) this.sizes[this.docID()];
-
-		// length = Similarity.decodeNorm(this.norm[this.doc()]);
-
-		// LENGTH NORMALIZATION
 
 		float result = this.b * (length / this.av_length);
 		result = result + 1 - this.b;
@@ -153,24 +143,11 @@ public class BM25TermScorer extends Scorer {
 		// FREQ SATURATION
 		result = result / (result + this.k1);
 
-		return result * this.idf * this.term.getBoost();
+//		return result * this.idf * this.term.getBoost();//AIP: lo multiplicamos otra vez por el boost???
+		return result * this.idf;
 
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.lucene.search.Scorer#skipTo(int)
-	 */
-	/*
-	@Override
-	public boolean skipTo(int target) throws IOException {
-		while (this.next() && this.doc() < target) {
-		}
-
-		return this.doc() == target;
-	}
-	*/
 	 public int advance(int target) throws IOException{
 		while (this.docID() < target) {
 			 this.nextDoc();

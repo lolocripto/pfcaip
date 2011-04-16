@@ -1,25 +1,6 @@
-package org.ninit.models.bm25;
+package org.ninit.models.lmql;
 
-/**
- * BM25BooleanWeight.java
- *
- * Copyright (c) 2008 "Joaquín Pérez-Iglesias"
- *
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+
 
 import java.io.IOException;
 
@@ -28,7 +9,7 @@ import org.apache.lucene.search.Explanation;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.Scorer;
 import org.apache.lucene.search.Weight;
-import org.ninit.models.bm25.BM25BooleanQuery.BooleanTermQuery;
+import org.ninit.models.lmql.LMQLBooleanQuery.BooleanTermQuery;
 
 /**
  * Weight BM25 class, implements <I>public Scorer scorer(IndexReader reader)
@@ -41,7 +22,7 @@ import org.ninit.models.bm25.BM25BooleanQuery.BooleanTermQuery;
  * 
  */
 @SuppressWarnings("serial")
-public class BM25BooleanWeight extends Weight {
+public class LMQLBooleanWeight extends Weight {
 
 	private BooleanTermQuery[] should;
 	private BooleanTermQuery[] must;
@@ -52,7 +33,7 @@ public class BM25BooleanWeight extends Weight {
 	private float[] bParams;
 	private int howMany = 0;
 
-    public BM25BooleanWeight(BooleanTermQuery[] should,
+    public LMQLBooleanWeight(BooleanTermQuery[] should,
 			BooleanTermQuery[] must, BooleanTermQuery[] not) {
 		if (should.length > 0) {
 			this.should = should;
@@ -71,7 +52,7 @@ public class BM25BooleanWeight extends Weight {
 		}
 	}
 
-	public BM25BooleanWeight(BooleanTermQuery[] should,
+	public LMQLBooleanWeight(BooleanTermQuery[] should,
 			BooleanTermQuery[] must, BooleanTermQuery[] not, String fields[],
 			float[] boosts, float[] bParams) {
 		this(should, must, not);
@@ -139,24 +120,7 @@ public class BM25BooleanWeight extends Weight {
 	 */
 //	@Override
 	public Scorer scorer(IndexReader reader) throws IOException {
-		if (howMany > 1) { // BM25BooleaScorer
-			if (this.fields == null)
-				return new BM25BooleanScorer(reader, this.should, this.must,
-						this.not, new BM25Similarity());
-			else
-				return new BM25BooleanScorer(reader, this.should, this.must,
-						this.not, new BM25Similarity(), this.fields,
-						this.boosts, this.bParams);
-		} else {// BM25SingleBooleanScorer
-			if (this.fields == null)
-				return new BM25SingleBooleanScorer(reader, this.unique,
-						new BM25Similarity());
-			else
-				return new BM25SingleBooleanScorer(reader, this.unique,
-						new BM25Similarity(), this.fields, this.boosts,
-						this.bParams);
-		}
-
+		return new LMQLSingleBooleanScorer(reader, this.unique,	new LMQLSimilarity());
 	}
 
 	/**
