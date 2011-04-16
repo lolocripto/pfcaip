@@ -91,7 +91,7 @@ public class MustBooleanScorer extends AbstractBooleanScorer {
 	}
 
 	/*
-	 * (non-Javadoc)
+	 * Se trata de avanzar a la vez para que esten alineados
 	 * 
 	 * @see org.apache.lucene.search.Scorer#next()
 	 */

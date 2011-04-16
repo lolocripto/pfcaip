@@ -1,6 +1,8 @@
-package org.ninit.models.bm25;
+package org.ninit.models.lmql;
 
 import java.io.IOException;
+
+
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -21,7 +23,6 @@ import org.apache.lucene.search.Searcher;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.Weight;
 import org.apache.lucene.util.Version;
-import org.ninit.models.bm25f.BM25FParameters;
 import org.ninit.models.bool.AbstractBooleanScorer;
 
 /**
@@ -31,7 +32,7 @@ import org.ninit.models.bool.AbstractBooleanScorer;
  *
  */
 @SuppressWarnings("serial")
-public class BM25BooleanQuery extends Query {
+public class LMQLBooleanQuery extends Query {
 
     private List<BooleanTermQuery> mustBoolTermQueries = new ArrayList<BooleanTermQuery>();
     private List<BooleanTermQuery> shouldBoolTermQueries = new ArrayList<BooleanTermQuery>();
@@ -41,7 +42,7 @@ public class BM25BooleanQuery extends Query {
     private float[] bParams;
 
     @SuppressWarnings("unchecked")
-    public BM25BooleanQuery(String query, String field, Analyzer analyzer)
+    public LMQLBooleanQuery(String query, String field, Analyzer analyzer)
 	    throws ParseException, IOException {
 	QueryParser qp = new QueryParser(Version.LUCENE_30, field, analyzer);
 	Query q = qp.parse(query);
@@ -60,7 +61,7 @@ public class BM25BooleanQuery extends Query {
 	}
     }
 
-    public BM25BooleanQuery(String query, String[] fields, Analyzer analyzer,
+    public LMQLBooleanQuery(String query, String[] fields, Analyzer analyzer,
 	    AbstractBooleanScorer.searchModel model) throws ParseException,
 	    IOException {
 	this(query, "ALL_FIELDS", analyzer);
@@ -74,7 +75,7 @@ public class BM25BooleanQuery extends Query {
 
     }
 
-    public BM25BooleanQuery(String query, String[] fields, Analyzer analyzer)
+    public LMQLBooleanQuery(String query, String[] fields, Analyzer analyzer)
 	    throws ParseException, IOException {
 	this(query, "ALL_FIELDS", analyzer);
 	this.fields = fields;
@@ -87,26 +88,17 @@ public class BM25BooleanQuery extends Query {
     public Weight weight(Searcher searcher) throws IOException {
 
 	if (this.fields == null)
-	    return new BM25BooleanWeight(
-		    this.shouldBoolTermQueries.toArray(new BooleanTermQuery[this.shouldBoolTermQueries
-			    .size()]),
-		    this.mustBoolTermQueries
-			    .toArray(new BooleanTermQuery[this.mustBoolTermQueries
-				    .size()]),
-		    this.notBoolTermQueries
-			    .toArray(new BooleanTermQuery[this.notBoolTermQueries
-				    .size()]));
+	    return new LMQLBooleanWeight(
+		    this.shouldBoolTermQueries.toArray(new BooleanTermQuery[this.shouldBoolTermQueries.size()]),
+		    this.mustBoolTermQueries.toArray(new BooleanTermQuery[this.mustBoolTermQueries.size()]),
+		    this.notBoolTermQueries.toArray(new BooleanTermQuery[this.notBoolTermQueries.size()])
+		    );
 	else
-	    return new BM25BooleanWeight(
-		    this.shouldBoolTermQueries.toArray(new BooleanTermQuery[this.shouldBoolTermQueries
-			    .size()]),
-		    this.mustBoolTermQueries
-			    .toArray(new BooleanTermQuery[this.mustBoolTermQueries
-				    .size()]),
-		    this.notBoolTermQueries
-			    .toArray(new BooleanTermQuery[this.notBoolTermQueries
-				    .size()]), this.fields, this.boosts,
-		    this.bParams);
+	    return new LMQLBooleanWeight(
+		    this.shouldBoolTermQueries.toArray(new BooleanTermQuery[this.shouldBoolTermQueries.size()]),
+		    this.mustBoolTermQueries.toArray(new BooleanTermQuery[this.mustBoolTermQueries.size()]),
+		    this.notBoolTermQueries.toArray(new BooleanTermQuery[this.notBoolTermQueries.size()]), 
+		    this.fields, this.boosts,this.bParams);
     }
 
     private void addClause(BooleanTermQuery boolTerm) {
@@ -185,7 +177,7 @@ public class BM25BooleanQuery extends Query {
 
     public static void main(String args[]) throws ParseException,
 	    CorruptIndexException, IOException {
-	BM25BooleanQuery q = new BM25BooleanQuery(
+	LMQLBooleanQuery q = new LMQLBooleanQuery(
 		"(+product +faroe +islands +exported)", "CONTENT",
 		new StandardAnalyzer(Version.LUCENE_30));
 	System.out.println(q);
