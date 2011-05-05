@@ -87,17 +87,17 @@ public class WikiIndexer extends Indexer {
 	    System.out.println(" texto: " + handler.toString());
 	}
 	
-	for (String name : metadata.names()) {
-	    String value = metadata.get(name);
-	    if (textualMetadataFields.contains(name)) {
-		doc.add(new Field("content", value, 
-			Field.Store.NO, Field.Index.ANALYZED));
-	    }
-	    doc.add(new Field(name, value, Field.Store.YES, Field.Index.NO));
-	    if (DEBUG) {
-		System.out.println(" " + name + ": " + value);
-	    }
-	}
+//	for (String name : metadata.names()) {
+//	    String value = metadata.get(name);
+//	    if (textualMetadataFields.contains(name)) {
+//		doc.add(new Field("content", value, 
+//			Field.Store.NO, Field.Index.ANALYZED));
+//	    }
+//	    doc.add(new Field(name, value, Field.Store.YES, Field.Index.NO));
+//	    if (DEBUG) {
+//		System.out.println(" " + name + ": " + value);
+//	    }
+//	}
 	if (DEBUG) {
 	    System.out.println();
 	}
