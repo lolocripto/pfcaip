@@ -27,7 +27,7 @@ public class Searcher {
 	String indexDir = AIPTestUtils.INDEX_DIR_WIKI_SHORT;
 	// String indexDir = AIPTestUtils.INDEX_DIR_FIXED_DOCS;
 
-	String query = "anteriormente OR asdfcomputadoras";
+	String query = "+anteriormente ";
 	String field = "content";
 	System.out.println("Busqueda con el modelo de Lucene ...");
 	search(indexDir, field, query);
