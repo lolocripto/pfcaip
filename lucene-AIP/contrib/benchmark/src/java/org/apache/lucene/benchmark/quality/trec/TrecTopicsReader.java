@@ -117,9 +117,16 @@ public class TrecTopicsReader {
     String sep = "";
     while (true) {
       String line = reader.readLine();
+
       if (line==null) {
-        return null;
+          return null;
+        }
+      
+      //AIP modification: hay veces que viene un EOL justo despues del tag a leer (prefix)
+      if (prefix.equals("<title>") && line.equalsIgnoreCase(prefix)){
+    	  line += reader.readLine();
       }
+      
       if (line.startsWith(prefix)) {
         if (collectMatchLine) {
           sb.append(sep+line);
