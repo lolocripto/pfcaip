@@ -614,7 +614,7 @@ class DirectoryReader extends IndexReader implements Cloneable {
     return bytes;
   }
   
-  //AIP change code (DL) TODO si fuese necesario meterlo en la cache del mismo modo que esta los norms en "normsCache"
+  //AIP change code (DL)
   @Override
   public synchronized int[] sizes(String field) throws IOException{
       ensureOpen();
