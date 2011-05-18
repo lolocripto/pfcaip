@@ -19,6 +19,7 @@ package org.apache.lucene.index;
 
 import org.apache.lucene.util.UnicodeUtil;
 
+
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
