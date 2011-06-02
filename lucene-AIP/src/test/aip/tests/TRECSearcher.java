@@ -28,7 +28,7 @@ import org.ninit.models.lmql.LMQLBooleanQuery;
  */
 public class TRECSearcher {
 
-	private boolean DEBUG = true;
+	private boolean DEBUG = false;
 
 	enum searchType {
 		STANDARD, BM25, LMQL, LMKCD
@@ -36,7 +36,7 @@ public class TRECSearcher {
 
 	public static void main(String[] args) throws Exception {
 
-		String indexDir = AIPTestUtils.INDEX_DIR_TREC_VERYSHORT;
+		String indexDir = AIPTestUtils.INDEX_DIR_TREC;
 
 		TRECSearcher searcher = new TRECSearcher();
 
@@ -44,7 +44,7 @@ public class TRECSearcher {
 	}
 
 	public void search(String indexDir) throws Exception {
-		BufferedReader in = new BufferedReader(new FileReader(AIPTestUtils.SEARCH_CONTENT_FILE_SHORT));
+		BufferedReader in = new BufferedReader(new FileReader(AIPTestUtils.SEARCH_CONTENT_FILE));
 		TrecTopicsReader trecTopics = new TrecTopicsReader();
 		QualityQuery[] qQueries = trecTopics.readQueries(in);
 		QualityQuery qQuery;
@@ -54,20 +54,20 @@ public class TRECSearcher {
 
 //		File fResult = new File(AIPTestUtils.SEARCH_RESULT_FILE);
 //		String head = "(num consulta)  (id Lucene)       (DOCNO)      (Posición ranking) (Score)  (Una etiqueta)";
-		String head = AIPTestUtils.fitString("(num consulta)", 17) + 
-						  AIPTestUtils.fitString("(id Lucene)", 15) + 
-						  AIPTestUtils.fitString("(DOCNO)", 15) + 
-						  AIPTestUtils.fitString("(Posición ranking)", 19) + 
-						  AIPTestUtils.fitString("(Score)", 15) + 
-						  AIPTestUtils.fitString("(Una etiqueta)", 15);
+//		String head = AIPTestUtils.fitString("(num consulta)", 17) + 
+//						  AIPTestUtils.fitString("(id Lucene)", 15) + 
+//						  AIPTestUtils.fitString("(DOCNO)", 15) + 
+//						  AIPTestUtils.fitString("(Posición ranking)", 19) + 
+//						  AIPTestUtils.fitString("(Score)", 15) + 
+//						  AIPTestUtils.fitString("(Una etiqueta)", 15);
 		ArrayList<String> linesResult_standard = new ArrayList<String>();
-		linesResult_standard.add(head);
+//		linesResult_standard.add(head);
 		ArrayList<String> linesResult_bm25 = new ArrayList<String>();
-		linesResult_bm25.add(head);
+//		linesResult_bm25.add(head);
 		ArrayList<String> linesResult_lmql = new ArrayList<String>();
-		linesResult_lmql.add(head);
+//		linesResult_lmql.add(head);
 		ArrayList<String> linesResult_lmkcd = new ArrayList<String>();
-		linesResult_lmkcd.add(head);
+//		linesResult_lmkcd.add(head);
 
 		String textSearch;
 		String finalText;
@@ -78,8 +78,8 @@ public class TRECSearcher {
 			if (!textSearch.isEmpty()) {
 				debug("IDQuery[" + qQuery.getQueryID() + "] title[" + textSearch + "]");
 
-				procesSearch(is, field, qQuery, finalText, searchType.STANDARD, linesResult_standard);
-				procesSearch(is, field, qQuery, finalText, searchType.BM25, linesResult_bm25);
+//				procesSearch(is, field, qQuery, finalText, searchType.STANDARD, linesResult_standard);
+//				procesSearch(is, field, qQuery, finalText, searchType.BM25, linesResult_bm25);
 				procesSearch(is, field, qQuery, finalText, searchType.LMQL, linesResult_lmql);
 				procesSearch(is, field, qQuery, finalText, searchType.LMKCD, linesResult_lmkcd);
 			}
@@ -118,7 +118,7 @@ public class TRECSearcher {
 			debug("Busqueda LMQL");
 			LMQLBooleanQuery queryLMQL = new LMQLBooleanQuery(queryText, field, new StandardAnalyzer(Version.LUCENE_30, stopWordList));
 			hits = is.search(queryLMQL, 1000);
-			model = "LMQL_lambda_.5f";
+			model = "LMQL_lambda_.9f";
 			break;
 
 		case LMKCD:
@@ -137,7 +137,7 @@ public class TRECSearcher {
 		File fResult = new File(fileName);
 
 		String formattedLine;
-		System.out.println("Found " + hits.totalHits + " document(s) (in " + (end - start) + " milliseconds) that matched query '" + queryText + "':");
+		System.out.println("Model[" + model + "] Found " + hits.totalHits + " document(s) that matched query '" + queryText + "':");
 		for (int i = 0; i < hits.scoreDocs.length; i++) {
 			ScoreDoc scoreDoc = hits.scoreDocs[i];
 			Document doc = is.doc(scoreDoc.doc);
@@ -162,13 +162,17 @@ public class TRECSearcher {
 	private String convertToSearcheable(String text) {
 		String[] tokens = text.split("\\s");
 		String result = "";
+		//AIP este codigo cambia la query para generar un "AND" con los terminos
 //		for (int i = 0; i < tokens.length; i++) {
 //			result += "+" + tokens[i] + " ";
 //		}
+//		return result;
+		
 		if (tokens.length == 1)
 			return "+" + text;
 		else
 			return text;
+		
 	}
 
 	private void debug(String text) {
