@@ -26,7 +26,7 @@ import org.apache.lucene.util.Version;
  */
 public class TRECIndexer {
 
-	private boolean DEBUG = false;
+	private boolean DEBUG = true;
 	private static final int FACTOR = Integer.MAX_VALUE;
 
 	private enum fileType {
@@ -37,8 +37,8 @@ public class TRECIndexer {
 
 		TRECIndexer indexer = new TRECIndexer();
 
-		String indexDir = AIPTestUtils.INDEX_DIR_TREC_VERYSHORT;
-		String dataDir = AIPTestUtils.FILES_TREC_VERYSHORT;
+		String indexDir = AIPTestUtils.INDEX_DIR_TREC_SHORT;
+		String dataDir = AIPTestUtils.FILES_TREC_SHORT;
 		indexer.debug("Directorio con los ficheros a indexar:" + dataDir);
 		indexer.debug("Directorio con el contenido del indice:" + indexDir);
 

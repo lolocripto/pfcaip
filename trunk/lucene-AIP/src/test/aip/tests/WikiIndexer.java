@@ -43,8 +43,11 @@ public class WikiIndexer extends Indexer {
 
 //	TikaConfig config = TikaConfig.getDefaultConfig();
 	
-	String indexDir = AIPTestUtils.INDEX_DIR_WIKI_SHORT;
-	String dataDir = AIPTestUtils.FILES_WIKI_SHORT;
+    String indexDir = AIPTestUtils.INDEX_DIR_WIKI_LARGE;  //Ruta destino del indice para la wiki completa
+//	String indexDir = AIPTestUtils.INDEX_DIR_WIKI_SHORT; //Ruta destino del indice para la wiki reducida
+	
+	String dataDir = AIPTestUtils.FILES_WIKI_LARGE; // Ruta donde se encuentran los ficheros de la wiki completa
+//	String dataDir = AIPTestUtils.FILES_WIKI_SHORT;// Ruta donde se encuentran los ficheros de la wiki reducida
 	System.out.println("Directorio con los ficheros a indexar:"+dataDir);
 	System.out.println("Directorio con el contenido del indice:"+indexDir);
 	
