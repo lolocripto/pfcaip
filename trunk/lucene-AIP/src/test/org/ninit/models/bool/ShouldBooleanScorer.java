@@ -14,10 +14,11 @@ import org.apache.lucene.search.Similarity;
  */
 public class ShouldBooleanScorer extends AbstractBooleanScorer {
 
+	private static final boolean DEBUG = false;
 	public static final int NO_MORE_DOCS = Integer.MAX_VALUE;
 
 	private boolean initializated = false;
-	private int doc = -1;
+	private int doc = NO_MORE_DOCS;
 
 	public ShouldBooleanScorer(Similarity similarity, Scorer[] scorer)
 			throws IOException {
@@ -81,6 +82,8 @@ public class ShouldBooleanScorer extends AbstractBooleanScorer {
 
 		this.doc = min;
 		
+		debug("nextDoc() --> this.doc="+this.doc);
+		
 		return (this.doc == NO_MORE_DOCS)? NO_MORE_DOCS : this.doc;
 	}
 
@@ -116,9 +119,9 @@ public class ShouldBooleanScorer extends AbstractBooleanScorer {
 	private int init() throws IOException {
 		int result = NO_MORE_DOCS;
 		for (int i = 0; i < this.subScorer.length; i++) {
-		    	int aux = this.subScorer[i].nextDoc();
+		    int aux = this.subScorer[i].nextDoc();
 			this.subScorerNext[i] = (aux != NO_MORE_DOCS);
-			if (this.subScorerNext[i] && this.subScorer[i].docID() > this.doc) {
+			if (this.subScorerNext[i] && this.subScorer[i].docID() < this.doc) {
 				this.doc = this.subScorer[i].docID();
 				result = this.docID();
 			}
@@ -126,4 +129,24 @@ public class ShouldBooleanScorer extends AbstractBooleanScorer {
 		return result;
 	}
 
+	/** 
+	 * Init original
+	private boolean init() throws IOException {
+		boolean result = false;
+		for (int i = 0; i < this.subScorer.length; i++) {
+			this.subScorerNext[i] = this.subScorer[i].next();
+			if (this.subScorerNext[i] && this.subScorer[i].doc() < this.doc) {
+				this.doc = this.subScorer[i].doc();
+				result = true;
+			}
+		}
+		return result;
+	}
+	 */
+	
+	
+	private void debug(String text){
+		if (this.DEBUG)
+			System.out.println("[ShouldBooleanScorer]["+text+"]");
+	}
 }

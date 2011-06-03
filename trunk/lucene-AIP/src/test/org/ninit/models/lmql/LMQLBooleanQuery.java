@@ -48,6 +48,7 @@ public class LMQLBooleanQuery extends Query {
 	Query q = qp.parse(query);
 
 	List<BooleanClause> clauses = ((BooleanQuery) q).clauses();
+	// Para cada termino de la query
 	for (int i = 0; i < clauses.size(); i++) {
 	    Set<Term> terms = new HashSet<Term>();
 	    clauses.get(i).getQuery().extractTerms(terms);

@@ -1,29 +1,10 @@
 package org.ninit.models.lmql;
 
 /**
- * BM25TermScorer.java
- *
- * Copyright (c) 2008 "Joaquín Pérez-Iglesias"
- *
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * @author Antonio Iglesias Parma
  */
 
 import java.io.IOException;
-
-
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.TermDocs;
 import org.apache.lucene.search.Scorer;
@@ -31,35 +12,23 @@ import org.apache.lucene.search.Similarity;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.util.Constants;
 
-/**
- * Calculate the relevance value of a single term applying BM25 function
- * ranking. The {@link LMQLParameters} k1, and b are used.<BR>
- * 
- * @author "Joaquin Perez-Iglesias"
- * @see LMQLParameters
- * 
- */
 public class LMQLTermScorer extends Scorer {
 
+	private static final boolean DEBUG = false;
 	public static final int NO_MORE_DOCS = Integer.MAX_VALUE;
 	
 	private TermQuery term;
 	private IndexReader reader;
 	private TermDocs termDocs;
 	private int[] sizes;
-	private float lambda = .5f;
+	private float lambda = .9f;
 	private long docSizes; //tama�o total de la coleccion
-	
-	int aux1;
-	int aux2;
 
 	public LMQLTermScorer(IndexReader reader, TermQuery term, Similarity similarity)
 			throws IOException {
 		super(similarity);
 		this.reader = reader;
 		this.term = term;
-		aux1 = reader.docFreq(term.getTerm());
-		aux2 = reader.numDocs();		
 		this.sizes = this.reader.sizes(Constants.CATCHALL_FIELD);
 		this.termDocs = this.reader.termDocs(this.term.getTerm());
 		docSizes = reader.docSizes();
@@ -72,12 +41,13 @@ public class LMQLTermScorer extends Scorer {
 
 	@Override
 	public int nextDoc() throws IOException {
-
 		boolean result = this.termDocs.next();
 		if (!result)
 			this.termDocs.close();
 		
-		return (result? this.docID():NO_MORE_DOCS);
+		int next = result? this.docID():NO_MORE_DOCS;
+//		debug("nextDoc(): " + next);
+		return next;
 	}
 
 	/**
@@ -85,18 +55,22 @@ public class LMQLTermScorer extends Scorer {
 	 */
 	@Override
 	public float score() throws IOException {
-	    
-		float length = this.sizes[this.docID()];
-		float result = this.termDocs.freq();
-		result = result / length;
+	    int docID = this.docID();
+		float length = this.sizes[docID];
+		float freq = this.termDocs.freq();
+		float colDocFreq = this.reader.colDocFreq(this.term.getTerm());
 		
-		result = result * this.lambda;
+		debug("LMQL Score() DATA --------> docID["+docID+"] docName[" + this.reader.document(docID).get("docNo") + 
+				"]  L(D)[" + length + "] term[" + this.term.getTerm().text() + "] freq(t,C)[" +
+				colDocFreq + "] freq(t,d)["+freq+"] lambda["+this.lambda+"]  L(C)["+docSizes+"]"); 
+		
+		float part1 = this.lambda * (freq / length);
 
-		float aux = this.reader.colDocFreq(this.term.getTerm());
-		aux = aux / docSizes;
-		aux = aux * (1 - this.lambda);
+		float part2 = (1 - this.lambda) * (colDocFreq / docSizes);
 
-		result = result + aux;
+		float result = part1 + part2;
+		
+		debug("             COMPUTE -----> lambda * (freq(t,d) / L(D))=["+part1+"] + (1-lambda) * (freq(t,C) / L(C))=["+part2+"] = [" + result + "]");
 		return result;
 	}
 
@@ -106,5 +80,10 @@ public class LMQLTermScorer extends Scorer {
 		}
 
 			return this.docID();
+	 }
+	 
+	 private void debug(String text){
+		 if (this.DEBUG)
+			 System.out.println("[LMQLTermScorer]["+text+"]");
 	 }
 }

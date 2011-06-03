@@ -52,9 +52,8 @@ public class BM25BooleanQuery extends Query {
 	    clauses.get(i).getQuery().extractTerms(terms);
 	    Iterator<Term> iter = terms.iterator();
 	    while (iter.hasNext()) {
-		BooleanTermQuery boolTerm = new BooleanTermQuery(new TermQuery(
-			new Term(field, iter.next().text())), clauses.get(i)
-			.getQuery().getBoost(), clauses.get(i).getOccur());
+		BooleanTermQuery boolTerm = new BooleanTermQuery(new TermQuery(new Term(field, iter.next().text())), 
+														clauses.get(i).getQuery().getBoost(), clauses.get(i).getOccur());
 		this.addClause(boolTerm);
 	    }
 	}
