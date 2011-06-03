@@ -129,7 +129,6 @@ public class LMQLBooleanWeight extends Weight {
 	 */
 	public Scorer scorer(IndexReader reader, boolean scoreDocsInOrder,
 		      boolean topScorer) throws IOException{
-	    
 	    return scorer(reader);
 	}
 	
@@ -140,6 +139,8 @@ public class LMQLBooleanWeight extends Weight {
 	 */
 	@Override
 	public float sumOfSquaredWeights() throws IOException {
+		
+		System.out.println("-----------------> sumOfSquareWeights()");
 		return 0;
 	}
 

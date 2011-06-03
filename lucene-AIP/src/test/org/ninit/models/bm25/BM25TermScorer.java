@@ -35,7 +35,7 @@ import org.apache.lucene.util.Constants;
  * Calculate the relevance value of a single term applying BM25 function
  * ranking. The {@link BM25Parameters} k1, and b are used.<BR>
  * 
- * @author "Joaquin Perez-Iglesias"
+ * @author "Antonio Iglesias Parma"
  * @see BM25Parameters
  * 
  */
@@ -43,6 +43,8 @@ public class BM25TermScorer extends Scorer {
 
 	public static final int NO_MORE_DOCS = Integer.MAX_VALUE;
 	
+	private static final boolean DEBUG = false;
+
 	private TermQuery term;
 	private IndexReader reader;
 	private TermDocs termDocs;
@@ -51,21 +53,26 @@ public class BM25TermScorer extends Scorer {
 	private int[] sizes;
 	private float b;
 	private float k1;
-	
+
 	int aux1;
 	int aux2;
 
-	public BM25TermScorer(IndexReader reader, TermQuery term, Similarity similarity)
-			throws IOException {
+	/**
+	 * Inicialización de las variables que serán usadas en la fórmula del modelo:
+	 * 		- idf
+	 * 		- tamaño del documento
+	 * 		- tamaño medio de la colección
+	 */
+	public BM25TermScorer(IndexReader reader, TermQuery term, Similarity similarity) throws IOException {
 		super(similarity);
 		this.reader = reader;
 		this.term = term;
 		aux1 = reader.docFreq(term.getTerm());
-		aux2 = reader.numDocs();		
+		aux2 = reader.numDocs();
 		this.idf = this.getSimilarity().idf(aux1, aux2);
 		this.sizes = this.reader.sizes(Constants.CATCHALL_FIELD);
 		this.av_length = this.reader.avgDocSize();
-		
+
 		this.b = BM25Parameters.getB();
 		this.k1 = BM25Parameters.getK1();
 		this.termDocs = this.reader.termDocs(this.term.getTerm());
@@ -81,7 +88,7 @@ public class BM25TermScorer extends Scorer {
 	 * 
 	 * @see org.apache.lucene.search.Scorer#explain(int)
 	 */
-//	@Override
+	// @Override
 	public Explanation explain(int doc) throws IOException {
 		// Init termDocs
 		if (this.termDocs != null)
@@ -96,8 +103,7 @@ public class BM25TermScorer extends Scorer {
 		byte[] norm = this.reader.norms(this.term.getTerm().field());
 
 		float av_length = BM25Parameters.getAverageLength(this.term.getTerm().field());
-		length = 1 / ((Similarity.decodeNorm(norm[this.docID()])) * (Similarity.decodeNorm(norm[this
-				.docID()])));
+		length = 1 / ((Similarity.decodeNorm(norm[this.docID()])) * (Similarity.decodeNorm(norm[this.docID()])));
 
 		float tf = this.termDocs.freq();
 
@@ -107,32 +113,36 @@ public class BM25TermScorer extends Scorer {
 		// FREQ SATURATION
 		result = result / (result + BM25Parameters.getK1());
 
-		Explanation idfE = new Explanation(this.idf, " idf (docFreq:"
-				+ this.reader.docFreq(this.term.getTerm()) + ",numDocs:" + this.reader.numDocs()
-				+ ")");
-		Explanation bE = new Explanation(result, "B:" + BM25Parameters.getB() + ",Length:" + length
-				+ ",AvgLength:" + av_length + ",Freq:" + tf + ",K1:" + BM25Parameters.getK1());
+		Explanation idfE = new Explanation(this.idf, " idf (docFreq:" + this.reader.docFreq(this.term.getTerm()) + ",numDocs:" + this.reader.numDocs() + ")");
+		Explanation bE = new Explanation(result, "B:" + BM25Parameters.getB() + ",Length:" + length + ",AvgLength:" + av_length + ",Freq:" + tf + ",K1:" + BM25Parameters.getK1());
 
-		Explanation resultE = new Explanation(this.idf * result, "BM25("
-				+ this.term.getTerm().field() + ":" + this.term.getTerm().text());
+		Explanation resultE = new Explanation(this.idf * result, "BM25(" + this.term.getTerm().field() + ":" + this.term.getTerm().text());
 		resultE.addDetail(idfE);
 		resultE.addDetail(bE);
 
 		return resultE;
 	}
-	
+
+	/**
+	 * El propio motor de Lucene va llamando iterativamente a este método para 
+	 * 		obtener el ID del siguiente documento 
+	 */
 	@Override
 	public int nextDoc() throws IOException {
 
 		boolean result = this.termDocs.next();
 		if (!result)
 			this.termDocs.close();
-		
-		return (result? this.docID():NO_MORE_DOCS);
+
+		return (result ? this.docID() : NO_MORE_DOCS);
 	}
 
+	/**
+	 * Aquí es donde realmente implementamos la fórmula asociada al modelo BM25
+	 */
 	@Override
 	public float score() throws IOException {
+
 		float length = 0f;
 		length = (float) this.sizes[this.docID()];
 
@@ -143,16 +153,25 @@ public class BM25TermScorer extends Scorer {
 		// FREQ SATURATION
 		result = result / (result + this.k1);
 
-//		return result * this.idf * this.term.getBoost();//AIP: lo multiplicamos otra vez por el boost???
+		// return result * this.idf * this.term.getBoost();//AIP: lo
+		// multiplicamos otra vez por el boost???
+
+		debug("BM25 score() --> doc["+this.reader.document(this.docID()).get("docNo")+"] size["+length+"] av_length["+this.av_length+"] freq["+this.termDocs.freq()+"]");
 		return result * this.idf;
 
 	}
 
-	 public int advance(int target) throws IOException{
+	public int advance(int target) throws IOException {
 		while (this.docID() < target) {
-			 this.nextDoc();
+			this.nextDoc();
 		}
+		return this.docID();
+	}
+	
+	private void debug(String text){
+		if (DEBUG){
+			System.out.println("[Debug]["+text+"]");
+		}
+	}
 
-			return this.docID();
-	 }
 }

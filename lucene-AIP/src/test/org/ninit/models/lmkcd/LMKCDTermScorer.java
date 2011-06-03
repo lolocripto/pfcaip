@@ -1,63 +1,46 @@
 package org.ninit.models.lmkcd;
 
 /**
- * BM25TermScorer.java
- *
- * Copyright (c) 2008 "JoaquÃ­n PÃ©rez-Iglesias"
- *
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * @author Antonio Iglesias Parma
  */
 
 import java.io.IOException;
-
-
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.TermDocs;
 import org.apache.lucene.search.Scorer;
 import org.apache.lucene.search.Similarity;
 import org.apache.lucene.search.TermQuery;
-import org.apache.lucene.util.Constants;
 
 public class LMKCDTermScorer extends Scorer {
 
 	public static final int NO_MORE_DOCS = Integer.MAX_VALUE;
+	private static final boolean DEBUG = false;
 	
 	private TermQuery term;
 	private IndexReader reader;
 	private TermDocs termDocs;
-	private int[] sizes;
-	private long docSizes; //tamaño total de la coleccion
-	private int freqTermQuery;
-	private int queryLength;
-	int aux1;
-	int aux2;
+	private long docSizes;     //tamaño total de la coleccion
+	private int freqTermQuery; //frecuencia del termino en la consulta
+	private int queryLength;   //tamaño de la consulta
+	float colDocFreq;
 
+	/**
+	 * Inicialización de las variables que serán usadas en la fórmula del modelo:
+	 * 		- tamaño de la colección
+	 * 		- tamaño de la consulta
+	 * 		- frecuencia del termino en la consulta
+	 */
 	public LMKCDTermScorer(IndexReader reader, TermQuery term, Similarity similarity,
 		int freqTermQuery, int queryLength)
 			throws IOException {
 		super(similarity);
 		this.reader = reader;
 		this.term = term;
-		aux1 = reader.docFreq(term.getTerm());
-		aux2 = reader.numDocs();		
-		this.sizes = this.reader.sizes(Constants.CATCHALL_FIELD);
 		this.termDocs = this.reader.termDocs(this.term.getTerm());
 		docSizes = reader.docSizes();
 		this.freqTermQuery = freqTermQuery;
 		this.queryLength = queryLength;
+		this.colDocFreq = this.reader.colDocFreq(this.term.getTerm());
 	}
 
 	@Override
@@ -65,6 +48,10 @@ public class LMKCDTermScorer extends Scorer {
 		return this.termDocs.doc();
 	}
 
+	/**
+	 * El propio motor de Lucene va llamando iterativamente a este método para 
+	 * 		obtener el ID del siguiente documento 
+	 */
 	@Override
 	public int nextDoc() throws IOException {
 
@@ -80,17 +67,30 @@ public class LMKCDTermScorer extends Scorer {
 	 */
 	@Override
 	public float score() throws IOException {
-	    float a = (float) this.freqTermQuery / this.queryLength;
-	    float b = this.reader.colDocFreq(this.term.getTerm());
-	    b = (float) b / this.docSizes;
+
+	    String docName = this.reader.document(this.docID()).get("docNo");
+		debug("LMKCD Score() DATA -----------> docName[" + docName + 
+				"] term[" + this.term.getTerm().text() + "] frec(t,Q)[" + this.freqTermQuery + 
+				"] L(Q)[" + this.queryLength +  "] freq(t,C)[" + this.colDocFreq 
+				+ "] L(C)["+docSizes+"]"); 
+
+		
+		float a = (float) this.freqTermQuery / this.queryLength;
+	    float b = (float) this.colDocFreq / this.docSizes;
 	    
 	    if (b==0) return 0f; //AIP si no controlamos este error daria infinito
 	    
+	
 	    double result = a / b;
-	    result = Math.log(result);
+//	    System.out.println("a/b="+result);
+	    result = Math.log10(result);
+//	    System.out.println("log(a/b)["+result+"]");
 	    result = result * a;
+//	    System.out.println("*a="+result);
 	    result = result * -1;
-	    
+//	    System.out.println("*-1="+result);
+
+	    debug("              COMPUTE --------> a=["+a+"] b=["+b+"] -a*log(a/b)[" + result+"]");
 	    return (float) result;
 	}
 
@@ -100,5 +100,10 @@ public class LMKCDTermScorer extends Scorer {
 		}
 
 			return this.docID();
+	 }
+	 
+	 private void debug(String text){
+		 if (DEBUG)
+			 System.out.println("[LMKCDTermScorer]["+text+"]");
 	 }
 }
