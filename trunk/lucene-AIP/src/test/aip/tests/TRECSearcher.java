@@ -51,15 +51,9 @@ public class TRECSearcher {
 		String field = "text";
 		Directory dir = new SimpleFSDirectory(new File(indexDir), null);
 		IndexSearcher is = new IndexSearcher(dir, true);
-
-//		File fResult = new File(AIPTestUtils.SEARCH_RESULT_FILE);
-//		String head = "(num consulta)  (id Lucene)       (DOCNO)      (Posición ranking) (Score)  (Una etiqueta)";
-//		String head = AIPTestUtils.fitString("(num consulta)", 17) + 
-//						  AIPTestUtils.fitString("(id Lucene)", 15) + 
-//						  AIPTestUtils.fitString("(DOCNO)", 15) + 
-//						  AIPTestUtils.fitString("(Posición ranking)", 19) + 
-//						  AIPTestUtils.fitString("(Score)", 15) + 
-//						  AIPTestUtils.fitString("(Una etiqueta)", 15);
+		
+// Suprimimos la cabecera en el fichero de salida
+//		String head = getHeader();
 		ArrayList<String> linesResult_standard = new ArrayList<String>();
 //		linesResult_standard.add(head);
 		ArrayList<String> linesResult_bm25 = new ArrayList<String>();
@@ -181,4 +175,12 @@ public class TRECSearcher {
 		}
 	}
 
+	private String getHeader(){
+		return 	AIPTestUtils.fitString("(num consulta)", 17) + 
+				AIPTestUtils.fitString("(id Lucene)", 15) + 
+				AIPTestUtils.fitString("(DOCNO)", 15) + 
+				AIPTestUtils.fitString("(Posición ranking)", 19) + 
+				AIPTestUtils.fitString("(Score)", 15) + 
+				AIPTestUtils.fitString("(Una etiqueta)", 15);
+	}
 }

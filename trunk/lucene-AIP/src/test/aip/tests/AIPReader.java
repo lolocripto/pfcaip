@@ -18,11 +18,16 @@ public class AIPReader {
     public static void main(String[] args) throws Exception {
 	
 //	read(AIPTestUtils.INDEX_DIR_FIXED_DOCS);
-	read(AIPTestUtils.INDEX_DIR_WIKI_SHORT);
+//	read(AIPTestUtils.INDEX_DIR_WIKI_SHORT);
+    read("H:/programacion/java/Lucene/index/opos");
     }
 
+    /**
+     * Este metodo muestra parte del contenido de un indice
+     */
     public static void read(String indexDir) throws Exception {
 
+    	//obtenemos el objeto "IndexReader" que incorpora todos los datos del indice
 	Directory dir = new SimpleFSDirectory(new File(indexDir), null);
 	IndexReader idx = IndexReader.open(dir, true);
 
@@ -39,6 +44,10 @@ public class AIPReader {
 	System.out.println("Tamaño medio (avg)[" + idx.avgDocSize() + "]");
 	
 	//Tamaño del campo "catchAll", lo que significa tamaño de cada documento
+	/*
+	 *  Leemos los tamaños de los documentos a través del campo "CatchAll", 
+	 *  este campo agrupa todos los términos así que nos da el 
+	 */
 	int[] sizesDoc = idx.sizes(Constants.CATCHALL_FIELD);
 	System.out.println("Tamaños de Documentos:");
 	for (int i = 0; i < sizesDoc.length; i++) {
