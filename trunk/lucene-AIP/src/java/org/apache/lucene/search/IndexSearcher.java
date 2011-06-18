@@ -95,7 +95,8 @@ public class IndexSearcher extends Searcher {
     this.docStarts = docStarts;
     closeReader = false;
   }
-  
+
+  /*
   private IndexSearcher(IndexReader r, boolean closeReader) {
     reader = r;
     this.closeReader = closeReader;
@@ -110,6 +111,22 @@ public class IndexSearcher extends Searcher {
       maxDoc += subReaders[i].maxDoc();
     }
   }
+  */
+  private IndexSearcher(IndexReader r, boolean closeReader) {
+	    reader = r;
+	    this.closeReader = closeReader;
+
+	    List<IndexReader> subReadersList = new ArrayList<IndexReader>();
+//	    gatherSubReaders(subReadersList, reader);
+	    subReadersList.add(reader);
+	    subReaders = subReadersList.toArray(new IndexReader[subReadersList.size()]);
+	    docStarts = new int[subReaders.length];
+	    int maxDoc = 0;
+	    for (int i = 0; i < subReaders.length; i++) {
+	      docStarts[i] = maxDoc;
+	      maxDoc += subReaders[i].maxDoc();
+	    }
+	  }
 
   protected void gatherSubReaders(List<IndexReader> allSubReaders, IndexReader r) {
     ReaderUtil.gatherSubReaders(allSubReaders, r);
