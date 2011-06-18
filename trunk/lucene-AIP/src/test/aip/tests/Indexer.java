@@ -48,6 +48,8 @@ public class Indexer {
 		for (int i = 0; i < files.length; i++) {
 			File f = files[i];
 			if (!f.isDirectory() && !f.isHidden() && f.exists() && f.canRead() && acceptFile(f)) {
+				
+				//TODO REVISAR ESTO PORQUE EN PPIO. f.getPath() INCLUYE EL NOMBRE DEL FICHERO!!
 				System.out.println("Indexing file["+f.getPath()+"\\"+f.getName());
 				indexFile(f);
 			}else if (f.isDirectory()){

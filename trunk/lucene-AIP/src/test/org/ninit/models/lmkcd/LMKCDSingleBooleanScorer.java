@@ -124,5 +124,4 @@ public class LMKCDSingleBooleanScorer extends Scorer {
 
 		return this.docID();
 	}
-
 }

@@ -59,7 +59,8 @@ public class BM25Similarity extends Similarity {
 	@Override
 	public float idf(int docFreq, int numDocs) {
 		float result = (numDocs - docFreq + 0.5f);
-		result = 1 + (result / (docFreq + 0.5f));
+//		result = 1 + (result / (docFreq + 0.5f));
+		result = (result / (docFreq + 0.5f));
 		return (float) Math.log(result);
 	}
 

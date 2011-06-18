@@ -1,9 +1,13 @@
 package aip.tests;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.TermAttribute;
@@ -11,7 +15,7 @@ import org.apache.lucene.util.AttributeSource;
 
 public final class AIPTestUtils {
 
-	private static final String DIR_BASE = "H:/programacion/java/Lucene/";
+	public static final String DIR_BASE = "H:/programacion/java/Lucene/";
 
 	// Directorios donde estan los indices
 	public static final String INDEX_DIR_FIXED_DOCS = DIR_BASE + "index/fixed_docs";
@@ -49,6 +53,8 @@ public final class AIPTestUtils {
 	public static final String SEARCH_RESULT_FILE_BM25 = DIR_BASE + "files/search_result_bm25.txt";
 	public static final String SEARCH_RESULT_FILE_LMQL = DIR_BASE + "files/search_result_lmql.txt";
 	public static final String SEARCH_RESULT_FILE_LMKCD = DIR_BASE + "files/search_result_lmkcd.txt";
+	
+	public static boolean global_debug = false;
 
 	public static void displayTokens(Analyzer analyzer, String text) throws IOException {
 		AttributeSource[] tokens = tokensFromAnalysis(analyzer, text);

@@ -48,6 +48,9 @@ public class LMQLSimilarity extends Similarity {
 	 */
 	@Override
 	public float coord(int overlap, int maxOverlap) {
+		
+		System.out.println("--------------------------------------------------------------------------- LLAMA a coor!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
 		return (float) overlap / (float) maxOverlap;
 	}
 
@@ -58,6 +61,9 @@ public class LMQLSimilarity extends Similarity {
 	 */
 	@Override
 	public float idf(int docFreq, int numDocs) {
+		
+		System.out.println("--------------------------------------------------------------------------- LLAMA a IDF!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+		
 		float result = (numDocs - docFreq + 0.5f);
 		result = 1 + (result / (docFreq + 0.5f));
 		return (float) Math.log(result);
@@ -71,6 +77,9 @@ public class LMQLSimilarity extends Similarity {
 	 */
 	@Override
 	public float lengthNorm(String fieldName, int numTokens) {
+		
+		System.out.println("--------------------------------------------------------------------------- LLAMA a lengthNorm!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
 		return 1;
 	}
 
@@ -81,6 +90,8 @@ public class LMQLSimilarity extends Similarity {
 	 */
 	@Override
 	public float queryNorm(float sumOfSquaredWeights) {
+		
+		System.out.println("--------------------------------------------------------------------------- LLAMA a queryNorm!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
 		return 1;
 	}
@@ -92,6 +103,8 @@ public class LMQLSimilarity extends Similarity {
 	 */
 	@Override
 	public float sloppyFreq(int distance) {
+		
+		System.out.println("--------------------------------------------------------------------------- LLAMA a sloop!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
 		return 1;
 	}
@@ -103,6 +116,8 @@ public class LMQLSimilarity extends Similarity {
 	 */
 	@Override
 	public float tf(float freq) {
+		
+		System.out.println("--------------------------------------------------------------------------- LLAMA a tf!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
 		return freq;
 	}
