@@ -620,9 +620,16 @@ class DirectoryReader extends IndexReader implements Cloneable {
       ensureOpen();
       if (!hasNorms(field))
 	  return null;
-      int[] result = null;
-      for (int i=0; i < subReaders.length; i++)
-	  result = subReaders[i].sizes(field);
+      int[] result = new int[maxDoc()];
+      int[] aux = null;
+      int count = 0;
+      for (int i=0; i < subReaders.length; i++){
+//    	  result = subReaders[i].sizes(field);
+    	  aux = subReaders[i].sizes(field);
+    	  System.arraycopy(aux, 0, result, count, aux.length);
+    	  count += aux.length;
+      }
+
       
       return result;
   }
