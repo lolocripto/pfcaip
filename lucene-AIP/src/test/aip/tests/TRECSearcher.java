@@ -1,11 +1,13 @@
 package aip.tests;
 
 import java.io.BufferedReader;
+
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.benchmark.quality.QualityQuery;
 import org.apache.lucene.benchmark.quality.trec.TrecTopicsReader;
@@ -28,8 +30,9 @@ import org.ninit.models.lmql.LMQLBooleanQuery;
  */
 public class TRECSearcher {
 
-	private boolean DEBUG = false;
-
+	Logger logger =Logger.getLogger(TRECSearcher.class);
+	private static final boolean DEBUG = true;
+	
 	enum searchType {
 		STANDARD, BM25, LMQL, LMKCD
 	}
@@ -49,19 +52,16 @@ public class TRECSearcher {
 		QualityQuery[] qQueries = trecTopics.readQueries(in);
 		QualityQuery qQuery;
 		String field = "text";
+		
 		Directory dir = new SimpleFSDirectory(new File(indexDir), null);
 		IndexSearcher is = new IndexSearcher(dir, true);
 		
 // Suprimimos la cabecera en el fichero de salida
 //		String head = getHeader();
 		ArrayList<String> linesResult_standard = new ArrayList<String>();
-//		linesResult_standard.add(head);
 		ArrayList<String> linesResult_bm25 = new ArrayList<String>();
-//		linesResult_bm25.add(head);
 		ArrayList<String> linesResult_lmql = new ArrayList<String>();
-//		linesResult_lmql.add(head);
 		ArrayList<String> linesResult_lmkcd = new ArrayList<String>();
-//		linesResult_lmkcd.add(head);
 
 		String textSearch;
 		String finalText;
@@ -71,10 +71,12 @@ public class TRECSearcher {
 			finalText = convertToSearcheable(textSearch);
 			if (!textSearch.isEmpty()) {
 				debug("IDQuery[" + qQuery.getQueryID() + "] title[" + textSearch + "]");
-
+				if (qQuery.getQueryID().equals("328")){
+					System.out.println("quito");
+				}
 //				procesSearch(is, field, qQuery, finalText, searchType.STANDARD, linesResult_standard);
 //				procesSearch(is, field, qQuery, finalText, searchType.BM25, linesResult_bm25);
-				procesSearch(is, field, qQuery, finalText, searchType.LMQL, linesResult_lmql);
+//				procesSearch(is, field, qQuery, finalText, searchType.LMQL, linesResult_lmql);
 				procesSearch(is, field, qQuery, finalText, searchType.LMKCD, linesResult_lmkcd);
 			}
 		}
@@ -112,7 +114,7 @@ public class TRECSearcher {
 			debug("Busqueda LMQL");
 			LMQLBooleanQuery queryLMQL = new LMQLBooleanQuery(queryText, field, new StandardAnalyzer(Version.LUCENE_30, stopWordList));
 			hits = is.search(queryLMQL, 1000);
-			model = "LMQL_lambda_.9f";
+			model = "LMQL_lambda_0.9f";
 			break;
 
 		case LMKCD:
@@ -147,6 +149,7 @@ public class TRECSearcher {
 							AIPTestUtils.fitString(model, 15);
 							
 //			System.out.println(formattedLine);
+//			debug(formattedLine);
 			linesResult.add(formattedLine);
 		}
 
@@ -170,8 +173,9 @@ public class TRECSearcher {
 	}
 
 	private void debug(String text) {
-		if (this.DEBUG) {
-			System.out.println("[Debug trace][" + text + "]");
+		if (DEBUG) {
+//			System.out.println("[Debug trace][" + text + "]");
+			logger.debug(text);
 		}
 	}
 

@@ -62,9 +62,9 @@ public class TRECIndexer {
 //		writer.setInfoStream(System.out);
 //		writer.setUseCompoundFile(false);
 
-		indexTRECFiles(writer,dataDir,fileType.FR94,stopWordList);
-		indexTRECFiles(writer,dataDir,fileType.FT,stopWordList);
-		indexTRECFiles(writer,dataDir,fileType.FBIS,stopWordList);
+//		indexTRECFiles(writer,dataDir,fileType.FR94,stopWordList);
+//		indexTRECFiles(writer,dataDir,fileType.FT,stopWordList);
+//		indexTRECFiles(writer,dataDir,fileType.FBIS,stopWordList);
 		indexTRECFiles(writer,dataDir,fileType.LATIMES,stopWordList);
 		
 		int num = writer.numDocs();

@@ -62,7 +62,7 @@ public class LMKCDBooleanQuery extends Query {
 	    }
 	}
     }
-
+/*
     public LMKCDBooleanQuery(String query, String[] fields, Analyzer analyzer,
 	    AbstractBooleanScorer.searchModel model) throws ParseException,
 	    IOException {
@@ -85,7 +85,7 @@ public class LMKCDBooleanQuery extends Query {
 	this.bParams = bParams;
 
     }
-
+*/
     @Override
     public Weight weight(Searcher searcher) throws IOException {
 

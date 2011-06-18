@@ -42,7 +42,7 @@ public class LMQLBooleanQuery extends Query {
     private float[] bParams;
 
     @SuppressWarnings("unchecked")
-    public LMQLBooleanQuery(String query, String field, Analyzer analyzer)
+	public LMQLBooleanQuery(String query, String field, Analyzer analyzer)
 	    throws ParseException, IOException {
 	QueryParser qp = new QueryParser(Version.LUCENE_30, field, analyzer);
 	Query q = qp.parse(query);

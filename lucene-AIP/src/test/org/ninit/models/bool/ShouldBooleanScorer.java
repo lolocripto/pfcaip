@@ -2,8 +2,12 @@ package org.ninit.models.bool;
 
 import java.io.IOException;
 
+import org.apache.log4j.Logger;
 import org.apache.lucene.search.Scorer;
 import org.apache.lucene.search.Similarity;
+import org.ninit.models.lmql.LMQLTermScorer;
+
+import aip.tests.AIPTestUtils;
 
 /**
  * Boolean Scorer that matches all documents that contains at least one term (OR
@@ -14,11 +18,15 @@ import org.apache.lucene.search.Similarity;
  */
 public class ShouldBooleanScorer extends AbstractBooleanScorer {
 
-	private static final boolean DEBUG = false;
+	private static final boolean DEBUG = true;
 	public static final int NO_MORE_DOCS = Integer.MAX_VALUE;
 
 	private boolean initializated = false;
 	private int doc = NO_MORE_DOCS;
+	
+//	FileWriter fdebug = new FileWriter(AIPTestUtils.DIR_BASE + "debug/ShouldBooleanScorer.txt");
+//	BufferedWriter out = new BufferedWriter(fdebug);
+	Logger logger =Logger.getLogger(ShouldBooleanScorer.class);
 
 	public ShouldBooleanScorer(Similarity similarity, Scorer[] scorer)
 			throws IOException {
@@ -82,7 +90,7 @@ public class ShouldBooleanScorer extends AbstractBooleanScorer {
 
 		this.doc = min;
 		
-		debug("nextDoc() --> this.doc="+this.doc);
+//		debug("nextDoc() --> this.doc="+this.doc);
 		
 		return (this.doc == NO_MORE_DOCS)? NO_MORE_DOCS : this.doc;
 	}
@@ -104,18 +112,30 @@ public class ShouldBooleanScorer extends AbstractBooleanScorer {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.apache.lucene.search.Scorer#score()
+	 * Aqui es donde se calcula el sumatorio de los scores de cada uno de los terminos
 	 */
 	@Override
 	public float score() throws IOException {
 		double result = 0f;
+		int docID;
 		for (int i = 0; i < this.subScorer.length; i++) {
-			if (this.subScorer[i].docID() == this.doc)
+			docID = this.subScorer[i].docID();
+			
+			if (docID == this.doc){
 				result += this.subScorer[i].score();
+			}else{
+				if (this.subScorer[i] instanceof LMQLTermScorer){
+					result += ((LMQLTermScorer)this.subScorer[i]).getDefault();	
+				}else{
+					debug("El termino no está y el subScrorer No es LMQLTermScorer con lo que no hace falta calcular la parte constante");
+				}
+				
+			}
 		}
+		debug("---> TOTAL sumando scores para el doc["+this.docID()+"] es["+result+"]");
 		return (float) result;
 	}
-
+	
 	private int init() throws IOException {
 		int result = NO_MORE_DOCS;
 		for (int i = 0; i < this.subScorer.length; i++) {
@@ -146,7 +166,7 @@ public class ShouldBooleanScorer extends AbstractBooleanScorer {
 	
 	
 	private void debug(String text){
-		if (this.DEBUG)
-			System.out.println("[ShouldBooleanScorer]["+text+"]");
+		if (DEBUG && AIPTestUtils.global_debug)
+			logger.debug(text);
 	}
 }

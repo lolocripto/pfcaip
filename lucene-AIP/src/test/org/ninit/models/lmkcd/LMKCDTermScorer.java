@@ -5,16 +5,23 @@ package org.ninit.models.lmkcd;
  */
 
 import java.io.IOException;
+
+import org.apache.log4j.Logger;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.TermDocs;
 import org.apache.lucene.search.Scorer;
 import org.apache.lucene.search.Similarity;
 import org.apache.lucene.search.TermQuery;
+import org.apache.lucene.util.Constants;
+import org.ninit.models.lmql.LMQLTermScorer;
+
+import aip.tests.AIPTestUtils;
 
 public class LMKCDTermScorer extends Scorer {
 
 	public static final int NO_MORE_DOCS = Integer.MAX_VALUE;
-	private static final boolean DEBUG = false;
+	private static final boolean DEBUG = true;
+	Logger logger =Logger.getLogger(LMKCDTermScorer.class);
 	
 	private TermQuery term;
 	private IndexReader reader;
@@ -23,7 +30,10 @@ public class LMKCDTermScorer extends Scorer {
 	private int freqTermQuery; //frecuencia del termino en la consulta
 	private int queryLength;   //tamaño de la consulta
 	float colDocFreq;
-
+	private int[] sizes;
+	
+	float a;
+	
 	/**
 	 * Inicialización de las variables que serán usadas en la fórmula del modelo:
 	 * 		- tamaño de la colección
@@ -41,6 +51,10 @@ public class LMKCDTermScorer extends Scorer {
 		this.freqTermQuery = freqTermQuery;
 		this.queryLength = queryLength;
 		this.colDocFreq = this.reader.colDocFreq(this.term.getTerm());
+		this.sizes = this.reader.sizes(Constants.CATCHALL_FIELD);
+		
+		a = (float) this.freqTermQuery / this.queryLength;
+		
 	}
 
 	@Override
@@ -67,33 +81,40 @@ public class LMKCDTermScorer extends Scorer {
 	 */
 	@Override
 	public float score() throws IOException {
-
-	    String docName = this.reader.document(this.docID()).get("docNo");
-		debug("LMKCD Score() DATA -----------> docName[" + docName + 
-				"] term[" + this.term.getTerm().text() + "] frec(t,Q)[" + this.freqTermQuery + 
-				"] L(Q)[" + this.queryLength +  "] freq(t,C)[" + this.colDocFreq 
-				+ "] L(C)["+docSizes+"]"); 
-
+		int docID = this.docID();
+		float length = this.sizes[docID];
+		float freq = this.termDocs.freq();
 		
-		float a = (float) this.freqTermQuery / this.queryLength;
-	    float b = (float) this.colDocFreq / this.docSizes;
+	    String docName = this.reader.document(docID).get("docNo");
+	    String docDebug = "FR941006-2-00169,FBIS4-41684,LA112489-0141,FBIS4-19535,LA102989-0026,FT921-4265,FBIS4-63999"; 
+		if (docDebug.contains(docName)) 
+			AIPTestUtils.global_debug = true;
+		else
+			AIPTestUtils.global_debug = false;
+		
+//	    float b = (float) this.colDocFreq / this.docSizes;
+		float b = (float) freq / length;
 	    
 	    if (b==0) return 0f; //AIP si no controlamos este error daria infinito
-	    
 	
 	    double result = a / b;
 //	    System.out.println("a/b="+result);
-	    result = Math.log10(result);
+	    result = Math.log(result);
 //	    System.out.println("log(a/b)["+result+"]");
 	    result = result * a;
 //	    System.out.println("*a="+result);
 	    result = result * -1;
 //	    System.out.println("*-1="+result);
-
+	    
+		debug("LMKCD Score() DATA -----------> docName[" + docName + 
+				"] term[" + this.term.getTerm().text() + "] frec(t,Q)[" + this.freqTermQuery + 
+				"] L(Q)[" + this.queryLength +  "] freq(t,C)[" + colDocFreq + "] freq(t,d)[" + freq   
+				+ "] L(D)[" + length + "] L(C)["+docSizes+"]"); 
 	    debug("              COMPUTE --------> a=["+a+"] b=["+b+"] -a*log(a/b)[" + result+"]");
+
 	    return (float) result;
 	}
-
+	
 	 public int advance(int target) throws IOException{
 		while (this.docID() < target) {
 			 this.nextDoc();
@@ -103,7 +124,8 @@ public class LMKCDTermScorer extends Scorer {
 	 }
 	 
 	 private void debug(String text){
-		 if (DEBUG)
-			 System.out.println("[LMKCDTermScorer]["+text+"]");
+		 if (DEBUG && AIPTestUtils.global_debug)
+//			 System.out.println("[LMKCDTermScorer]["+text+"]");
+			 logger.debug(text);
 	 }
 }
